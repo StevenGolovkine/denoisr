@@ -1,0 +1,5 @@
+# .gitignore file
+
+# Sublim text files
+*.sublime-project
+*.sublime-workspace
