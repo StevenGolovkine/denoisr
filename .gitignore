@@ -10,3 +10,4 @@
 
 # Data simulation files
 *.rds
+.Rproj.user
