@@ -1,0 +1,146 @@
+[
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_covariance.cpp",
+                "kind" : 6,
+                "line" : 12,
+                "name" : "kernelSmoothingCovariance(const List &, const arma::vec &, const arma::vec &, const double &, const double &)",
+                "parent_name" : "",
+                "usr" : "c:@F@kernelSmoothingCovariance#&1$@N@Rcpp@C@Vector>#VI19#@N@Rcpp@CT>1#T@PreserveStorage#&1$@N@arma@C@Col>#d#S2_#&1d#S4_#"
+            }
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_covariance.cpp",
+        "file_last_write" : 1564034816
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_covariance.h",
+        "file_last_write" : 1564034919
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_curve.cpp",
+                "kind" : 6,
+                "line" : 9,
+                "name" : "kernelSmoothingCurve(const arma::vec &, const arma::vec &, const arma::vec &, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@kernelSmoothingCurve#&1$@N@arma@C@Col>#d#S0_#S0_#1d#"
+            },
+            {
+                "column" : 11,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_curve.cpp",
+                "kind" : 6,
+                "line" : 47,
+                "name" : "betaKernelSmoothingCurve(const arma::vec &, const arma::vec &, const arma::vec &, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@betaKernelSmoothingCurve#&1$@N@arma@C@Col>#d#S0_#S0_#1d#"
+            },
+            {
+                "column" : 11,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_curve.cpp",
+                "kind" : 6,
+                "line" : 86,
+                "name" : "modifiedBetaKernelSmoothingCurve(const arma::vec &, const arma::vec &, const arma::vec &, const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@modifiedBetaKernelSmoothingCurve#&1$@N@arma@C@Col>#d#S0_#S0_#1d#"
+            }
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_curve.cpp",
+        "file_last_write" : 1567152651
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_curve.h",
+        "file_last_write" : 1567152820
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 21,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_risk.cpp",
+                "kind" : 6,
+                "line" : 10,
+                "name" : "estimateRisk(const List &, const List &, const double &)",
+                "parent_name" : "",
+                "usr" : "c:@F@estimateRisk#&1$@N@Rcpp@C@Vector>#VI19#@N@Rcpp@CT>1#T@PreserveStorage#S0_#&1d#"
+            },
+            {
+                "column" : 6,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_risk.cpp",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "estimateRiskCurve(const List &, const List &)",
+                "parent_name" : "",
+                "usr" : "c:@F@estimateRiskCurve#&1$@N@Rcpp@C@Vector>#VI19#@N@Rcpp@CT>1#T@PreserveStorage#S0_#"
+            },
+            {
+                "column" : 6,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_risk.cpp",
+                "kind" : 6,
+                "line" : 72,
+                "name" : "estimateRiskCurves(const List &, const List &)",
+                "parent_name" : "",
+                "usr" : "c:@F@estimateRiskCurves#&1$@N@Rcpp@C@Vector>#VI19#@N@Rcpp@CT>1#T@PreserveStorage#S0_#"
+            }
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_risk.cpp",
+        "file_last_write" : 1570452595
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_risk.h",
+        "file_last_write" : 1569507781
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_sigma.cpp",
+                "kind" : 6,
+                "line" : 10,
+                "name" : "estimateSigma(const List &)",
+                "parent_name" : "",
+                "usr" : "c:@F@estimateSigma#&1$@N@Rcpp@C@Vector>#VI19#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 8,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_sigma.cpp",
+                "kind" : 6,
+                "line" : 37,
+                "name" : "estimateSigmaMSE(const List &, const List &)",
+                "parent_name" : "",
+                "usr" : "c:@F@estimateSigmaMSE#&1$@N@Rcpp@C@Vector>#VI19#@N@Rcpp@CT>1#T@PreserveStorage#S0_#"
+            }
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_sigma.cpp",
+        "file_last_write" : 1566825239
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/estimate_sigma.h",
+        "file_last_write" : 1564059036
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/mfBm.cpp",
+                "kind" : 6,
+                "line" : 12,
+                "name" : "mfBm(arma::vec &, arma::vec &, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@mfBm#&$@N@arma@C@Col>#d#S0_#I#I#"
+            }
+        ],
+        "file" : "/home/steven/Documents/workspace/CovarianceEstimate/src/mfBm.cpp",
+        "file_last_write" : 1569577789
+    }
+]

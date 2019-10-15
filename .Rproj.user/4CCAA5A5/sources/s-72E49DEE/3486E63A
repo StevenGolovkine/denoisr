@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570624299111.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3486E63A",
+    "lastKnownWriteTime" : 1571052969,
+    "last_content_update" : 1571052969364,
+    "path" : "~/Documents/workspace/CovarianceEstimate/R/estimate.H0.R",
+    "project_path" : "R/estimate.H0.R",
+    "properties" : {
+        "cursorPosition" : "51,21",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

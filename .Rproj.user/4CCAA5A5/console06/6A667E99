@@ -1,0 +1,18 @@
+ls
+[0m[01;34mcache[0m                     CovarianceEstimate.sublime-project    [01;34mdata[0m      DESCRIPTION  NAMESPACE  Read-and-delete-me
+CovarianceEstimate.Rproj  CovarianceEstimate.sublime-workspace  [01;34mdata-raw[0m  [01;34mman[0m          [01;34mR[0m          [01;34msrc[0m
+]0;/home/steven/Documents/workspace/CovarianceEstimate]0;steven@steven-VirtualBox: ~/Documents/workspace/CovarianceEstimate[01;32msteven@steven-VirtualBox[00m:[01;34m~/Documents/workspace/CovarianceEstimate[00m$ cd src
+]0;/home/steven/Documents/workspace/CovarianceEstimate/src]0;steven@steven-VirtualBox: ~/Documents/workspace/CovarianceEstimate/src[01;32msteven@steven-VirtualBox[00m:[01;34m~/Documents/workspace/CovarianceEstimate/src[00m$ ls
+[0m[01;32mCovarianceEstimate.so[0m    estimate_covariance.o  estimate_curve.h  Makevars      RcppExports.cpp
+estimate_covariance.cpp  estimate_curve.cpp     estimate_curve.o  Makevars.win  RcppExports.o
+]0;/home/steven/Documents/workspace/CovarianceEstimate/src]0;steven@steven-VirtualBox: ~/Documents/workspace/CovarianceEstimate/src[01;32msteven@steven-VirtualBox[00m:[01;34m~/Documents/workspace/CovarianceEstimate/src[00m$ R CM²[KD SHLIB estimate_curve.o [K[Ko [K[Kcpp 
+g++ -std=gnu++11 -shared -L/usr/lib/R/lib -Wl,-Bsymbolic-functions -Wl,-z,relro -o estimate_curve.so estimate_curve.o -fopenmp -llapack -lblas -lgfortran -lm -lquadmath -L/usr/lib/R/lib -lR
+]0;/home/steven/Documents/workspace/CovarianceEstimate/src]0;steven@steven-VirtualBox: ~/Documents/workspace/CovarianceEstimate/src[01;32msteven@steven-VirtualBox[00m:[01;34m~/Documents/workspace/CovarianceEstimate/src[00m$ ls
+[0m[01;32mCovarianceEstimate.so[0m    estimate_covariance.o  estimate_curve.h  [01;32mestimate_curve.so[0m  Makevars.win     RcppExports.o
+estimate_covariance.cpp  estimate_curve.cpp     estimate_curve.o  Makevars           RcppExports.cpp
+]0;/home/steven/Documents/workspace/CovarianceEstimate/src]0;steven@steven-VirtualBox: ~/Documents/workspace/CovarianceEstimate/src[01;32msteven@steven-VirtualBox[00m:[01;34m~/Documents/workspace/CovarianceEstimate/src[00m$ gcc --shared -o Ar.dll Ar.c[K[K[K[K[K[K[K[K[K[K[Kestimate_cc[Kurve.so estim[K[K[K[Ks[Kstimate_curve.cpp
+[01m[Kestimate_curve.cpp:3:10:[m[K [01;31m[Kfatal error: [m[KRcppArmadillo.h: Aucun fichier ou dossier de ce type
+ #include [01;31m[K<RcppArmadillo.h>[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+]0;/home/steven/Documents/workspace/CovarianceEstimate/src]0;steven@steven-VirtualBox: ~/Documents/workspace/CovarianceEstimate/src[01;32msteven@steven-VirtualBox[00m:[01;34m~/Documents/workspace/CovarianceEstimate/src[00m$ 

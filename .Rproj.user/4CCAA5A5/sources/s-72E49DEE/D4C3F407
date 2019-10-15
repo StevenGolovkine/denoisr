@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571125569304.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D4C3F407",
+    "lastKnownWriteTime" : 1567152651,
+    "last_content_update" : 1567152651,
+    "path" : "~/Documents/workspace/CovarianceEstimate/src/estimate_curve.cpp",
+    "project_path" : "src/estimate_curve.cpp",
+    "properties" : {
+        "cursorPosition" : "89,38",
+        "scrollLine" : "27",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}
