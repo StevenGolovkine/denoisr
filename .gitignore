@@ -1,5 +1,12 @@
 # .gitignore file
 
-# Sublim text files
+# R files
+.Rhistory
+.Rproj.user/*
+
+# Sublime text files
 *.sublime-project
 *.sublime-workspace
+
+# Data simulation files
+*.rds
