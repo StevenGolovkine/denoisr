@@ -3,7 +3,6 @@
 ######################################################################################
 library(tidyverse)
 
-
 #' Perform the estimation of L0. 
 #' 
 #' @param data List of curves to estimate by kernel regression.
