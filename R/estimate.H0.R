@@ -24,7 +24,7 @@ estimate.H0 <- function(data, sigma = NULL, k0 = 2, t0 = 0){
   substract_sigma <- function(nb, sigma=0) nb - 2*sigma**2
   
   two_log_two <- 2*log(2)
-  if(is.null(sigma)){ # Case where sigma is unknown
+  if (is.null(sigma)) { # Case where sigma is unknown
     idxs <- S_N %>%
       map_dbl(~ min(order(abs(.x$t - t0))[seq_len(8*k0 - 6)]))
     a <- S_N %>% 
@@ -38,12 +38,12 @@ estimate.H0 <- function(data, sigma = NULL, k0 = 2, t0 = 0){
       mean()
     first_part <- log(a - b)
     second_part <- log(b - c)
-    
+
   } else{ # Case where sigma is known
     idxs <- S_N %>%
-      map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2*k0 + 1)]))
+      map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4*k0 - 2)]))
     first_part <- S_N %>% 
-      map2_dbl(idxs, ~ theta(.x$x, .x$t, k = k0 + 1, idx = .y)) %>% 
+      map2_dbl(idxs, ~ theta(.x$x, .x$t, k = 2*k0 - 1, idx = .y)) %>% 
       mean() %>% 
       substract_sigma(sigma) %>%
       max(c(., 1e-5)) %>%

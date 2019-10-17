@@ -1,6 +1,6 @@
-######################################################################################
-#                       Generate fractional Brownian motion                          #
-######################################################################################
+################################################################################
+#                       Generate fractional Brownian motion                    #
+################################################################################
 
 # Load packages
 library(tidyverse)
@@ -9,18 +9,15 @@ library(tidyverse)
 
 #' Generate fractional Brownian motion with a random noise.
 #' 
-#' @param M Number of points in the trajectory
-#' @param sigma Standard deviation of the noise to add to the trajectory, can be a list.
-#' @param H Hurst coefficient
-#' @param hetero_func A function to generate the noise
+#' @param M Expected number of points in the trajectory.
+#'   The number of points follows a Poisson distribution with mean M.
+#' @param sigma Standard deviation of the noise to add to the trajectory, can 
+#'   be a list.
+#' @param H Hurst coefficient.
+#' 
 #' @return A tibble containing the trajectory and the sampling points.
-fractional_brownian_trajectory <- function(M, H, sigma, hetero_func = NULL){
+fractional_brownian_trajectory <- function(M, H, sigma){
   require(somebm)
-  if(is.null(hetero_func)){
-    sd.function <- function(t) (abs(t)+1)**(5/6)
-  } else{
-    sd.function <- hetero_func
-  }
   
   M_n <- rpois(1, M)
   t <- seq(0, 1, length.out = M_n + 1)
@@ -35,14 +32,10 @@ fractional_brownian_trajectory <- function(M, H, sigma, hetero_func = NULL){
   
   # Add columns with homoscedastic noise.
   j <- 3
-  for(i in sigma){
+  for (i in sigma) {
     simu[, j] <- x + i * e
     j = j + 1
   }
-  
-  # Add a column with heteroscedastique noise.
-  e <- sd.function((x - median(x)) / sd(x)) * rnorm(M_n + 1, mean = 0, sd = 0.05)
-  simu[, ncol(simu)] <- x + e
   
   return(as_tibble(simu, .name_repair = 'unique'))
 }
@@ -72,32 +65,29 @@ true_covariance <- function(s_, t_, H){
 }
 
 # Define some parameters
-N <- 10000 # Number of curves
+N <- 50 # Number of curves
 M <- c(50, 200, 1000)  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.9) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
-sigma <- c(0.01, 0.05, 0.1, 0.25) # Standard deviation of the noise (do it with 0.01, 0.05, 0.1, 0.25)
-hetero_func <- function(x) return (2 * exp(abs(x)) / (1 + exp(abs(x))) - 0.5)
+H <- c(0.4) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
+sigma <- c(0.01, 0.05, 0.1, 0.25) # Standard deviation of the noise
 
 # Do simulation
-for(m in 1:length(M)){
+for (m in 1:length(M)) {
     t <- seq(0, 1, length.out = M[m] + 1) # Design points
     
-    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma, hetero_func))
+    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma))
     mean_ <- true_mean(t)
     covariance_ <- true_covariance(t, t, H)
     
     fractional.brownian.trajectories <- list(
       simulation = simulation_,
       mean = mean_,
-      covariance = covariance_
+      covariance = covariance_,
+      sigma = sigma
     )
+    
     # Naming convention (fraction.brownian.trajectories-M-H-sigma)
     saveRDS(fractional.brownian.trajectories, 
-            file = paste0('./data/fractional.brownian.trajectories-', M[m], '-', H, '-', paste(sigma, collapse = '.'), '.rds'))
+            file = paste0('./data/fractional.brownian.trajectories-', 
+                          M[m], '-', H, '-', paste(sigma, collapse = '.'), '.rds'))
 }
-
-
-# Save data
-# Naming convention (fraction.brownian.trajectories-M-H-sigma)
-#usethis::use_data(fractional.brownian.trajectories, overwrite = TRUE)
 
