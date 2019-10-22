@@ -59,7 +59,12 @@ List estimateRiskCurve(
   List risk(2);
   
   arma::vec x = curve["x"];
+  arma::vec t = curve["t"];
   arma::vec x_estim = curve_estim["x"];
+  
+  arma::uvec idx = arma::find(t > 0.01 && t < 0.99);
+  x = x.elem(idx);
+  x_estim = x_estim.elem(idx);
   
   arma::vec squared_diff = pow(x - x_estim, 2);
   risk(0) = arma::mean(squared_diff);
