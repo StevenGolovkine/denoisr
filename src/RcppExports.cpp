@@ -64,7 +64,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // estimateRisk
-Rcpp::NumericVector estimateRisk(const List& curves, const List& curves_estim, const double& t0);
+Rcpp::List estimateRisk(const List& curves, const List& curves_estim, const double& t0);
 RcppExport SEXP _CovarianceEstimate_estimateRisk(SEXP curvesSEXP, SEXP curves_estimSEXP, SEXP t0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

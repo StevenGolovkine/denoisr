@@ -1,6 +1,6 @@
-######################################################################################
-#                  Functions for risk estimation using regularity                    #
-######################################################################################
+################################################################################
+#            Functions for risk estimation using regularity                    #
+################################################################################
 library(tidyverse)
 
 Rcpp::sourceCpp('./src/estimate_risk.cpp')
@@ -17,8 +17,7 @@ estimate.risk <- function(curves, curves_estim, t0 = 0.5){
   # Estimate the risk
   risk <- estimateRisk(curves, curves_estim, t0)
   
-  #return(c('MeanRSE' = risk[1], 'MaxRSE' = risk[2]))
-  return(risk)
+  return(c('MeanRSE' = risk[1], 'MaxRSE' = risk[2]))
 }
 
 #' Perform the estimation of the risk on a set of curves along the points.
@@ -32,5 +31,5 @@ estimate.risks <- function(curves, curves_estim){
   # Estimate the risk
   risk <- estimateRiskCurves(curves, curves_estim)
   
-  return(c('MeanRSE' = risk[1], 'MaxRSE' = risk[2]))
+  return(c('MeanMeanRSE' = risk[1], 'MaxMaxRSE' = risk[2]))
 }

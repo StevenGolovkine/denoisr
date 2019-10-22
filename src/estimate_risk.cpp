@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-Rcpp::NumericVector estimateRisk(
+Rcpp::List estimateRisk(
     const List & curves, // Curves list ($x and $t)
     const List & curves_estim, // Estimated curves list ($x and $t)
     const double & t0 // In which point estimate the risk.
@@ -45,10 +45,10 @@ Rcpp::NumericVector estimateRisk(
   risk(0) = arma::mean(squared_diff);
   risk(1) = arma::max(squared_diff);
   
-  Rcpp::NumericVector tmp = Rcpp::wrap(squared_diff);
-  tmp.attr("dim") = R_NilValue;
+  //Rcpp::NumericVector tmp = Rcpp::wrap(squared_diff);
+  //tmp.attr("dim") = R_NilValue;
   
-  return (tmp);
+  return (risk);
 }
 
 // [[Rcpp::export]]
@@ -95,20 +95,8 @@ List estimateRiskCurves(
     max_risk(n) = risk_curve(1);
   }
   
-  //risk(0) = arma::mean(mean_risk);
-  //risk(1) = arma::max(max_risk);
-  risk(0) = mean_risk;
-  risk(1) = max_risk;
+  risk(0) = arma::mean(mean_risk);
+  risk(1) = arma::max(max_risk);
   
-  Rcpp::NumericVector tmp = Rcpp::wrap(mean_risk);
-  tmp.attr("dim") = R_NilValue;
-  
-  Rcpp::NumericVector tmp2 = Rcpp::wrap(max_risk);
-  tmp2.attr("dim") = R_NilValue;
-  
-  Rcpp::List result = Rcpp::List::create(
-    Rcpp::Named("Mean") = tmp,
-    Rcpp::Named("Max") = tmp2);
-  
-  return (result);
+  return (risk);
 }

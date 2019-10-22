@@ -1,6 +1,6 @@
-######################################################################################
-#               Functions for L0 parameter estimation using regularity               #
-######################################################################################
+###############################################################################
+#        Functions for L0 parameter estimation using regularity               #
+###############################################################################
 library(tidyverse)
 
 #' Perform the estimation of L0. 
@@ -13,7 +13,8 @@ library(tidyverse)
 #' @param sigma True value of sigma
 #'         If null, change estimate
 #' @return An estimation of L0.
-estimate.L0 <- function(data, H0 = 0, k = 2, density = NULL, sigma=NULL){
+estimate.L0 <- function(data, sigma = NULL, H0 = 0, 
+                        k0 = 2, t0 = 0, density = NULL){
   
   S_N <- data
   
@@ -21,45 +22,64 @@ estimate.L0 <- function(data, H0 = 0, k = 2, density = NULL, sigma=NULL){
   mu_hat <- S_N %>% map_int(~ length(.x$t)) %>% mean()
   
   # Estimate L0
-  substract_double_element <- function(v, i){
-    return((v[4 * i - 3] - v[2 * i - 1])**2 - (v[2 * i - 1] - v[i])**2)
-  }
-  substract_double_time <- function(v, i, H0){
-    return(abs(v[4 * i - 3] - v[2 * i - 1])**(2 * H0) - abs(v[2 * i - 1] - v[i])**(2 * H0))
-  }
-  substract_first_element <- function(v, i) (v[2 * i - 1] - v[i])**2
-  substract_first_time <- function(v, i, H0) abs(v[2 * i - 1] - v[i])**(2 * H0)
-  substract_sigma <- function(nb, sigma=0) nb - 2*sigma**2
+  theta <- function(v, k, idx) (v[idx + 2*k - 1] - v[idx + k])**2
+  eta <- function(v, k, idx, H) (v[idx + 2*k - 1] - v[idx + k])**(2*H)
   
-  if(is.null(density)){
-    if(is.null(sigma)){
-      nume <- S_N %>%
-        map_dbl(~ substract_double_element(.x$x, k)) %>%
+  nume <- 0; deno <- 1
+  if (is.null(density)) {# Case where the density is not known
+    if (is.null(sigma)) {# Subcase where sigma is not known
+      idxs <- S_N %>%
+        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4*k0 - 2)]))
+      a <- S_N %>% 
+        map2_dbl(idxs, ~ theta(.x$x, k = 2*k0 - 1, idx = .y)) %>% 
         mean()
-      deno <- S_N %>%
-        map_dbl(~ substract_double_time(.x$t, k, H0)) %>%
+      b <- S_N %>% 
+        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>% 
         mean()
-    } else{
-      nume <- S_N %>%
-        map_dbl(~ substract_first_element(.x$x, k)) %>%
-        mean() %>%
-        substract_sigma(sigma)
-      deno <- S_N %>%
-        map_dbl(~ substract_first_time(.x$t, k, H0)) %>%
+      c <- S_N %>% 
+        map2_dbl(idxs, ~ eta(.x$t, k = 2*k0 - 1, idx = .y, H = H0)) %>% 
         mean()
+      d <- S_N %>% 
+        map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>% 
+        mean()
+      if ((a - b > 0) & (c - d > 0)) {
+        nume <- a - b
+        deno <- c - d
+      }
+    } else {# Subcase where sigma is known
+      idxs <- S_N %>% 
+        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2*k0)]))
+      a <- S_N %>% 
+        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>% 
+        mean()
+      b <- S_N %>% 
+        map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>% 
+        mean()
+      if ((a - 2*sigma**2 > 0) & b > 0) {
+        nume <- a - 2*sigma**2
+        deno <- b
+      }
     }
-  } else{
-    if(is.null(sigma)){
-      nume <- S_N %>%
-        map_dbl(~ substract_double_element(.x$x, k)) %>%
+  } else {# Case where the density is known (only the uniform case)
+    if (is.null(sigma)) {# Subcase where sigma is not known
+      idxs <- S_N %>%
+        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4*k0 - 2)]))
+      a <- S_N %>% 
+        map2_dbl(idxs, ~ theta(.x$x, k = 2*k0 - 1, idx = .y)) %>% 
         mean()
-      deno <- (2 ** (2 * H0) - 1) * ((k - 1) / (mu_hat + 1))**(2 * H0) 
-    } else{
-      nume <- S_N %>%
-        map_dbl(~ substract_first_element(.x$x, k)) %>%
-        mean() %>%
-        substract_sigma(sigma)
-      deno <- (2 ** (2 * H0) - 1) * ((k - 1) / (mu_hat + 1))**(2 * H0)
+      b <- S_N %>% 
+        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>% 
+        mean()
+      if (a - b > 0) nume <- a - b
+      deno <- (2 ** (2 * H0) - 1) * ((k0 - 1) / (mu_hat + 1))**(2 * H0) 
+    } else {# Subcase where sigma is known
+      idxs <- S_N %>% 
+        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2*k0)]))
+      a <- S_N %>% 
+        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>% 
+        mean()
+      if (a - 2*sigma**2 > 0) nume <- a - 2*sigma**2
+      deno <- ((k0 - 1) / (mu_hat + 1))**(2 * H0)
     }
   }
   
