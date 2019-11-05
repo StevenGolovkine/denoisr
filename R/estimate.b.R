@@ -17,12 +17,12 @@ estimate.b <- function(data, sigma=0, H0=0.5, L0=1, K='epanechnikov'){
   S_N <- data
   
   # Set kernel constants
-  if(K == 'epanechnikov'){
+  if (K == 'epanechnikov') {
     K_norm2 <- 0.6
     phi <- function(x, H0) {0.75 * (1 - x**2) * abs(x)**H0}
     upper <- 1
     lower <- -1
-  } else if(K == 'beta'){
+  } else if (K == 'beta') {
     K_norm2_f <- function(x, alpha = 1, beta = 1){x**(2*(alpha - 1)) * (1 - x)**(2*(beta - 1)) / beta(alpha, beta)**2}
     phi <- function(x, H0, alpha = 1, beta = 1){abs(x**(alpha - 1) * (1 - x)**(beta - 1)) * x**H0 / abs(beta(alpha, beta))}
     upper <- 1
@@ -46,4 +46,21 @@ estimate.b <- function(data, sigma=0, H0=0.5, L0=1, K='epanechnikov'){
   b_hat <- (frac / mu_hat)**(1 / (2*H0_tilde + 1))
   
   return(b_hat)
+}
+
+#' Perform the estimation of the bandwith using CV
+#' 
+#' @param data list of curves to estimate by kernel regression
+estimate.b.cv <- function(data, nb_cores){
+  require(np); require(doParallel)
+  
+  cl <- makeCluster(nb_cores)
+  registerDoParallel(cl)
+  
+  bw_list <- parSapply(cl, data, 
+                       function(c) sqrt(5) * np::npregbw(c$x ~ c$t, 
+                                                         regtype = 'll', # Local Linear Regression
+                                                         bwmethod = 'cv.ls', # Least Square Cross Validation
+                                                         ckertype = 'epanechnikov')$bw)
+  return(mean(bw_list))
 }

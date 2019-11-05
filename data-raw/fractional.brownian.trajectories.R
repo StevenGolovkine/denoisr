@@ -16,15 +16,20 @@ library(tidyverse)
 #' @param H Hurst coefficient.
 #' 
 #' @return A tibble containing the trajectory and the sampling points.
-fractional_brownian_trajectory <- function(M, H, sigma){
-  require(somebm)
+fractional_brownian_trajectory <- function(M, H, sigma, int){
+  require(somebm); require(pracma)
   
   M_n <- rpois(1, M)
   t <- seq(0, 1, length.out = M_n + 1)
   x <- as.vector(fbm(hurst = H, n = M_n))
   
+  if (int == TRUE) {
+    x <- cumtrapz(t, x)[, 1]
+    x <- cumtrapz(t, x)[, 1]
+  }
+  
   # Start to fill the data
-  simu <- matrix(rep(0, (M_n + 1) * (length(sigma) + 3)), nrow = M_n + 1)
+  simu <- matrix(rep(0, (M_n + 1) * (length(sigma) + 2)), nrow = M_n + 1)
   simu[, 1] <- t
   simu[, 2] <- x
   
@@ -36,7 +41,7 @@ fractional_brownian_trajectory <- function(M, H, sigma){
     simu[, j] <- x + i * e
     j = j + 1
   }
-  
+
   return(as_tibble(simu, .name_repair = 'unique'))
 }
 
@@ -65,16 +70,17 @@ true_covariance <- function(s_, t_, H){
 }
 
 # Define some parameters
-N <- 50 # Number of curves
-M <- c(50, 200, 1000)  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.4) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
+N <- 500000 # Number of curves
+M <- c(1000)  # Number of points per curves (do it with 50, 200, 1000)
+H <- c(0.5) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
 sigma <- c(0.01, 0.05, 0.1, 0.25) # Standard deviation of the noise
+int <- TRUE
 
 # Do simulation
 for (m in 1:length(M)) {
     t <- seq(0, 1, length.out = M[m] + 1) # Design points
     
-    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma))
+    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma, int))
     mean_ <- true_mean(t)
     covariance_ <- true_covariance(t, t, H)
     
