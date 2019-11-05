@@ -10,4 +10,5 @@
 
 # Data simulation files
 *.rds
-.Rproj.user
+.Rproj.use
+*.RData
