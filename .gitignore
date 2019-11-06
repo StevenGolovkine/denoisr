@@ -12,3 +12,4 @@
 *.rds
 .Rproj.use
 *.RData
+.Rproj.user

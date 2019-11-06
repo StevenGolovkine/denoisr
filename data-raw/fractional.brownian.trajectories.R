@@ -14,18 +14,41 @@ library(tidyverse)
 #' @param sigma Standard deviation of the noise to add to the trajectory, can 
 #'   be a list.
 #' @param H Hurst coefficient.
+#' @param int Should we consider the integrated brownian motion?
+#' @param int2 Should we consider the twice integrated brownian motion?
+#' @param change_time A function that modify the sampling time points.
+#' @param dens_time A function that modify the generating process of the
+#'   samping time points.
+#' @param modif_var An integer that modify the brownian motion.
 #' 
 #' @return A tibble containing the trajectory and the sampling points.
-fractional_brownian_trajectory <- function(M, H, sigma, int){
+fractional_brownian_trajectory <- function(M, H, sigma, 
+                                           int = FALSE, int2 = FALSE,
+                                           change_time = NULL, dens_time = NULL,
+                                           modif_var = 1){
   require(somebm); require(pracma)
   
   M_n <- rpois(1, M)
-  t <- seq(0, 1, length.out = M_n + 1)
-  x <- as.vector(fbm(hurst = H, n = M_n))
+  if (!inherits(dens_time, 'function')) {
+    t <- seq(0, 1, length.out = M_n + 1)
+  } else {
+    t <- dens_time(M_n + 1)
+    t <- t[order(t)]
+  }
+  x <- modif_var * as.vector(fbm(hurst = H, n = M_n))
   
+  # Integrate the brownian motion
   if (int == TRUE) {
     x <- cumtrapz(t, x)[, 1]
-    x <- cumtrapz(t, x)[, 1]
+    if (int2 == TRUE) {
+      x <- cumtrapz(t, x)[, 1]
+    }
+  }
+  
+  # Change time
+  if (inherits(change_time, 'function')) {
+    t <- change_time(t)
+    t <- t[order(t)]
   }
   
   # Start to fill the data
@@ -70,17 +93,17 @@ true_covariance <- function(s_, t_, H){
 }
 
 # Define some parameters
-N <- 500000 # Number of curves
-M <- c(1000)  # Number of points per curves (do it with 50, 200, 1000)
+N <- 5000 # Number of curves
+M <- c(200)  # Number of points per curves (do it with 50, 200, 1000)
 H <- c(0.5) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
 sigma <- c(0.01, 0.05, 0.1, 0.25) # Standard deviation of the noise
-int <- TRUE
+
 
 # Do simulation
 for (m in 1:length(M)) {
     t <- seq(0, 1, length.out = M[m] + 1) # Design points
     
-    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma, int))
+    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma))
     mean_ <- true_mean(t)
     covariance_ <- true_covariance(t, t, H)
     
