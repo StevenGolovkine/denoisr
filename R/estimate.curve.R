@@ -20,11 +20,13 @@ Rcpp::sourceCpp('./src/estimate_curve.cpp')
 estimate.curve <- function(curve, U, b, kernel='epanechnikov', degree = 0){
   
   # Compute the estimation of the curve.
-  if(kernel == 'epanechnikov'){
-    x_hat <- kernelSmoothingCurve(U, curve$t, curve$x, b)
-  } else if(kernel == 'beta'){
+  if(kernel == 'epanechnikov') {
+    x_hat <- epaKernelSmoothingCurve(U, curve$t, curve$x, b)
+  } else if(kernel == 'uniform') {
+    x_hat <- uniKernelSmoothingCurve(U, curve$t, curve$x, b)
+  } else if(kernel == 'beta') {
     x_hat <- betaKernelSmoothingCurve(U, curve$t, curve$x, b)
-  } else if(kernel == 'mBeta'){
+  } else if(kernel == 'mBeta') {
     x_hat <- modifiedBetaKernelSmoothingCurve(U, curve$t, curve$x, b)
   #} else if(kernel == 'locPoly'){
     #require(KernSmooth)

@@ -19,31 +19,26 @@ estimate.b <- function(data, sigma=0, H0=0.5, L0=1, K='epanechnikov'){
   # Set kernel constants
   if (K == 'epanechnikov') {
     K_norm2 <- 0.6
-    phi <- function(x, H0) {0.75 * (1 - x**2) * abs(x)**H0}
-    upper <- 1
-    lower <- -1
+    K_phi <- 3 / ((H0 + 1) * (H0 + 3))
   } else if (K == 'beta') {
     K_norm2_f <- function(x, alpha = 1, beta = 1){x**(2*(alpha - 1)) * (1 - x)**(2*(beta - 1)) / beta(alpha, beta)**2}
     phi <- function(x, H0, alpha = 1, beta = 1){abs(x**(alpha - 1) * (1 - x)**(beta - 1)) * x**H0 / abs(beta(alpha, beta))}
-    upper <- 1
-    lower <- 0
     K_norm2 <- integrate(K_norm2_f, lower = lower, upper = upper)$value
+    K_phi <- integrate(phi, lower = 0, upper = 1, H0 = H0)$value
   } else{
     K_norm2 <- 1
-    phi <- function(x, H0) {1}
-    upper <- 1
-    lower <- 0
+    K_phi <- 1 / (H0 + 1)
   }
   
   # Estimate mu
   mu_hat <- S_N %>% map_int(~ length(.x$t)) %>% mean()
   
   # Estimate b
-  H0_tilde <- H0 #- (1 / log(mu_hat))
-  nume <- (sigma**2 * K_norm2 * factorial(floor(H0_tilde)))
-  deno <- (H0_tilde * L0 * integrate(phi, lower = lower, upper = upper, H0 = H0_tilde)$value)
+  #H0_tilde <- H0 - (1 / log(mu_hat))
+  nume <- (sigma**2 * K_norm2 * factorial(floor(H0)))
+  deno <- (H0 * L0 * K_phi)
   frac <- nume / deno
-  b_hat <- (frac / mu_hat)**(1 / (2*H0_tilde + 1))
+  b_hat <- (frac / mu_hat)**(1 / (2*H0 + 1))
   
   return(b_hat)
 }
