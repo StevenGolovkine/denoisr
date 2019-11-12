@@ -68,5 +68,5 @@ microbenchmark(
 microbenchmark(
   npreg(y ~ t, bws = bw_uni, ckertype = 'uniform'),
   uniKernelSmoothingCurve(t, t, y, b = bw_uni),
-  times = 1000
+  times = 100
 )
