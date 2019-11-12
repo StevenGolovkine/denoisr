@@ -45,32 +45,24 @@ Rcpp::List estimateRisk(
   risk(0) = arma::mean(squared_diff);
   risk(1) = arma::max(squared_diff);
   
-  //Rcpp::NumericVector tmp = Rcpp::wrap(squared_diff);
-  //tmp.attr("dim") = R_NilValue;
-  
   return (risk);
 }
 
 // [[Rcpp::export]]
-List estimateRiskCurve(
+double estimateRiskCurve(
     const List & curve, // Curve ($x and $t)
     const List & curve_estim // Estimated curve ($x and $t)
 ){
-  List risk(2);
+  arma::mat risk;
   
   arma::vec x = curve["x"];
   arma::vec t = curve["t"];
   arma::vec x_estim = curve_estim["x"];
   
-  arma::uvec idx = arma::find(t > 0.01 && t < 0.99);
-  x = x.elem(idx);
-  x_estim = x_estim.elem(idx);
-  
   arma::vec squared_diff = pow(x - x_estim, 2);
-  risk(0) = arma::mean(squared_diff);
-  risk(1) = arma::max(squared_diff);
+  risk = arma::trapz(t, squared_diff); // Numerical integration
   
-  return (risk);
+  return (risk(0, 0));
 }
 
 // [[Rcpp::export]]
@@ -86,22 +78,17 @@ List estimateRiskCurves(
   List mycurve = curves[0];
   List mycurve_estim = curves_estim[0];
   
-  arma::vec mean_risk(N);
-  arma::vec max_risk(N);
-  List risk_curve(2);
-  for(arma::uword n; n < N; n++){
+  arma::vec risk_int(N);
+  for(arma::uword n=0; n < N; n++){
     
     mycurve = curves[n];
     mycurve_estim = curves_estim[n];
 
-    risk_curve = estimateRiskCurve(mycurve, mycurve_estim);
-    
-    mean_risk(n) = risk_curve(0);
-    max_risk(n) = risk_curve(1);
+    risk_int(n) = estimateRiskCurve(mycurve, mycurve_estim);
   }
   
-  risk(0) = arma::mean(mean_risk);
-  risk(1) = arma::max(max_risk);
+  risk(0) = arma::mean(risk_int);
+  risk(1) = arma::max(risk_int);
   
   return (risk);
 }

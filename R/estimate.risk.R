@@ -25,11 +25,11 @@ estimate.risk <- function(curves, curves_estim, t0 = 0.5){
 #' @param curves List of (true) curves.
 #' @param curves_estim List of estimated curves.
 #' 
-#' @return List with the mean of mean and max of max residual squared error.
+#' @return List with the mean of and max the integrated residual squared error.
 estimate.risks <- function(curves, curves_estim){
   
   # Estimate the risk
   risk <- estimateRiskCurves(curves, curves_estim)
   
-  return(c('MeanMeanRSE' = risk[1], 'MaxMaxRSE' = risk[2]))
+  return(c('MeanIntRSE' = risk[1], 'MaxIntRSE' = risk[2]))
 }

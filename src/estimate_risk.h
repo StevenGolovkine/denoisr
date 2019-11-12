@@ -11,7 +11,7 @@ List estimateRisk(
     const double & t0 // In which point estimate the risk.
 );
 
-List estimateRiskCurve(
+double estimateRiskCurve(
     const List & curve, // Curve ($x and $t)
     const List & curve_estim // Estimated curve ($x and $t)
 );
