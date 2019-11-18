@@ -122,7 +122,7 @@ arma::mat kernelSmoothingCovariance(
               // XX = X_n.elem(idx);
               // TT = T_n.elem(idx);
 
-              Y_hat_kl = kernelSmoothingCurve({T_n(k), T_n(l)}, T_n, X_n, b);
+              Y_hat_kl = epaKernelSmoothingCurve({T_n(k), T_n(l)}, T_n, X_n, b);
 
               double K_l_v = 0;
               if(std::abs(T_n(l) - V(iv)) < h){
