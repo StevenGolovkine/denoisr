@@ -70,3 +70,18 @@ microbenchmark(
   uniKernelSmoothingCurve(t, t, y, b = bw_uni),
   times = 100
 )
+# 
+# 
+# library(tictoc)
+# 
+# tic()
+# simulation2 <- simulation$simulation %>% 
+#   map(~ add_column(.x, 
+#                    ...6 = sort(runif(length(.x$...1), 0, 1)),
+#                    ...7 = sort(rbeta(length(.x$...1), 0.25, 0.25))))
+# toc()
+# 
+# simulation2 <- list(simulation2, simulation$mean, simulation$covariance, simulation$sigma)
+# 
+# saveRDS(simulation2, 
+#         file = paste0('./fractional.brownian.trajectories-1000-0.4-0.01.0.05.0.1-2.rds'))

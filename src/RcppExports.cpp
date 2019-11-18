@@ -21,9 +21,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// kernelSmoothingCurve
-arma::vec kernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
-RcppExport SEXP _CovarianceEstimate_kernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
+// epaKernelSmoothingCurve
+arma::vec epaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
+RcppExport SEXP _CovarianceEstimate_epaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,7 +31,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernelSmoothingCurve(U, T, Y, b));
+    rcpp_result_gen = Rcpp::wrap(epaKernelSmoothingCurve(U, T, Y, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// uniKernelSmoothingCurve
+arma::vec uniKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
+RcppExport SEXP _CovarianceEstimate_uniKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(uniKernelSmoothingCurve(U, T, Y, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -77,7 +91,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // estimateRiskCurve
-List estimateRiskCurve(const List& curve, const List& curve_estim);
+double estimateRiskCurve(const List& curve, const List& curve_estim);
 RcppExport SEXP _CovarianceEstimate_estimateRiskCurve(SEXP curveSEXP, SEXP curve_estimSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -140,7 +154,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_CovarianceEstimate_kernelSmoothingCovariance", (DL_FUNC) &_CovarianceEstimate_kernelSmoothingCovariance, 5},
-    {"_CovarianceEstimate_kernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_kernelSmoothingCurve, 4},
+    {"_CovarianceEstimate_epaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_epaKernelSmoothingCurve, 4},
+    {"_CovarianceEstimate_uniKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_uniKernelSmoothingCurve, 4},
     {"_CovarianceEstimate_betaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_betaKernelSmoothingCurve, 4},
     {"_CovarianceEstimate_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_modifiedBetaKernelSmoothingCurve, 4},
     {"_CovarianceEstimate_estimateRisk", (DL_FUNC) &_CovarianceEstimate_estimateRisk, 3},

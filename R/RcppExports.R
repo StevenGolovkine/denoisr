@@ -5,8 +5,12 @@ kernelSmoothingCovariance <- function(curves, U, V, b, h) {
     .Call('_CovarianceEstimate_kernelSmoothingCovariance', PACKAGE = 'CovarianceEstimate', curves, U, V, b, h)
 }
 
-kernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_CovarianceEstimate_kernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
+epaKernelSmoothingCurve <- function(U, T, Y, b) {
+    .Call('_CovarianceEstimate_epaKernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
+}
+
+uniKernelSmoothingCurve <- function(U, T, Y, b) {
+    .Call('_CovarianceEstimate_uniKernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
 }
 
 betaKernelSmoothingCurve <- function(U, T, Y, b) {

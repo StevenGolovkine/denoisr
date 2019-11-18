@@ -23,7 +23,6 @@ library(tidyverse)
 #' 
 #' @return A tibble containing the trajectory and the sampling points.
 fractional_brownian_trajectory <- function(M, H, sigma, 
-                                           int = FALSE, int2 = FALSE,
                                            change_time = NULL, dens_time = NULL,
                                            modif_var = 1){
   require(somebm); require(pracma)
@@ -36,14 +35,6 @@ fractional_brownian_trajectory <- function(M, H, sigma,
     t <- t[order(t)]
   }
   x <- modif_var * as.vector(fbm(hurst = H, n = M_n))
-  
-  # Integrate the brownian motion
-  if (int == TRUE) {
-    x <- cumtrapz(t, x)[, 1]
-    if (int2 == TRUE) {
-      x <- cumtrapz(t, x)[, 1]
-    }
-  }
   
   # Change time
   if (inherits(change_time, 'function')) {
@@ -93,10 +84,10 @@ true_covariance <- function(s_, t_, H){
 }
 
 # Define some parameters
-N <- 5000 # Number of curves
-M <- c(200)  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.5) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
-sigma <- c(0.01, 0.05, 0.1, 0.25) # Standard deviation of the noise
+N <- 500000 # Number of curves
+M <- c(100)  # Number of points per curves (do it with 50, 200, 1000)
+H <- c(0.4) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
+sigma <- c(0.01, 0.05, 0.1) # Standard deviation of the noise
 
 
 # Do simulation

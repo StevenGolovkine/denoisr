@@ -45,7 +45,7 @@ arma::mat kernelSmoothingCovariance(
     arma::vec x = mycurve["x"];
     arma::vec t = mycurve["t"];
 
-    Y_hat.row(n) = kernelSmoothingCurve(T, t, x, b).t();
+    Y_hat.row(n) = epaKernelSmoothingCurve(T, t, x, b).t();
   }
   Rcout << "\n=== End ===" << std::endl;
 
