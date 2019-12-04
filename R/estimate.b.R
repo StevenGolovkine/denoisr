@@ -46,16 +46,20 @@ estimate.b <- function(data, sigma=0, H0=0.5, L0=1, K='epanechnikov'){
 #' Perform the estimation of the bandwith using CV
 #' 
 #' @param data list of curves to estimate by kernel regression
-estimate.b.cv <- function(data, nb_cores){
-  require(np); require(doParallel)
+estimate.b.cv <- function(data){
+  require(np); require(doParallel); require(dplyr)
   
-  cl <- makeCluster(nb_cores)
-  registerDoParallel(cl)
+  cl <- parallel::detectCores() %>%  - 1 %>% parallel::makeCluster()
+  doParallel::registerDoParallel(cl)
   
-  bw_list <- parSapply(cl, data, 
-                       function(c) sqrt(5) * np::npregbw(c$x ~ c$t, 
-                                                         regtype = 'll', # Local Linear Regression
-                                                         bwmethod = 'cv.ls', # Least Square Cross Validation
-                                                         ckertype = 'epanechnikov')$bw)
-  return(mean(bw_list))
+  bw_list <- foreach(j = 1:length(data)) %dopar% {
+    sqrt(5) * np::npregbw(x ~ t, data = data[[j]], 
+                          bwmethod = 'cv.ls', # Least Square Cross Validation
+                          ckertype = 'epanechnikov', # Kernel used
+                          regtype = 'lc')$bw # Local Constant Regression
+  }
+  
+  parallel::stopCluster(cl)
+  
+  return(mean(unlist(bw_list)))
 }
