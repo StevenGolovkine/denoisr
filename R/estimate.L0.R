@@ -6,15 +6,19 @@ library(tidyverse)
 #' Perform the estimation of L0. 
 #' 
 #' @param data List of curves to estimate by kernel regression.
+#' @param t0 The starting time for the estimation of H0. We consider the 8k0 - 7
+#'  nearest points of t0 for the estimation of H0 when sigma is unknown.
 #' @param H0 An estimation of H0.
-#' @param k The sampling time to consider (>= 2).
-#' @param density Density of the sampling points (currently, only consider uniform 
-#'        sampling points).
-#' @param sigma True value of sigma
-#'         If null, change estimate
+#' @param k0 For the computation of the gap between the different observations. 
+#'  Should be set as k0 = M / max(8, log(M)).
+#' @param sigma True value of sigma.
+#'  If null, change estimate.
+#' @param density Density of the sampling points (currently, only consider 
+#'  uniform sampling points).
+#'  
 #' @return An estimation of L0.
-estimate.L0 <- function(data, sigma = NULL, H0 = 0, 
-                        k0 = 2, t0 = 0, density = NULL){
+estimate.L0 <- function(data, t0 = 0, H0 = 0, 
+                        k0 = 2, sigma = NULL, density = NULL){
   
   S_N <- data
   
@@ -86,4 +90,31 @@ estimate.L0 <- function(data, sigma = NULL, H0 = 0,
   L0_hat <- (nume / deno)**0.5 
   
   return(L0_hat)
+}
+
+
+#' Perform the estimation of L0 over a list of t0.
+#' 
+#' @param data List of curves to estimate by kernel regression.
+#' @param t0_list Starting times for the estimation of H0. We consider the 8k0 - 7
+#'  nearest points of t0 for the estimation of H0 when sigma is unknown.
+#' @param H0_list Estimation of H0 at each t0.
+#' @param k0 For the computation of the gap between the different observations.
+#' @param sigma True value of sigma.
+#'  If null, change estimate.
+#' @param density Density of the sampling points (currently, only consider
+#'  uniform sampling points)?
+#'  
+#' @return A list containing the estimation of H0 at each t0.
+estimate.L0.list <- function(data, t0_list, H0_list, 
+                             k0 = 2, sigma = NULL, density = NULL){
+  
+  if (length(t0_list) != length(H0_list))
+    stop('t0_list and H0_list must have the same length')
+  
+  L0_hat_list <- t0_list %>% 
+    map2_dbl(H0_list, ~ estimate.L0(data, t0 = .x, H0 = .y, 
+                                    k0 = k0, sigma = sigma, density = NULL))
+  
+  return (L0_hat_list)
 }

@@ -7,12 +7,16 @@ library(tidyverse)
 #' Perform the estimation of the bandwith 
 #' 
 #' @param data List of curves to estimate by kernel regression.
-#' @param sigma An estimation of sigma.
 #' @param H0 An estimation of H0.
 #' @param L0 An estimation of L0.
+#' @param sigma An estimation of sigma.
 #' @param kernel Which kernel to use?
+#'  - epanechnikov (default)
+#'  - beta
+#'  - uniform
+#'  
 #' @return An estimation of H0.
-estimate.b <- function(data, sigma=0, H0=0.5, L0=1, K='epanechnikov'){
+estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = 'epanechnikov'){
   
   S_N <- data
   
@@ -43,9 +47,35 @@ estimate.b <- function(data, sigma=0, H0=0.5, L0=1, K='epanechnikov'){
   return(b_hat)
 }
 
-#' Perform the estimation of the bandwith using CV
+#' Perform the estimation of the bandwidth over a list of H0 and t0.
 #' 
-#' @param data list of curves to estimate by kernel regression
+#' @param data List of curves to estimate by kernel regression.
+#' @param H0_list List of estimates of H0.
+#' @param L0_list <- List of estimates of L0.
+#' @param sigma An estimation of sigma.
+#' @param kernel Which kernel to use?
+#'  - epanechnikov
+#'  - beta
+#'  - uniform
+#'  
+#'  @return List of estimates of the bandwidth.
+estimate.b.list <- function(data, H0_list, L0_list, 
+                            sigma = 0, K = 'epanechnikov'){
+  
+  if (length(H0_list) != length(L0_list))
+    stop('H0_list and L0_list must have the same length.')
+  
+  b_hat_list <- H0_list %>%
+    map2_dbl(L0_list, ~ estimate.b(data, H0 = .x, L0 = .y,
+                                   sigma = sigma, K = K))
+  return (b_hat_list)
+}
+
+#' Perform the estimation of the bandwith using CV.
+#' 
+#' @param data List of curves to estimate by kernel regression.
+#' 
+#' @return An estimation of the bandwidth by cross-validation.
 estimate.b.cv <- function(data){
   require(np); require(doParallel); require(dplyr)
   

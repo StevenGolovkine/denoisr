@@ -10,7 +10,7 @@ arma::vec epaKernelSmoothingCurve(
     const arma::vec & U, // Estimation points in U 
     const arma::vec & T, // Sampling points
     const arma::vec & Y, // Curves points
-    const double b // Smoothing bandwith
+    const arma::vec & b // Smoothing bandwiths
   ){
 
   // Get parameters
@@ -27,9 +27,9 @@ arma::vec epaKernelSmoothingCurve(
     // Loop over the known points
     for (arma::uword k=0; k<M; k++){
 
-      if (std::abs(T(k) - U(i)) <= b){
-        Y_hat(i) += (Y(k) * (1 - std::pow((T(k) - U(i))/b, 2)));
-        cpt += (1 - std::pow((T(k) - U(i))/b, 2));
+      if (std::abs(T(k) - U(i)) <= b(i)){
+        Y_hat(i) += (Y(k) * (1 - std::pow((T(k) - U(i))/b(i), 2)));
+        cpt += (1 - std::pow((T(k) - U(i))/b(i), 2));
       }
     }
     if(cpt == 0){
@@ -47,7 +47,7 @@ arma::vec uniKernelSmoothingCurve(
     const arma::vec & U, // Estimation points in U 
     const arma::vec & T, // Sampling points
     const arma::vec & Y, // Curves points
-    const double b // Smoothing bandwith
+    const arma::vec & b // Smoothing bandwiths
 ){
   
   // Get parameters
@@ -64,7 +64,7 @@ arma::vec uniKernelSmoothingCurve(
     // Loop over the known points
     for (arma::uword k=0; k<M; k++){
       
-      if (std::abs(T(k) - U(i)) <= b){
+      if (std::abs(T(k) - U(i)) <= b(i)){
         Y_hat(i) += Y(k);
         cpt += 1;
       }
@@ -85,7 +85,7 @@ arma::vec betaKernelSmoothingCurve(
   const arma::vec & U, // Estimation points 
   const arma::vec & T, // Sampling points
   const arma::vec & Y, // Curves points
-  const double b // Smoothing bandwith
+  const arma::vec & b // Smoothing bandwiths
 ){
   // Get parameters
   arma::uword M = T.n_elem; // Number of sampling points
@@ -104,12 +104,12 @@ arma::vec betaKernelSmoothingCurve(
   
   // Loop over the points to estimate
   for(arma::uword i=0; i<L; i++){
-    double B = R::beta(U(i)/b + 1, (1 - U(i))/b + 1);
+    double B = R::beta(U(i)/b(i) + 1, (1 - U(i))/b(i) + 1);
     // Loop over the known points
     for(arma::uword k=1; k<M; k++){
       
       arma::vec S_k = arma::linspace<arma::vec>(S(k-1), S(k), 100);
-      arma::vec K = arma::pow(S_k, U(i)/b) % arma::pow((1 - S_k), (1 - U(i))/b);
+      arma::vec K = arma::pow(S_k, U(i)/b(i)) % arma::pow((1 - S_k), (1 - U(i))/b(i));
       arma::mat intK = arma::trapz(S_k, K);
       
       Y_hat(i) += (Y(k) * intK(0, 0)) / B;
@@ -124,7 +124,7 @@ arma::vec modifiedBetaKernelSmoothingCurve(
   const arma::vec & U, // Estimation points
   const arma::vec & T, // Sampling points
   const arma::vec & Y, // Curves points
-  const double b // Smoothing bandwith
+  const arma::vec & b // Smoothing bandwiths
 ){
   // Get parameters
   arma::uword M = T.n_elem; // Number of sampling points 
@@ -144,37 +144,37 @@ arma::vec modifiedBetaKernelSmoothingCurve(
   // Loop over the points to estimate
   for(arma::uword i=0; i<L; i++){
     
-    if(U(i) < 2*b){
-      double rho = 2 * std::pow(b, 2) + 2.5 - std::pow(4 * std::pow(b, 4) + 6 * std::pow(b, 2) + 2.25 - std::pow(U(i), 2) - U(i) / b, 0.5);
-      double B = R::beta(rho, (1 - U(i))/b);
+    if(U(i) < 2*b(i)){
+      double rho = 2 * std::pow(b(i), 2) + 2.5 - std::pow(4 * std::pow(b(i), 4) + 6 * std::pow(b(i), 2) + 2.25 - std::pow(U(i), 2) - U(i) / b(i), 0.5);
+      double B = R::beta(rho, (1 - U(i))/b(i));
       // Loop over the known points
       for(arma::uword k=1; k<M; k++){
         
         arma::vec S_k = arma::linspace<arma::vec>(S(k-1), S(k), 10);
-        arma::vec K = arma::pow(S_k, rho - 1) % arma::pow((1 - S_k), (1 - U(i))/b - 1);
+        arma::vec K = arma::pow(S_k, rho - 1) % arma::pow((1 - S_k), (1 - U(i))/b(i) - 1);
         arma::mat intK = arma::trapz(S_k, K);
         
         Y_hat(i) += (Y(k) * intK(0, 0)) / B;
       }
-    } else if(U(i) > 1 - 2*b){
-      double rho = 2 * std::pow(b, 2) + 2.5 - std::pow(4 * std::pow(b, 4) + 6 * std::pow(b, 2) + 2.25 - std::pow((1 - U(i)), 2) - (1 - U(i)) / b, 0.5);
-      double B = R::beta(U(i)/b, rho);
+    } else if(U(i) > 1 - 2*b(i)){
+      double rho = 2 * std::pow(b(i), 2) + 2.5 - std::pow(4 * std::pow(b(i), 4) + 6 * std::pow(b(i), 2) + 2.25 - std::pow((1 - U(i)), 2) - (1 - U(i)) / b(i), 0.5);
+      double B = R::beta(U(i)/b(i), rho);
       // Loop over the known points
       for(arma::uword k=1; k<M; k++){
         
         arma::vec S_k = arma::linspace<arma::vec>(S(k-1), S(k), 10);
-        arma::vec K = arma::pow(S_k, U(i)/b - 1) % arma::pow((1 - S_k), rho - 1);
+        arma::vec K = arma::pow(S_k, U(i)/b(i) - 1) % arma::pow((1 - S_k), rho - 1);
         arma::mat intK = arma::trapz(S_k, K);
         
         Y_hat(i) += (Y(k) * intK(0, 0)) / B;
       }
     } else{ // 2*b < U(i) < 1 - 2*b
-      double B = R::beta(U(i)/b, (1 - U(i))/b);
+      double B = R::beta(U(i)/b(i), (1 - U(i))/b(i));
       // Loop over the known points
       for(arma::uword k=1; k<M; k++){
         
         arma::vec S_k = arma::linspace<arma::vec>(S(k-1), S(k), 10);
-        arma::vec K = arma::pow(S_k, U(i)/b - 1) % arma::pow((1 - S_k), (1 - U(i))/b - 1);
+        arma::vec K = arma::pow(S_k, U(i)/b(i) - 1) % arma::pow((1 - S_k), (1 - U(i))/b(i) - 1);
         arma::mat intK = arma::trapz(S_k, K);
         
         Y_hat(i) += (Y(k) * intK(0, 0)) / B;
