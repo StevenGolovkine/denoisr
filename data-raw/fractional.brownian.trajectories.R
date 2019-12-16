@@ -84,10 +84,10 @@ true_covariance <- function(s_, t_, H){
 }
 
 # Define some parameters
-N <- 500000 # Number of curves
-M <- c(100)  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.4) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
-sigma <- c(0.01, 0.05, 0.1) # Standard deviation of the noise
+N <- 1000 # Number of curves
+M <- c(200)  # Number of points per curves (do it with 50, 200, 1000)
+H <- c(0.9) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
+sigma <- c(0) # Standard deviation of the noise
 
 
 # Do simulation
