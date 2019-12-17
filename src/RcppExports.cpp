@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // epaKernelSmoothingCurve
-arma::vec epaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
+arma::vec epaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
 RcppExport SEXP _CovarianceEstimate_epaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -30,13 +30,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(epaKernelSmoothingCurve(U, T, Y, b));
     return rcpp_result_gen;
 END_RCPP
 }
 // uniKernelSmoothingCurve
-arma::vec uniKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
+arma::vec uniKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
 RcppExport SEXP _CovarianceEstimate_uniKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -44,13 +44,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(uniKernelSmoothingCurve(U, T, Y, b));
     return rcpp_result_gen;
 END_RCPP
 }
 // betaKernelSmoothingCurve
-arma::vec betaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
+arma::vec betaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
 RcppExport SEXP _CovarianceEstimate_betaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -58,13 +58,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(betaKernelSmoothingCurve(U, T, Y, b));
     return rcpp_result_gen;
 END_RCPP
 }
 // modifiedBetaKernelSmoothingCurve
-arma::vec modifiedBetaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const double b);
+arma::vec modifiedBetaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
 RcppExport SEXP _CovarianceEstimate_modifiedBetaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -72,7 +72,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(modifiedBetaKernelSmoothingCurve(U, T, Y, b));
     return rcpp_result_gen;
 END_RCPP
