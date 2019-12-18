@@ -6,21 +6,6 @@
 
 using namespace Rcpp;
 
-// kernelSmoothingCovariance
-arma::mat kernelSmoothingCovariance(const List& curves, const arma::vec& U, const arma::vec& V, const double& b, const double& h);
-RcppExport SEXP _CovarianceEstimate_kernelSmoothingCovariance(SEXP curvesSEXP, SEXP USEXP, SEXP VSEXP, SEXP bSEXP, SEXP hSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const List& >::type curves(curvesSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type V(VSEXP);
-    Rcpp::traits::input_parameter< const double& >::type b(bSEXP);
-    Rcpp::traits::input_parameter< const double& >::type h(hSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernelSmoothingCovariance(curves, U, V, b, h));
-    return rcpp_result_gen;
-END_RCPP
-}
 // epaKernelSmoothingCurve
 arma::vec epaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
 RcppExport SEXP _CovarianceEstimate_epaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
@@ -137,23 +122,8 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// mfBm
-arma::vec mfBm(arma::vec& H, arma::vec& T, int N, int K);
-RcppExport SEXP _CovarianceEstimate_mfBm(SEXP HSEXP, SEXP TSEXP, SEXP NSEXP, SEXP KSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type H(HSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type T(TSEXP);
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< int >::type K(KSEXP);
-    rcpp_result_gen = Rcpp::wrap(mfBm(H, T, N, K));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_CovarianceEstimate_kernelSmoothingCovariance", (DL_FUNC) &_CovarianceEstimate_kernelSmoothingCovariance, 5},
     {"_CovarianceEstimate_epaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_epaKernelSmoothingCurve, 4},
     {"_CovarianceEstimate_uniKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_uniKernelSmoothingCurve, 4},
     {"_CovarianceEstimate_betaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_betaKernelSmoothingCurve, 4},
@@ -163,7 +133,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_CovarianceEstimate_estimateRiskCurves", (DL_FUNC) &_CovarianceEstimate_estimateRiskCurves, 2},
     {"_CovarianceEstimate_estimateSigma", (DL_FUNC) &_CovarianceEstimate_estimateSigma, 1},
     {"_CovarianceEstimate_estimateSigmaMSE", (DL_FUNC) &_CovarianceEstimate_estimateSigmaMSE, 2},
-    {"_CovarianceEstimate_mfBm", (DL_FUNC) &_CovarianceEstimate_mfBm, 4},
     {NULL, NULL, 0}
 };
 
