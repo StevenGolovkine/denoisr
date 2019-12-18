@@ -2,18 +2,16 @@
 % Please edit documentation in R/estimate.sigma.R
 \name{estimate.sigma}
 \alias{estimate.sigma}
-\title{Perform the estiamtion of the standard deviation of the noise}
+\title{Perform the estimation of sigma}
 \usage{
-estimate.sigma(curve)
+estimate.sigma(data)
 }
 \arguments{
-\item{curve}{List of two vectors representing a curve:
-- $t Sampling points
-- $x Observed points}
+\item{data}{List of curves to estimate by kernel regression.}
 }
 \value{
-The estimated standard deviation
+An estimation of sigma.
 }
 \description{
-Perform the estiamtion of the standard deviation of the noise
+Perform the estimation of sigma
 }

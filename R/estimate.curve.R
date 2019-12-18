@@ -20,7 +20,7 @@ Rcpp::sourceCpp("./src/estimate_curve.cpp")
 #'  - mBeta
 #'  - locPoly (not used)
 #' @param degree Degree of the polynomial for the locpoly function (not used).
-#' @useDynLib CovarianceEstimate
+#' @useDynLib SmoothCurves
 #'
 #' @return List of two vectors representating the estimated curve:
 #'               - $t Sampling points

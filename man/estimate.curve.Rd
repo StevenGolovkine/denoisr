@@ -2,9 +2,16 @@
 % Please edit documentation in R/estimate.curve.R
 \name{estimate.curve}
 \alias{estimate.curve}
-\title{Perform the smoothing of individuals curves}
+\title{Perform the smoothing of individuals curves.}
 \usage{
-estimate.curve(curve, U, b)
+estimate.curve(
+  curve,
+  U,
+  b,
+  t0_list = NULL,
+  kernel = "epanechnikov",
+  degree = 0
+)
 }
 \arguments{
 \item{curve}{List of two vectors representing a curve:
@@ -14,12 +21,25 @@ estimate.curve(curve, U, b)
 \item{U}{Vector of points for the estimation}
 
 \item{b}{Bandwith}
+
+\item{t0_list}{List of time at which the bandwidths have been estimated.}
+
+\item{kernel}{Kernel name to use
+\itemize{
+\item epanechnikov (default)
+\item uniforma
+\item beta
+\item mBeta
+\item locPoly (not used)
+}}
+
+\item{degree}{Degree of the polynomial for the locpoly function (not used).}
 }
 \value{
-List of two vectors representaing the estimated curve:
+List of two vectors representating the estimated curve:
 - $t Sampling points
 - $x Predicted points
 }
 \description{
-Perform the smoothing of individuals curves
+Perform the smoothing of individuals curves.
 }
