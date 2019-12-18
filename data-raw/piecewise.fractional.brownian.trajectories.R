@@ -61,9 +61,9 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
 
 
 # Define some parameters
-N <- 10000 # Number of curves
-M <- c(500)  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.9, 0.4, 0.6) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
+N <- 500000 # Number of curves
+M <- c(1000)  # Number of points per curves (do it with 50, 200, 1000)
+H <- c(0.2, 0.5, 0.8) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
 sigma <- c(0.01, 0.05, 0.1) # Standard deviation of the noise (do it with 0, 0.01, 0.05, 0.1)
 
 # Do simulation
