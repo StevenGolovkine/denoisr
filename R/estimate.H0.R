@@ -70,9 +70,9 @@ estimate.H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #'  If null, change estimate.
 #'
 #' @return A list containing the estimation of H0 at each t0.
-estimate.H0.list <- function(data, t0_list, k0 = 2, sigma = NULL) {
+estimate.H0.list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
   H0_hat_list <- t0_list %>%
-    map_dbl(~ estimate.H0(data, t0 = .x, k0 = k0, sigma = sigma))
+    map2_dbl(k0_list, ~ estimate.H0(data, t0 = .x, k0 = .y, sigma = sigma))
 
   return(H0_hat_list)
 }

@@ -2,38 +2,42 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 epaKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_CovarianceEstimate_epaKernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
+    .Call('_SmoothCurves_epaKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
 }
 
 uniKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_CovarianceEstimate_uniKernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
+    .Call('_SmoothCurves_uniKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
 }
 
 betaKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_CovarianceEstimate_betaKernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
+    .Call('_SmoothCurves_betaKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
 }
 
 modifiedBetaKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_CovarianceEstimate_modifiedBetaKernelSmoothingCurve', PACKAGE = 'CovarianceEstimate', U, T, Y, b)
+    .Call('_SmoothCurves_modifiedBetaKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
 }
 
 estimateRisk <- function(curves, curves_estim, t0) {
-    .Call('_CovarianceEstimate_estimateRisk', PACKAGE = 'CovarianceEstimate', curves, curves_estim, t0)
+    .Call('_SmoothCurves_estimateRisk', PACKAGE = 'SmoothCurves', curves, curves_estim, t0)
 }
 
 estimateRiskCurve <- function(curve, curve_estim) {
-    .Call('_CovarianceEstimate_estimateRiskCurve', PACKAGE = 'CovarianceEstimate', curve, curve_estim)
+    .Call('_SmoothCurves_estimateRiskCurve', PACKAGE = 'SmoothCurves', curve, curve_estim)
 }
 
 estimateRiskCurves <- function(curves, curves_estim) {
-    .Call('_CovarianceEstimate_estimateRiskCurves', PACKAGE = 'CovarianceEstimate', curves, curves_estim)
+    .Call('_SmoothCurves_estimateRiskCurves', PACKAGE = 'SmoothCurves', curves, curves_estim)
 }
 
 estimateSigma <- function(curves) {
-    .Call('_CovarianceEstimate_estimateSigma', PACKAGE = 'CovarianceEstimate', curves)
+    .Call('_SmoothCurves_estimateSigma', PACKAGE = 'SmoothCurves', curves)
 }
 
 estimateSigmaMSE <- function(curves, curves_estim) {
+<<<<<<< HEAD
     .Call('_CovarianceEstimate_estimateSigmaMSE', PACKAGE = 'CovarianceEstimate', curves, curves_estim)
+=======
+    .Call('_SmoothCurves_estimateSigmaMSE', PACKAGE = 'SmoothCurves', curves, curves_estim)
+>>>>>>> a0cefa04eac313d9c84427f165adea1e0b369ddd
 }
 
