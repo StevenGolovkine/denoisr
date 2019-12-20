@@ -1,18 +1,33 @@
 Package: SmoothCurves
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Nonparametric Kernel Smoothing Methods for Functional Data
+Version: 1.0.0
 Date: 2019-06-14
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Authors@R: person("Steven", "Golovkine", 
+                email = "steven_golovkine@icloud.com", 
+                role = c("aut", "cre"))
+Maintainer: Steven Golovkine <steven_golovkine@icloud.com>
+Description: Nonparametric kernel smoothing methods that handle irregularly 
+    sampled functional data.  
+License: MIT + file LICENSE
+LazyData: true
+URL: https://github.com/StevenGolovkine/SmoothCurves
+BugReports: https://github.com/StevenGolovkine/SmoothCurves/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.1
 LinkingTo: 
     Rcpp,
     RcppArmadillo
-Imports: 
-    np,
-    Rcpp,
-    tidyverse
+Imports:
+    doParallel (>= 1.0.15),
+    KernSmooth (>= 2.23-16),
+    np (>= 0.60-9),
+    parallel (>= 3.6.2),
+    Rcpp (>= 1.0.3),
+    RcppArmadillo (>= 0.9.800.1.0),
+    tidyverse (>= 1.3.0)
+Suggest:
+    pracma (>= 2.2.5),
+    somebm (>= 0.1)
+Suggests: 
+    testthat (>= 2.1.0)
