@@ -4,6 +4,8 @@
 
 #' Perform a non-parametric smoothing of a set of curves.
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param data A list of curves to smooth. Each entry of the list should have
 #'  two elements:
 #'   - $t which correspond to the time we observed the curve.
@@ -19,13 +21,14 @@
 #'  - epanechnikov (default)
 #'
 #' @return A list of same size of `data` containing the smoothed curves.
+#' @export
 smooth.curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") {
 
   # Estimation of the noise
   sigma_estim <- estimate.sigma(data)
 
   # Estimation of H0
-  H0_estim <- estimate.H0.list(data, t0_list = t0, k0 = k0, sigma = NULL)
+  H0_estim <- estimate.H0.list(data, t0_list = t0, k0_list = k0, sigma = NULL)
 
   # Estimation of L0
   L0_estim <- estimate.L0.list(data,
@@ -41,12 +44,12 @@ smooth.curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
 
   # Estimation of the curves
   if (is.null(U)) {
-    curves <- data %>% map(~ estimate.curve(.x,
+    curves <- data %>% purrr::map(~ estimate.curve(.x,
       U = .x$t, b = b_estim,
       t0_list = t0, kernel = K
     ))
   } else {
-    curves <- data %>% map(~ estimate.curve(.x,
+    curves <- data %>% purrr::map(~ estimate.curve(.x,
       U = U, b = b_estim,
       t0_list = t0, kernel = K
     ))
@@ -67,6 +70,8 @@ smooth.curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
 #' Perform a non-parametric smoothing of a set of curves when the regularity is
 #' larger than 1.
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param data A list of curves to smooth. Each entry of the list should have
 #'  two elements:
 #'   - $t which corresponds to the time we observed the curve.
@@ -86,6 +91,7 @@ smooth.curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
 #'  - parameter which contains the estimation of sigma, H0, L0 and b.
 #'  - smooth which is a list of the same size than `data` containing the
 #'  smoothed curves.
+#' @export
 smooth.curves.regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
                                      K = "epanechnikov", eps = 0.1) {
 
@@ -99,9 +105,9 @@ smooth.curves.regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
     L0 <- estimate.L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
     b <- estimate.b(data, sigma = sigma_estim, H0 = H0_estim + cpt, L0 = L0)
 
-    smooth <- data %>% map(~ list(
+    smooth <- data %>% purrr::map(~ list(
       t = .x$t,
-      x = locpoly(.x$t, .x$x,
+      x = KernSmooth::locpoly(.x$t, .x$x,
         drv = 1 + cpt,
         bandwidth = b, gridsize = length(.x$t)
       )$y
@@ -118,12 +124,12 @@ smooth.curves.regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
 
   # Estimation of the curves
   if (is.null(U)) {
-    curves <- data %>% map(~ estimate.curve(.x,
+    curves <- data %>% purrr::map(~ estimate.curve(.x,
       U = .x$t, b = b_estim,
       t0_list = t0, kernel = K
     ))
   } else {
-    curves <- data %>% map(~ estimate.curve(.x,
+    curves <- data %>% purrr::map(~ estimate.curve(.x,
       U = U, b = b_estim,
       t0_list = t0, kernel = K
     ))

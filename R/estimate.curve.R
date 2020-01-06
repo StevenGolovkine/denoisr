@@ -5,6 +5,8 @@
 
 #' Perform the smoothing of individuals curves.
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param curve List of two vectors representing a curve:
 #'               - $t Sampling points
 #'               - $x Observed points
@@ -22,6 +24,7 @@
 #' @return List of two vectors representating the estimated curve:
 #'               - $t Sampling points
 #'               - $x Predicted points
+#' @export
 estimate.curve <- function(curve, U, b, t0_list = NULL,
                            kernel = "epanechnikov") {
 
@@ -29,7 +32,7 @@ estimate.curve <- function(curve, U, b, t0_list = NULL,
   if (length(b) == 1) {
     bandwidth <- rep(b, length(U))
   } else if (length(b) != length(U)) {
-    idx <- U %>% map_dbl(~ order(abs(.x - t0_list))[1])
+    idx <- U %>% purrr::map_dbl(~ order(abs(.x - t0_list))[1])
     bandwidth <- b[idx]
   } else if (length(b) == length(U)) {
     bandwidth <- b

@@ -7,12 +7,7 @@
 #' 
 #' @param data List of curves to estimate by kernel regression.
 #' @return An estimation of sigma.
+#' @export
 estimate.sigma <- function(data){
-  
-  S_N <- data
-  
-  # Estimate sigma
-  sigma_hat <- S_N %>% estimateSigma()
-  
-  return(sigma_hat)
+  return(estimateSigma(data))
 }

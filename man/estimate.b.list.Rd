@@ -22,7 +22,8 @@ estimate.b.list(data, H0_list, L0_list, sigma = 0, K = "epanechnikov")
 \item uniform
 }
 
-@return List of estimates of the bandwidth.}
+@return List of estimates of the bandwidth.
+@export}
 }
 \description{
 Perform the estimation of the bandwidth over a list of H0 and t0.

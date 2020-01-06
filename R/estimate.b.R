@@ -5,6 +5,8 @@
 
 #' Perform the estimation of the bandwith
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param data List of curves to estimate by kernel regression.
 #' @param H0 An estimation of H0.
 #' @param L0 An estimation of L0.
@@ -29,8 +31,8 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
     phi <- function(x, H0, alpha = 1, beta = 1) {
       abs(x**(alpha - 1) * (1 - x)**(beta - 1)) * x**H0 / abs(beta(alpha, beta))
     }
-    K_norm2 <- integrate(K_norm2_f, lower = lower, upper = upper)$value
-    K_phi <- integrate(phi, lower = 0, upper = 1, H0 = H0)$value
+    K_norm2 <- stats::integrate(K_norm2_f, lower = lower, upper = upper)$value
+    K_phi <- stats::integrate(phi, lower = 0, upper = 1, H0 = H0)$value
   } else {
     K_norm2 <- 1
     K_phi <- 1 / (H0 + 1)
@@ -38,7 +40,7 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 
   # Estimate mu
   mu_hat <- S_N %>%
-    map_int(~ length(.x$t)) %>%
+    purrr::map_int(~ length(.x$t)) %>%
     mean()
 
   # Estimate b
@@ -53,6 +55,10 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 
 #' Perform the estimation of the bandwidth over a list of H0 and t0.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom foreach foreach
+#' @importFrom foreach %dopar%
+#' 
 #' @param data List of curves to estimate by kernel regression.
 #' @param H0_list List of estimates of H0.
 #' @param L0_list <- List of estimates of L0.
@@ -63,6 +69,7 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 #'  - uniform
 #'
 #'  @return List of estimates of the bandwidth.
+#'  @export
 estimate.b.list <- function(data, H0_list, L0_list,
                             sigma = 0, K = "epanechnikov") {
   if (length(H0_list) != length(L0_list)) {
@@ -70,7 +77,7 @@ estimate.b.list <- function(data, H0_list, L0_list,
   }
 
   b_hat_list <- H0_list %>%
-    map2_dbl(L0_list, ~ estimate.b(data,
+    purrr::map2_dbl(L0_list, ~ estimate.b(data,
       H0 = .x, L0 = .y,
       sigma = sigma, K = K
     ))
@@ -79,9 +86,12 @@ estimate.b.list <- function(data, H0_list, L0_list,
 
 #' Perform the estimation of the bandwith using CV.
 #'
+#' @importFrom magrittr %>%
+#'
 #' @param data List of curves to estimate by kernel regression.
 #'
 #' @return An estimation of the bandwidth by cross-validation.
+#' @export
 estimate.b.cv <- function(data) {
 
   cl <- parallel::detectCores() %>%

@@ -50,7 +50,7 @@ fractional_brownian_trajectory <- function(M, H, sigma,
     j = j + 1
   }
 
-  return(as_tibble(simu, .name_repair = 'unique'))
+  return(dplyr::as_tibble(simu, .name_repair = 'unique'))
 }
 
 
@@ -65,6 +65,8 @@ true_mean <- function(t){
 
 #' Compute the true covariance of the generated fractional Brownian motion.
 #' 
+#' @importFrom magrittr %>%
+#' 
 #' @param s_ A vector of sampling points
 #' @param t_ A vector of sampling points
 #' @param H Hurst coefficient
@@ -73,7 +75,7 @@ true_covariance <- function(s_, t_, H){
   res <- tibble(
     s = rep(s_, times = length(t_)),
     t = rep(t_, each = length(s_))) %>% 
-    mutate(phi = (abs(s)**(2*H) + abs(t)**(2*H) - abs(t - s)*(2*H))/2)
+    dplyr::mutate(phi = (abs(s)**(2*H) + abs(t)**(2*H) - abs(t - s)*(2*H))/2)
   return(res)
 }
 

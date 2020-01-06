@@ -27,7 +27,7 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
   
   x <- list()
   for(i in seq_along(H)){
-    x[i] <- list(as.vector(fbm(hurst = H[i], n = M_nn[i] - 1)))
+    x[i] <- list(as.vector(somebm::fbm(hurst = H[i], n = M_nn[i] - 1)))
   }
 
   # Some continuity in the change point
@@ -50,7 +50,7 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
     j = j + 1
   }
   
-  return(as_tibble(simu, .name_repair = 'unique'))
+  return(dplyr::as_tibble(simu, .name_repair = 'unique'))
 }
 
 

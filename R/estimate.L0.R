@@ -5,6 +5,8 @@
 
 #' Perform the estimation of L0.
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0 The starting time for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
@@ -23,7 +25,7 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
 
   # Estimate mu
   mu_hat <- S_N %>%
-    map_int(~ length(.x$t)) %>%
+    purrr::map_int(~ length(.x$t)) %>%
     mean()
 
   # Estimate L0
@@ -35,18 +37,18 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
   if (is.null(density)) { # Case where the density is not known
     if (is.null(sigma)) { # Subcase where sigma is not known
       idxs <- S_N %>%
-        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
+        purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
       a <- S_N %>%
-        map2_dbl(idxs, ~ theta(.x$x, k = 2 * k0 - 1, idx = .y)) %>%
+        purrr::map2_dbl(idxs, ~ theta(.x$x, k = 2 * k0 - 1, idx = .y)) %>%
         mean()
       b <- S_N %>%
-        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
+        purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
       c <- S_N %>%
-        map2_dbl(idxs, ~ eta(.x$t, k = 2 * k0 - 1, idx = .y, H = H0)) %>%
+        purrr::map2_dbl(idxs, ~ eta(.x$t, k = 2 * k0 - 1, idx = .y, H = H0)) %>%
         mean()
       d <- S_N %>%
-        map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>%
+        purrr::map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>%
         mean()
       if ((a - b > 0) & (c - d > 0)) {
         nume <- a - b
@@ -54,12 +56,12 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
       }
     } else { # Subcase where sigma is known
       idxs <- S_N %>%
-        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2 * k0)]))
+        purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2 * k0)]))
       a <- S_N %>%
-        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
+        purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
       b <- S_N %>%
-        map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>%
+        purrr::map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>%
         mean()
       if ((a - 2 * sigma**2 > 0) & b > 0) {
         nume <- a - 2 * sigma**2
@@ -69,20 +71,20 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
   } else { # Case where the density is known (only the uniform case)
     if (is.null(sigma)) { # Subcase where sigma is not known
       idxs <- S_N %>%
-        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
+        purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
       a <- S_N %>%
-        map2_dbl(idxs, ~ theta(.x$x, k = 2 * k0 - 1, idx = .y)) %>%
+        purrr::map2_dbl(idxs, ~ theta(.x$x, k = 2 * k0 - 1, idx = .y)) %>%
         mean()
       b <- S_N %>%
-        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
+        purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
       if (a - b > 0) nume <- a - b
       deno <- (2**(2 * H0) - 1) * ((k0 - 1) / (mu_hat + 1))**(2 * H0)
     } else { # Subcase where sigma is known
       idxs <- S_N %>%
-        map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2 * k0)]))
+        purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2 * k0)]))
       a <- S_N %>%
-        map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
+        purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
       if (a - 2 * sigma**2 > 0) nume <- a - 2 * sigma**2
       deno <- ((k0 - 1) / (mu_hat + 1))**(2 * H0)
@@ -97,6 +99,8 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
 
 #' Perform the estimation of L0 over a list of t0.
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0_list Starting times for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
@@ -108,6 +112,7 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
 #'  uniform sampling points)?
 #'
 #' @return A list containing the estimation of H0 at each t0.
+#' @export
 estimate.L0.list <- function(data, t0_list, H0_list,
                              k0 = 2, sigma = NULL, density = NULL) {
   if (length(t0_list) != length(H0_list)) {
@@ -115,7 +120,7 @@ estimate.L0.list <- function(data, t0_list, H0_list,
   }
 
   L0_hat_list <- t0_list %>%
-    map2_dbl(H0_list, ~ estimate.L0(data,
+    purrr::map2_dbl(H0_list, ~ estimate.L0(data,
       t0 = .x, H0 = .y,
       k0 = k0, sigma = sigma, density = NULL
     ))
