@@ -15,7 +15,7 @@ estimate.b.list(data, H0_list, L0_list, sigma = 0, K = "epanechnikov")
 
 \item{sigma}{An estimation of sigma.}
 
-\item{kernel}{Which kernel to use?
+\item{K}{Which kernel to use?
 \itemize{
 \item epanechnikov
 \item beta

@@ -4,14 +4,7 @@
 \alias{estimate.curve}
 \title{Perform the smoothing of individuals curves.}
 \usage{
-estimate.curve(
-  curve,
-  U,
-  b,
-  t0_list = NULL,
-  kernel = "epanechnikov",
-  degree = 0
-)
+estimate.curve(curve, U, b, t0_list = NULL, kernel = "epanechnikov")
 }
 \arguments{
 \item{curve}{List of two vectors representing a curve:
@@ -32,8 +25,6 @@ estimate.curve(
 \item mBeta
 \item locPoly (not used)
 }}
-
-\item{degree}{Degree of the polynomial for the locpoly function (not used).}
 }
 \value{
 List of two vectors representating the estimated curve:

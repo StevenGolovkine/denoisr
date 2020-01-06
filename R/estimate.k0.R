@@ -1,7 +1,6 @@
 ################################################################################
 #         Functions for k0 parameter estimation using regularity               #
 ################################################################################
-library(tidyverse)
 
 
 #' Perform the estimation of the pilot k0.

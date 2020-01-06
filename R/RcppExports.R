@@ -34,10 +34,6 @@ estimateSigma <- function(curves) {
 }
 
 estimateSigmaMSE <- function(curves, curves_estim) {
-<<<<<<< HEAD
-    .Call('_CovarianceEstimate_estimateSigmaMSE', PACKAGE = 'CovarianceEstimate', curves, curves_estim)
-=======
     .Call('_SmoothCurves_estimateSigmaMSE', PACKAGE = 'SmoothCurves', curves, curves_estim)
->>>>>>> a0cefa04eac313d9c84427f165adea1e0b369ddd
 }
 

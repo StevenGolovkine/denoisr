@@ -2,11 +2,6 @@
 #                       Generate fractional Brownian motion                    #
 ################################################################################
 
-# Load packages
-library(tidyverse)
-
-# Define functions
-
 #' Generate fractional Brownian motion with a random noise.
 #' 
 #' @param M Expected number of points in the trajectory.
@@ -25,8 +20,7 @@ library(tidyverse)
 fractional_brownian_trajectory <- function(M, H, sigma, 
                                            change_time = NULL, dens_time = NULL,
                                            modif_var = 1){
-  require(somebm); require(pracma)
-  
+
   M_n <- rpois(1, M)
   if (!inherits(dens_time, 'function')) {
     t <- seq(0, 1, length.out = M_n + 1)
@@ -34,7 +28,7 @@ fractional_brownian_trajectory <- function(M, H, sigma,
     t <- dens_time(M_n + 1)
     t <- t[order(t)]
   }
-  x <- modif_var * as.vector(fbm(hurst = H, n = M_n))
+  x <- modif_var * as.vector(somebm::fbm(hurst = H, n = M_n))
   
   # Change time
   if (inherits(change_time, 'function')) {

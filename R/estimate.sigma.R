@@ -1,9 +1,6 @@
 ################################################################################
 #       Functions for sigma parameter estimation using regularity              #
 ################################################################################
-library(tidyverse)
-
-Rcpp::sourceCpp('./src/estimate_sigma.cpp')
 
 
 #' Perform the estimation of sigma 

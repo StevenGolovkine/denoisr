@@ -1,10 +1,6 @@
 ################################################################################
 #        Functions that performs kernel smoothing over a set of curves         #
 ################################################################################
-library(tidyverse)
-
-Rcpp::sourceCpp("./src/estimate_sigma.cpp")
-Rcpp::sourceCpp("./src/estimate_curve.cpp")
 
 #' Perform a non-parametric smoothing of a set of curves.
 #'
@@ -92,7 +88,6 @@ smooth.curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
 #'  smoothed curves.
 smooth.curves.regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
                                      K = "epanechnikov", eps = 0.1) {
-  require(KernSmooth)
 
   # Estimation of the noise
   sigma_estim <- estimate.sigma(data)

@@ -4,7 +4,7 @@
 \alias{estimate.H0.list}
 \title{Perform the estimation of H0 over a list of t0.}
 \usage{
-estimate.H0.list(data, t0_list, k0 = 2, sigma = NULL)
+estimate.H0.list(data, t0_list, k0_list = 2, sigma = NULL)
 }
 \arguments{
 \item{data}{List of curves to estimate by kernel regression.}
@@ -12,7 +12,7 @@ estimate.H0.list(data, t0_list, k0 = 2, sigma = NULL)
 \item{t0_list}{Starting times for the estimation of H0. We consider the 8k0 - 7
 nearest points of t0 for the estimation of H0 when sigma is unknown.}
 
-\item{k0}{For the computation of the gap between the different observations.}
+\item{k0_list}{For the computation of the gap between the different observations.}
 
 \item{sigma}{True value of sigma.
 If null, change estimate.}

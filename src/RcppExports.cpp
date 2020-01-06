@@ -124,17 +124,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-<<<<<<< HEAD
-    {"_CovarianceEstimate_epaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_epaKernelSmoothingCurve, 4},
-    {"_CovarianceEstimate_uniKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_uniKernelSmoothingCurve, 4},
-    {"_CovarianceEstimate_betaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_betaKernelSmoothingCurve, 4},
-    {"_CovarianceEstimate_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_CovarianceEstimate_modifiedBetaKernelSmoothingCurve, 4},
-    {"_CovarianceEstimate_estimateRisk", (DL_FUNC) &_CovarianceEstimate_estimateRisk, 3},
-    {"_CovarianceEstimate_estimateRiskCurve", (DL_FUNC) &_CovarianceEstimate_estimateRiskCurve, 2},
-    {"_CovarianceEstimate_estimateRiskCurves", (DL_FUNC) &_CovarianceEstimate_estimateRiskCurves, 2},
-    {"_CovarianceEstimate_estimateSigma", (DL_FUNC) &_CovarianceEstimate_estimateSigma, 1},
-    {"_CovarianceEstimate_estimateSigmaMSE", (DL_FUNC) &_CovarianceEstimate_estimateSigmaMSE, 2},
-=======
     {"_SmoothCurves_epaKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_epaKernelSmoothingCurve, 4},
     {"_SmoothCurves_uniKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_uniKernelSmoothingCurve, 4},
     {"_SmoothCurves_betaKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_betaKernelSmoothingCurve, 4},
@@ -144,7 +133,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SmoothCurves_estimateRiskCurves", (DL_FUNC) &_SmoothCurves_estimateRiskCurves, 2},
     {"_SmoothCurves_estimateSigma", (DL_FUNC) &_SmoothCurves_estimateSigma, 1},
     {"_SmoothCurves_estimateSigmaMSE", (DL_FUNC) &_SmoothCurves_estimateSigmaMSE, 2},
->>>>>>> a0cefa04eac313d9c84427f165adea1e0b369ddd
     {NULL, NULL, 0}
 };
 

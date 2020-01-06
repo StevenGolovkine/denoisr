@@ -17,7 +17,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.1
 LinkingTo: 
     Rcpp,
-    RcppArmadillo
+    RcppArmadillo   
 Imports:
     doParallel (>= 1.0.15),
     KernSmooth (>= 2.23-16),

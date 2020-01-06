@@ -1,7 +1,6 @@
 ######################################################################################
 #           Functions for bandwith parameter estimation using regularity             #
 ######################################################################################
-library(tidyverse)
 
 
 #' Perform the estimation of the bandwith
@@ -10,7 +9,7 @@ library(tidyverse)
 #' @param H0 An estimation of H0.
 #' @param L0 An estimation of L0.
 #' @param sigma An estimation of sigma.
-#' @param kernel Which kernel to use?
+#' @param K Which kernel to use?
 #'  - epanechnikov (default)
 #'  - beta
 #'  - uniform
@@ -58,7 +57,7 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 #' @param H0_list List of estimates of H0.
 #' @param L0_list <- List of estimates of L0.
 #' @param sigma An estimation of sigma.
-#' @param kernel Which kernel to use?
+#' @param K Which kernel to use?
 #'  - epanechnikov
 #'  - beta
 #'  - uniform
@@ -84,9 +83,6 @@ estimate.b.list <- function(data, H0_list, L0_list,
 #'
 #' @return An estimation of the bandwidth by cross-validation.
 estimate.b.cv <- function(data) {
-  require(np)
-  require(doParallel)
-  require(dplyr)
 
   cl <- parallel::detectCores() %>%
     -1 %>%

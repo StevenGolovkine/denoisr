@@ -1,7 +1,6 @@
 ################################################################################
 #         Functions for H0 parameter estimation using regularity               #
 ################################################################################
-library(tidyverse)
 
 
 #' Perform the estimation of H0.
@@ -65,7 +64,7 @@ estimate.H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0_list Starting times for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
-#' @param k0 For the computation of the gap between the different observations.
+#' @param k0_list For the computation of the gap between the different observations.
 #' @param sigma True value of sigma.
 #'  If null, change estimate.
 #'

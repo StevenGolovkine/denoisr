@@ -1,9 +1,7 @@
 ################################################################################
 #                 Functions that performs kernel smoothing                     #
 ################################################################################
-library(tidyverse)
 
-Rcpp::sourceCpp("./src/estimate_curve.cpp")
 
 #' Perform the smoothing of individuals curves.
 #'
@@ -19,14 +17,13 @@ Rcpp::sourceCpp("./src/estimate_curve.cpp")
 #'  - beta
 #'  - mBeta
 #'  - locPoly (not used)
-#' @param degree Degree of the polynomial for the locpoly function (not used).
 #' @useDynLib SmoothCurves
 #'
 #' @return List of two vectors representating the estimated curve:
 #'               - $t Sampling points
 #'               - $x Predicted points
 estimate.curve <- function(curve, U, b, t0_list = NULL,
-                           kernel = "epanechnikov", degree = 0) {
+                           kernel = "epanechnikov") {
 
   # Control of the bandwidth parameter
   if (length(b) == 1) {
@@ -49,11 +46,6 @@ estimate.curve <- function(curve, U, b, t0_list = NULL,
     x_hat <- betaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
   } else if (kernel == "mBeta") {
     x_hat <- modifiedBetaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
-    # } else if(kernel == 'locPoly'){
-    # require(KernSmooth)
-    # smooth <- locpoly(curve$t, curve$x, bandwidth = b,
-    #                 gridsize = 2*length(U), degree = degree)
-    # x_hat <- smooth$y[U == smooth$x]
   } else {
     print("Wrong kernel name")
     x_hat <- rep(0, length(U))

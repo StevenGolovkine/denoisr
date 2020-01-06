@@ -2,10 +2,6 @@
 #                  Generate piecewise fractional Brownian motion                     #
 ######################################################################################
 
-# Load packages
-library(tidyverse)
-
-
 # Define functions
 
 #' Generate piecewise fractional Brownian motion with a random noise.
@@ -16,8 +12,6 @@ library(tidyverse)
 #' @return A tibble containing the trajectory and the sampling points.
 piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
   
-  require(somebm); require(pracma)
-
   M_n <- rpois(1, M)
   
   M_nn <- vector(length = length(H))

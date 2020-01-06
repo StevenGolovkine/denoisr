@@ -1,7 +1,7 @@
 ###############################################################################
 #        Functions for L0 parameter estimation using regularity               #
 ###############################################################################
-library(tidyverse)
+
 
 #' Perform the estimation of L0.
 #'

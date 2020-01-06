@@ -1,9 +1,6 @@
 ################################################################################
 #            Functions for risk estimation using regularity                    #
 ################################################################################
-library(tidyverse)
-
-Rcpp::sourceCpp('./src/estimate_risk.cpp')
 
 
 #' Perform the estimation of the risk on a set of curves. 
