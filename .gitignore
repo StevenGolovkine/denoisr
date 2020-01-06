@@ -13,9 +13,3 @@
 .Rproj.use
 *.RData
 .Rproj.user
-
-# Particular folders
-data-raw/old/*
-R/old/*
-src/old/*
-data/*
