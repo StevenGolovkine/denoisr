@@ -6,7 +6,7 @@
 #' Perform the estimation of L0.
 #'
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0 The starting time for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
@@ -19,7 +19,7 @@
 #'  uniform sampling points).
 #'
 #' @return An estimation of L0.
-estimate.L0 <- function(data, t0 = 0, H0 = 0,
+estimate_L0 <- function(data, t0 = 0, H0 = 0,
                         k0 = 2, sigma = NULL, density = NULL) {
   S_N <- data
 
@@ -100,7 +100,7 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
 #' Perform the estimation of L0 over a list of t0.
 #'
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0_list Starting times for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
@@ -113,14 +113,14 @@ estimate.L0 <- function(data, t0 = 0, H0 = 0,
 #'
 #' @return A list containing the estimation of H0 at each t0.
 #' @export
-estimate.L0.list <- function(data, t0_list, H0_list,
+estimate_L0_list <- function(data, t0_list, H0_list,
                              k0 = 2, sigma = NULL, density = NULL) {
   if (length(t0_list) != length(H0_list)) {
     stop("t0_list and H0_list must have the same length")
   }
 
   L0_hat_list <- t0_list %>%
-    purrr::map2_dbl(H0_list, ~ estimate.L0(data,
+    purrr::map2_dbl(H0_list, ~ estimate_L0(data,
       t0 = .x, H0 = .y,
       k0 = k0, sigma = sigma, density = NULL
     ))

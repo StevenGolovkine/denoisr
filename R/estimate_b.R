@@ -1,12 +1,12 @@
-######################################################################################
-#           Functions for bandwith parameter estimation using regularity             #
-######################################################################################
+################################################################################
+#        Functions for bandwith parameter estimation using regularity          #
+################################################################################
 
 
 #' Perform the estimation of the bandwith
 #'
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @param data List of curves to estimate by kernel regression.
 #' @param H0 An estimation of H0.
 #' @param L0 An estimation of L0.
@@ -17,7 +17,7 @@
 #'  - uniform
 #'
 #' @return An estimation of H0.
-estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
+estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
   S_N <- data
 
   # Set kernel constants
@@ -58,7 +58,7 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 #' @importFrom magrittr %>%
 #' @importFrom foreach foreach
 #' @importFrom foreach %dopar%
-#' 
+#'
 #' @param data List of curves to estimate by kernel regression.
 #' @param H0_list List of estimates of H0.
 #' @param L0_list <- List of estimates of L0.
@@ -77,7 +77,7 @@ estimate_b_list <- function(data, H0_list, L0_list,
   }
 
   b_hat_list <- H0_list %>%
-    purrr::map2_dbl(L0_list, ~ estimate.b(data,
+    purrr::map2_dbl(L0_list, ~ estimate_b(data,
       H0 = .x, L0 = .y,
       sigma = sigma, K = K
     ))
@@ -92,21 +92,20 @@ estimate_b_list <- function(data, H0_list, L0_list,
 #'
 #' @return An estimation of the bandwidth by cross-validation.
 #' @export
-estimate.b.cv <- function(data) {
-
+estimate_b_cv <- function(data) {
   cl <- parallel::detectCores() %>%
     -1 %>%
     parallel::makeCluster()
   doParallel::registerDoParallel(cl)
 
-  j = 1:length(data)
+  j <- 1:length(data)
   bw_list <- foreach(j = iterators::iter(j)) %dopar% {
     sqrt(5) * np::npregbw(x ~ t,
       data = data[[j]],
       bwmethod = "cv.ls", # Least Square Cross Validation
       ckertype = "epanechnikov", # Kernel used
       regtype = "lc" # Local Constant Regression
-    )$bw 
+    )$bw
   }
 
   parallel::stopCluster(cl)

@@ -6,7 +6,7 @@
 #' Perform the smoothing of individuals curves.
 #'
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @param curve List of two vectors representing a curve:
 #'               - $t Sampling points
 #'               - $x Observed points
@@ -25,7 +25,7 @@
 #'               - $t Sampling points
 #'               - $x Predicted points
 #' @export
-estimate.curve <- function(curve, U, b, t0_list = NULL,
+estimate_curve <- function(curve, U, b, t0_list = NULL,
                            kernel = "epanechnikov") {
 
   # Control of the bandwidth parameter

@@ -6,7 +6,7 @@
 #' Perform the estimation of H0.
 #'
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0 The starting time for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
@@ -16,7 +16,7 @@
 #'  If null, change estimate.
 #'
 #' @return An estimation of H0.
-estimate.H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
+estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
   S_N <- data
 
   # Estimate H_0
@@ -64,7 +64,7 @@ estimate.H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #' Perform the estimation of H0 over a list of t0.
 #'
 #' @importFrom magrittr %>%
-#' 
+#'
 #' @param data List of curves to estimate by kernel regression.
 #' @param t0_list Starting times for the estimation of H0. We consider the 8k0 - 7
 #'  nearest points of t0 for the estimation of H0 when sigma is unknown.
@@ -74,9 +74,9 @@ estimate.H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #'
 #' @return A list containing the estimation of H0 at each t0.
 #' @export
-estimate.H0.list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
+estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
   H0_hat_list <- t0_list %>%
-    purrr::map2_dbl(k0_list, ~ estimate.H0(data, t0 = .x, k0 = .y, sigma = sigma))
+    purrr::map2_dbl(k0_list, ~ estimate_H0(data, t0 = .x, k0 = .y, sigma = sigma))
 
   return(H0_hat_list)
 }
