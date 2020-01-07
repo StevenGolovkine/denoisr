@@ -37,7 +37,7 @@ smooth.curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
   )
 
   # Estimation of the bandwidth
-  b_estim <- estimate.b.list(data,
+  b_estim <- estimate_b_list(data,
     H0_list = H0_estim, L0_list = L0_estim,
     sigma = sigma_estim, K = K
   )

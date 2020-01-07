@@ -68,9 +68,9 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 #'  - beta
 #'  - uniform
 #'
-#'  @return List of estimates of the bandwidth.
-#'  @export
-estimate.b.list <- function(data, H0_list, L0_list,
+#' @return List of estimates of the bandwidth.
+#' @export
+estimate_b_list <- function(data, H0_list, L0_list,
                             sigma = 0, K = "epanechnikov") {
   if (length(H0_list) != length(L0_list)) {
     stop("H0_list and L0_list must have the same length.")
