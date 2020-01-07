@@ -33,4 +33,7 @@ Imports:
 Suggests:
     pracma (>= 2.2.5),
     somebm (>= 0.1),
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -13,3 +13,4 @@
 .Rproj.use
 *.RData
 .Rproj.user
+inst/doc
