@@ -3,6 +3,7 @@ Type: Package
 Title: Nonparametric Kernel Smoothing Methods for Functional Data
 Version: 1.0.0
 Date: 2019-06-14
+Depends: R (>= 2.10)
 Authors@R: person("Steven", "Golovkine", 
                 email = "steven_golovkine@icloud.com", 
                 role = c("aut", "cre"))
@@ -21,6 +22,7 @@ LinkingTo:
 Imports:
     doParallel (>= 1.0.15),
     foreach (>= 1.4.7),
+    iterators (>= 1.0.12),
     KernSmooth (>= 2.23-16),
     magrittr (>= 1.5),
     np (>= 0.60-9),

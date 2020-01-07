@@ -31,7 +31,7 @@ estimate.b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
     phi <- function(x, H0, alpha = 1, beta = 1) {
       abs(x**(alpha - 1) * (1 - x)**(beta - 1)) * x**H0 / abs(beta(alpha, beta))
     }
-    K_norm2 <- stats::integrate(K_norm2_f, lower = lower, upper = upper)$value
+    K_norm2 <- stats::integrate(K_norm2_f, lower = 0, upper = 1)$value
     K_phi <- stats::integrate(phi, lower = 0, upper = 1, H0 = H0)$value
   } else {
     K_norm2 <- 1
@@ -99,7 +99,8 @@ estimate.b.cv <- function(data) {
     parallel::makeCluster()
   doParallel::registerDoParallel(cl)
 
-  bw_list <- foreach(j = 1:length(data)) %dopar% {
+  j = 1:length(data)
+  bw_list <- foreach(j = iterators::iter(j)) %dopar% {
     sqrt(5) * np::npregbw(x ~ t,
       data = data[[j]],
       bwmethod = "cv.ls", # Least Square Cross Validation

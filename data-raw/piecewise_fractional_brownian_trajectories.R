@@ -55,23 +55,17 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
 
 
 # Define some parameters
-N <- 500000 # Number of curves
-M <- c(1000)  # Number of points per curves (do it with 50, 200, 1000)
+N <- 1000 # Number of curves
+M <- 200  # Number of points per curves (do it with 50, 200, 1000)
 H <- c(0.2, 0.5, 0.8) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
-sigma <- c(0.01, 0.05, 0.1) # Standard deviation of the noise (do it with 0, 0.01, 0.05, 0.1)
+sigma <- c(0.1) # Standard deviation of the noise (do it with 0, 0.01, 0.05, 0.1)
 
 # Do simulation
-for(m in 1:length(M)){
+simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M[m], H, sigma))
+      
+piecewise_fractional_brownian <- list(
+  simulation = simulation_
+  )
 
-      simulation_ <- rerun(N, piecewise_fractional_brownian_trajectory(M[m], H, sigma))
-      
-      fractional.brownian.trajectories <- list(
-        simulation = simulation_
-      )
-      
-      # Naming convention (fraction.brownian.trajectories-M-H-sigma)
-      saveRDS(fractional.brownian.trajectories, 
-              file = paste0('./data/piecewise.fractional.brownian.trajectories-', 
-                            M[m], '-', paste(H, collapse = '.'), '-', paste(sigma, collapse = '.'), '.rds'))
-}
+usethis::use_data(piecewise_fractional_brownian)
 

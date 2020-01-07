@@ -60,7 +60,7 @@ fractional_brownian_trajectory <- function(M, H, sigma,
 #' @return A tibble containing the true mean trajectory and the sampling points. 
 true_mean <- function(t){
   x <- rep(0, length(t))
-  return(tibble(t = t, x = x))
+  return(dplyr::tibble(t = t, x = x))
 }
 
 #' Compute the true covariance of the generated fractional Brownian motion.
@@ -72,7 +72,7 @@ true_mean <- function(t){
 #' @param H Hurst coefficient
 #' @return A tibble containing the true covariance for each pair (s, t)
 true_covariance <- function(s_, t_, H){
-  res <- tibble(
+  res <- dplyr::tibble(
     s = rep(s_, times = length(t_)),
     t = rep(t_, each = length(s_))) %>% 
     dplyr::mutate(phi = (abs(s)**(2*H) + abs(t)**(2*H) - abs(t - s)*(2*H))/2)
@@ -81,29 +81,24 @@ true_covariance <- function(s_, t_, H){
 
 # Define some parameters
 N <- 1000 # Number of curves
-M <- c(200)  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.9) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
-sigma <- c(0) # Standard deviation of the noise
+M <- 200  # Number of points per curves (do it with 50, 200, 1000)
+H <- c(0.5) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
+sigma <- c(0.05) # Standard deviation of the noise
 
 
 # Do simulation
-for (m in 1:length(M)) {
-    t <- seq(0, 1, length.out = M[m] + 1) # Design points
+t <- seq(0, 1, length.out = M[m] + 1) # Design points
     
-    simulation_ <- rerun(N, fractional_brownian_trajectory(M[m], H, sigma))
-    mean_ <- true_mean(t)
-    covariance_ <- true_covariance(t, t, H)
+simulation_ <- purrr::rerun(N, fractional_brownian_trajectory(M[m], H, sigma))
+mean_ <- true_mean(t)
+covariance_ <- true_covariance(t, t, H)
     
-    fractional.brownian.trajectories <- list(
-      simulation = simulation_,
-      mean = mean_,
-      covariance = covariance_,
-      sigma = sigma
-    )
-    
-    # Naming convention (fraction.brownian.trajectories-M-H-sigma)
-    saveRDS(fractional.brownian.trajectories, 
-            file = paste0('./data/fractional.brownian.trajectories-', 
-                          M[m], '-', H, '-', paste(sigma, collapse = '.'), '.rds'))
-}
+fractional_brownian <- list(
+  simulation = simulation_,
+  mean = mean_,
+  covariance = covariance_,
+  sigma = sigma
+)
+
+usethis::use_data(fractional_brownian)
 
