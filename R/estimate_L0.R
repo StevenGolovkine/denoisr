@@ -21,10 +21,9 @@
 #' @return An estimation of L0.
 estimate_L0 <- function(data, t0 = 0, H0 = 0,
                         k0 = 2, sigma = NULL, density = NULL) {
-  S_N <- data
 
   # Estimate mu
-  mu_hat <- S_N %>%
+  mu_hat <- data %>%
     purrr::map_int(~ length(.x$t)) %>%
     mean()
 
@@ -36,18 +35,18 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
   deno <- 1
   if (is.null(density)) { # Case where the density is not known
     if (is.null(sigma)) { # Subcase where sigma is not known
-      idxs <- S_N %>%
+      idxs <- data %>%
         purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
-      a <- S_N %>%
+      a <- data %>%
         purrr::map2_dbl(idxs, ~ theta(.x$x, k = 2 * k0 - 1, idx = .y)) %>%
         mean()
-      b <- S_N %>%
+      b <- data %>%
         purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
-      c <- S_N %>%
+      c <- data %>%
         purrr::map2_dbl(idxs, ~ eta(.x$t, k = 2 * k0 - 1, idx = .y, H = H0)) %>%
         mean()
-      d <- S_N %>%
+      d <- data %>%
         purrr::map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>%
         mean()
       if ((a - b > 0) & (c - d > 0)) {
@@ -55,12 +54,12 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
         deno <- c - d
       }
     } else { # Subcase where sigma is known
-      idxs <- S_N %>%
+      idxs <- data %>%
         purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2 * k0)]))
-      a <- S_N %>%
+      a <- data %>%
         purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
-      b <- S_N %>%
+      b <- data %>%
         purrr::map2_dbl(idxs, ~ eta(.x$t, k = k0, idx = .y, H = H0)) %>%
         mean()
       if ((a - 2 * sigma**2 > 0) & b > 0) {
@@ -70,20 +69,20 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
     }
   } else { # Case where the density is known (only the uniform case)
     if (is.null(sigma)) { # Subcase where sigma is not known
-      idxs <- S_N %>%
+      idxs <- data %>%
         purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
-      a <- S_N %>%
+      a <- data %>%
         purrr::map2_dbl(idxs, ~ theta(.x$x, k = 2 * k0 - 1, idx = .y)) %>%
         mean()
-      b <- S_N %>%
+      b <- data %>%
         purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
       if (a - b > 0) nume <- a - b
       deno <- (2**(2 * H0) - 1) * ((k0 - 1) / (mu_hat + 1))**(2 * H0)
     } else { # Subcase where sigma is known
-      idxs <- S_N %>%
+      idxs <- data %>%
         purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(2 * k0)]))
-      a <- S_N %>%
+      a <- data %>%
         purrr::map2_dbl(idxs, ~ theta(.x$x, k = k0, idx = .y)) %>%
         mean()
       if (a - 2 * sigma**2 > 0) nume <- a - 2 * sigma**2
@@ -91,9 +90,7 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
     }
   }
 
-  L0_hat <- (nume / deno)**0.5
-
-  return(L0_hat)
+  (nume / deno)**0.5
 }
 
 
@@ -119,11 +116,9 @@ estimate_L0_list <- function(data, t0_list, H0_list,
     stop("t0_list and H0_list must have the same length")
   }
 
-  L0_hat_list <- t0_list %>%
+  t0_list %>%
     purrr::map2_dbl(H0_list, ~ estimate_L0(data,
       t0 = .x, H0 = .y,
       k0 = k0, sigma = sigma, density = NULL
     ))
-
-  return(L0_hat_list)
 }

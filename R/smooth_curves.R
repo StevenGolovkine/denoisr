@@ -55,7 +55,7 @@ smooth_curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
     ))
   }
 
-  return(list(
+  list(
     "parameter" = list(
       "sigma" = sigma_estim,
       "H0" = H0_estim,
@@ -63,7 +63,7 @@ smooth_curves <- function(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov") 
       "b" = b_estim
     ),
     "smooth" = curves
-  ))
+  )
 }
 
 
@@ -135,7 +135,7 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
     ))
   }
 
-  return(list(
+  list(
     "parameter" = list(
       "sigma" = sigma_estim,
       "H0" = H0_estim + cpt,
@@ -143,5 +143,5 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
       "b" = b_estim
     ),
     "smooth" = curves
-  ))
+  )
 }

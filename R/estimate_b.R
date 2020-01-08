@@ -18,7 +18,6 @@
 #'
 #' @return An estimation of H0.
 estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
-  S_N <- data
 
   # Set kernel constants
   if (K == "epanechnikov") {
@@ -39,18 +38,16 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
   }
 
   # Estimate mu
-  mu_hat <- S_N %>%
+  mu_hat <- data %>%
     purrr::map_int(~ length(.x$t)) %>%
     mean()
 
   # Estimate b
-  # H0_tilde <- H0 - (1 / log(mu_hat))
-  nume <- (sigma**2 * K_norm2 * factorial(floor(H0)))
-  deno <- (H0 * L0 * K_phi)
+  nume <- sigma**2 * K_norm2 * factorial(floor(H0))
+  deno <- H0 * L0 * K_phi
   frac <- nume / deno
-  b_hat <- (frac / mu_hat)**(1 / (2 * H0 + 1))
 
-  return(b_hat)
+  (frac / mu_hat)**(1 / (2 * H0 + 1))
 }
 
 #' Perform the estimation of the bandwidth over a list of H0 and t0.
@@ -76,12 +73,10 @@ estimate_b_list <- function(data, H0_list, L0_list,
     stop("H0_list and L0_list must have the same length.")
   }
 
-  b_hat_list <- H0_list %>%
-    purrr::map2_dbl(L0_list, ~ estimate_b(data,
-      H0 = .x, L0 = .y,
-      sigma = sigma, K = K
-    ))
-  return(b_hat_list)
+  H0_list %>% purrr::map2_dbl(L0_list, ~ estimate_b(data,
+    H0 = .x, L0 = .y,
+    sigma = sigma, K = K
+  ))
 }
 
 #' Perform the estimation of the bandwith using CV.
@@ -93,6 +88,7 @@ estimate_b_list <- function(data, H0_list, L0_list,
 #' @return An estimation of the bandwidth by cross-validation.
 #' @export
 estimate_b_cv <- function(data) {
+  # Create clusters for parallel computation
   cl <- parallel::detectCores() %>%
     -1 %>%
     parallel::makeCluster()
@@ -110,5 +106,5 @@ estimate_b_cv <- function(data) {
 
   parallel::stopCluster(cl)
 
-  return(mean(unlist(bw_list)))
+  mean(unlist(bw_list))
 }

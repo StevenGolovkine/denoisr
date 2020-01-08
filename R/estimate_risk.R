@@ -11,11 +11,9 @@
 #' @return List with the mean and max residual squared error in t0.
 #' @export
 estimate_risk <- function(curves, curves_estim, t0 = 0.5) {
-
-  # Estimate the risk
   risk <- estimateRisk(curves, curves_estim, t0)
 
-  return(c("MeanRSE" = risk[1], "MaxRSE" = risk[2]))
+  c("MeanRSE" = risk[1], "MaxRSE" = risk[2])
 }
 
 #' Perform the estimation of the risk on a set of curves along the points.
@@ -26,9 +24,7 @@ estimate_risk <- function(curves, curves_estim, t0 = 0.5) {
 #' @return List with the mean of and max the integrated residual squared error.
 #' @export
 estimate_risks <- function(curves, curves_estim) {
-
-  # Estimate the risk
   risk <- estimateRiskCurves(curves, curves_estim)
 
-  return(c("MeanIntRSE" = risk[1], "MaxIntRSE" = risk[2]))
+  c("MeanIntRSE" = risk[1], "MaxIntRSE" = risk[2])
 }

@@ -9,5 +9,5 @@
 #' @return An estimation of sigma.
 #' @export
 estimate_sigma <- function(data) {
-  return(estimateSigma(data))
+  estimateSigma(data)
 }

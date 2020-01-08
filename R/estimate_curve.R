@@ -18,17 +18,14 @@
 #'  - uniforma
 #'  - beta
 #'  - mBeta
-#'  - locPoly (not used)
 #' @useDynLib SmoothCurves
 #'
 #' @return List of two vectors representating the estimated curve:
 #'               - $t Sampling points
 #'               - $x Predicted points
 #' @export
-estimate_curve <- function(curve, U, b, t0_list = NULL,
-                           kernel = "epanechnikov") {
-
-  # Control of the bandwidth parameter
+estimate_curve <- function(curve, U, b,
+                           t0_list = NULL, kernel = "epanechnikov") {
   if (length(b) == 1) {
     bandwidth <- rep(b, length(U))
   } else if (length(b) != length(U)) {
@@ -40,7 +37,6 @@ estimate_curve <- function(curve, U, b, t0_list = NULL,
     stop("Issues with the bandwidth parameter.")
   }
 
-  # Compute the estimation of the curve.
   if (kernel == "epanechnikov") {
     x_hat <- epaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
   } else if (kernel == "uniform") {
@@ -54,8 +50,5 @@ estimate_curve <- function(curve, U, b, t0_list = NULL,
     x_hat <- rep(0, length(U))
   }
 
-  return(list(
-    t = U,
-    x = as.vector(x_hat)
-  ))
+  list(t = U, x = as.vector(x_hat))
 }

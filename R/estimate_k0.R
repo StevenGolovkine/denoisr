@@ -9,8 +9,7 @@
 #'
 #' @return The pilot k0.
 estimate_k0_pilot <- function(M) {
-  k0_pilot <- trunc((M + 1) * exp(-sqrt(log(M + 1)))) + 1
-  return(k0_pilot)
+  trunc((M + 1) * exp(-sqrt(log(M + 1)))) + 1
 }
 
 #' Perform the estimation of the oracle k0.
@@ -20,6 +19,5 @@ estimate_k0_pilot <- function(M) {
 #'
 #' @return The oracle k0.
 estimate_k0_oracle <- function(M, H) {
-  k0_oracle <- trunc((M + 1)**(H / (2 + H))) + 1
-  return(k0_oracle)
+  trunc((M + 1)**(H / (2 + H))) + 1
 }
