@@ -1,4 +1,10 @@
-\documentclass[article]{jss}
+%% $Id: article.Rnw,v 0.1 2020/01/08 $
+
+%\VignetteIndexEntry{An Introduction to the SmoothCurves package}
+%\VignetteKeywords{nonparametric, kernel, functional data, smoothing}
+%\VignettePackage{SmoothCurves}
+
+\documentclass[nojss]{jss}
 
 %% -- LaTeX packages and custom commands ---------------------------------------
 
@@ -72,7 +78,6 @@
 }
 
 \begin{document}
-\input{article-concordance}
 
 
 %% -- Introduction -------------------------------------------------------------
@@ -252,11 +257,13 @@ are in sentence style, and if possible vertical lines should be avoided.}
 \section{Empirical Illustration} \label{sec:illustrations}
 
 This section introduces the main features of the package \pkg{SmoothCurves} 
-employing some simulated datasets and the canonical dataset of the daily 
-temperature of $35$ canadian cities.
+employing some simulated datasets and the Canadian daily temperature data 
+\citep{ramsay_functional_2005}, that are available e.g. in the \pkg{fda} package
+\citep{fda_2018}. It contains daily observations of temperature (in \°C) for $N = 35$
+Canadian weather stations averaged over the years 1960 to 1994.
 
 From within \proglang{R}, the latest version of \pkg{SmoothCurves} can be 
-installed from the Comprehensive \proloang{R} Archive Network (CRAN) 
+installed from the Comprehensive \proglang{R} Archive Network (CRAN) 
 (\textcolor{red}{maybe one day}) using the following
 %
 \begin{Schunk}
@@ -284,131 +291,81 @@ R> library(SmoothCurves)
 \end{Schunk}
 %
 
-For a simple illustration of basic Poisson and NB count regression the
-\code{quine} data from the \pkg{MASS} package is used. This provides the number
-of \code{Days} that children were absent from school in Australia in a
-particular year, along with several covariates that can be employed as regressors.
+Additionally, the package help manual can be accessed via:
+%
+\begin{Schunk}
+\begin{Sinput}
+R> help(package="SmoothCurves")
+\end{Sinput}
+\end{Schunk}
+%
+
+\subsection{A note on the format of the data}
+
+\subsection{Brownian motion}
+
+The data are generated from the following model:
+%
+\begin{equation} \label{eq:model}
+Y_{n, j} = X_n(T_{n, j}) + \varepsilon_{n, j}, \quad 1 \leq n \leq N,
+\end{equation}
+%
+where $T_{n, j} \sim f$, with $f$ a probability density function with support $[0, 1]$,
+and $\varepsilon_{n, j} \sim \mathcal{N}(0, \sigma^2)$ are independant variables. 
+Denote by $H$ the regularity of $X$ and define $X$ as a standard Brownian motion
+($H = 0.5). The \code{fractional_brownian} data from the package \pkg{SmoothCurves}
+is used. 
+
 The data can be loaded by
 %
 \begin{Schunk}
 \begin{Sinput}
-R> data("quine", package = "MASS")
+R> data("fractional_brownian", package = "SmoothCurves")
 \end{Sinput}
 \end{Schunk}
 %
-and a basic frequency distribution of the response variable is displayed in
-Figure~\ref{fig:quine}.
 
-\begin{leftbar}
-For code input and output, the style files provide dedicated environments.
-Either the ``agnostic'' \verb|{CodeInput}| and \verb|{CodeOutput}| can be used
-or, equivalently, the environments \verb|{Sinput}| and \verb|{Soutput}| as
-produced by \fct{Sweave} or \pkg{knitr} when using the \code{render_sweave()}
-hook. Please make sure that all code is properly spaced, e.g., using
-\code{y = a + b * x} and \emph{not} \code{y=a+b*x}. Moreover, code input should
-use ``the usual'' command prompt in the respective software system. For
-\proglang{R} code, the prompt \code{"R> "} should be used with \code{"+  "} as
-the continuation prompt. Generally, comments within the code chunks should be
-avoided -- and made in the regular {\LaTeX} text instead. Finally, empty lines
-before and after code input/output should be avoided (see above).
-\end{leftbar}
-
-\begin{figure}[t!]
-\centering
-\includegraphics{article-visualization}
-\caption{\label{fig:quine} Frequency distribution for number of days absent
-from school.}
-\end{figure}
-
-As a first model for the \code{quine} data, we fit the basic Poisson regression
-model. (Note that JSS prefers when the second line of code is indented by two
-spaces.)
+The smoothing of the curves can be easyly performed using one line
 %
 \begin{Schunk}
 \begin{Sinput}
-R> m_pois <- glm(Days ~ (Eth + Sex + Age + Lrn)^2, data = quine,
-+    family = poisson)
-\end{Sinput}
-\end{Schunk}
-%
-To account for potential overdispersion we also consider a negative binomial
-GLM.
-%
-\begin{Schunk}
-\begin{Sinput}
-R> library("MASS")
-R> m_nbin <- glm.nb(Days ~ (Eth + Sex + Age + Lrn)^2, data = quine)
-\end{Sinput}
-\end{Schunk}
-%
-In a comparison with the BIC the latter model is clearly preferred.
-%
-\begin{Schunk}
-\begin{Sinput}
-R> BIC(m_pois, m_nbin)
+R> smooth_data <- smooth.curves(fractional_brownian)
+R> smooth_data$parameter
 \end{Sinput}
 \begin{Soutput}
-       df      BIC
-m_pois 18 2046.851
-m_nbin 19 1157.235
+$sigma
+[1] 0.07080734
+
+$H0
+[1] 0.4956724
+
+$L0
+[1] 0.9788827
+
+$b
+[1] 0.00718395
 \end{Soutput}
 \end{Schunk}
 %
-Hence, the full summary of that model is shown below.
+
+We discuss alternative choices for implementation and inference further below, 
+but first we plot the results obtained above. 
 %
 \begin{Schunk}
 \begin{Sinput}
-R> summary(m_nbin)
+R> df <- tibble(t = fractional_brownian[[1]]$t,
++               x = fractional_brownian[[1]]$x,
++               x_true = fractional_brownian[[1]]$x_true,
++               x_hat = smooth_data$smooth[[1]]$x)
+R> ggplot(df) +
++    geom_point(aes(x = t, y = x), alpha = 0.5) +
++    geom_line(aes(x = t, y = x_true), col = 'red') +
++    geom_line(aes(x = t, y = x_hat), col = 'blue') +
++    labs(x = '', y = '') +
++    theme_custom()
 \end{Sinput}
-\begin{Soutput}
-Call:
-glm.nb(formula = Days ~ (Eth + Sex + Age + Lrn)^2, data = quine, 
-    init.theta = 1.60364105, link = log)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--3.0857  -0.8306  -0.2620   0.4282   2.0898  
-
-Coefficients: (1 not defined because of singularities)
-            Estimate Std. Error z value Pr(>|z|)    
-(Intercept)  3.00155    0.33709   8.904  < 2e-16 ***
-EthN        -0.24591    0.39135  -0.628  0.52977    
-SexM        -0.77181    0.38021  -2.030  0.04236 *  
-AgeF1       -0.02546    0.41615  -0.061  0.95121    
-AgeF2       -0.54884    0.54393  -1.009  0.31296    
-AgeF3       -0.25735    0.40558  -0.635  0.52574    
-LrnSL        0.38919    0.48421   0.804  0.42153    
-EthN:SexM    0.36240    0.29430   1.231  0.21818    
-EthN:AgeF1  -0.70000    0.43646  -1.604  0.10876    
-EthN:AgeF2  -1.23283    0.42962  -2.870  0.00411 ** 
-EthN:AgeF3   0.04721    0.44883   0.105  0.91622    
-EthN:LrnSL   0.06847    0.34040   0.201  0.84059    
-SexM:AgeF1   0.02257    0.47360   0.048  0.96198    
-SexM:AgeF2   1.55330    0.51325   3.026  0.00247 ** 
-SexM:AgeF3   1.25227    0.45539   2.750  0.00596 ** 
-SexM:LrnSL   0.07187    0.40805   0.176  0.86019    
-AgeF1:LrnSL -0.43101    0.47948  -0.899  0.36870    
-AgeF2:LrnSL  0.52074    0.48567   1.072  0.28363    
-AgeF3:LrnSL       NA         NA      NA       NA    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-(Dispersion parameter for Negative Binomial(1.6036) family taken to be 1)
-
-    Null deviance: 235.23  on 145  degrees of freedom
-Residual deviance: 167.53  on 128  degrees of freedom
-AIC: 1100.5
-
-Number of Fisher Scoring iterations: 1
-
-
-              Theta:  1.604 
-          Std. Err.:  0.214 
-
- 2 x log-likelihood:  -1062.546 
-\end{Soutput}
 \end{Schunk}
-
+%
 
 
 %% -- Summary/conclusions/discussion -------------------------------------------

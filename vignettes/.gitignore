@@ -4,3 +4,5 @@
 *.bbl
 *.synctex.gz
 *.log
+*.bsr
+*.cls

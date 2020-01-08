@@ -23,7 +23,6 @@ estimate_curve(curve, U, b, t0_list = NULL, kernel = "epanechnikov")
 \item uniforma
 \item beta
 \item mBeta
-\item locPoly (not used)
 }}
 }
 \value{
