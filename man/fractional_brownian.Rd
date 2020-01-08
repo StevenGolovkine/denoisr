@@ -4,11 +4,21 @@
 \name{fractional_brownian}
 \alias{fractional_brownian}
 \title{Fractional brownian trajectories}
-\format{An object of class \code{list} of length 1000.}
+\format{A list with 1000 elements. Each element corresponds to one simulation of
+a fractional Brownian trajectory. Each element is a list with 3 elements which
+are:
+\itemize{
+\item \strong{t} The sampling points
+\item \strong{x} The trajectory with random noise
+\item \strong{x_true} The true underlying trajectory
+}}
 \usage{
 fractional_brownian
 }
 \description{
-Fractional brownian trajectories
+A dataset containing the simulation of fractional Brownian motions. The
+increments of a fractional Brownian motion are not independent. A fractional
+Brownian motion is characterized by a parameter \eqn{H}, named Hurst
+coefficient. They are defined on \eqn{[0, 1]}.
 }
 \keyword{datasets}

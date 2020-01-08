@@ -1,15 +1,33 @@
-######################################################################################
-#                  Generate piecewise fractional Brownian motion                     #
-######################################################################################
+################################################################################
+#               Generate piecewise fractional Brownian motion                  #
+################################################################################
 
-# Define functions
-
-#' Generate piecewise fractional Brownian motion with a random noise.
+#' Generate piecewise fractional Brownian motion with a random noise
 #' 
-#' @param M Number of points in the trajectory
-#' @param H Vector of Hurst coefficients
-#' @param sigma Standard deviation of the noise to add to the trajectory
-#' @return A tibble containing the trajectory and the sampling points.
+#' This function generates a realization of a piecewise fractional Brownian motion
+#' wih random noise. A piecewise fractional Brownian motion is defined by a non
+#' constant Hurst parameter along the sampling points. We observe the process at
+#' regularly spaced time \eqn{t_i = \frac{i}{M_n}}, where \eqn{i = 0, \dots, M_n}.
+#' We define a segmentation \eqn{\tau = (\tau_k)_{k=0, \dots, K+1}}, with 
+#' \eqn{0 = \tau_0 < \tau_1 < \dots < \tau_{K} < \tau_{K+1} = 1}. So, on the 
+#' interval \eqn{[\tau_k, \tau_{k+1}]}, for \eqn{k = 0, \dots, K}, the process 
+#' is a fractional Brownian motion with Hurst parameter \eqn{H_k}. 
+#' 
+#' @param M An integer, expected number of points in the trajectory.
+#'   THe number of points follows a Poisson distribution with mean \eqn{M}.
+#' @param H A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}
+#' @param sigma A vector of numerics, standard deviation of the noise to add to 
+#'  the piecewise fractional Brownian motion.
+#'  
+#' @return A tibble containing the following elements:
+#'  \itemize{
+#'   \item \strong{...1}: The sampling points
+#'   \item \strong{...2} The true trajectory
+#'   \item \strong{...3} The trajectory contaminated by noise with standard deviation \eqn{\sigma}
+#'  }
+#'  
+#' @examples 
+#' piecewise_fractional_brownian_trajectory(100, c(0.2, 0.5, 0.8), 0.1)
 piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
   
   M_n <- rpois(1, M)
@@ -50,22 +68,22 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
     j = j + 1
   }
   
-  return(dplyr::as_tibble(simu, .name_repair = 'unique'))
+  dplyr::as_tibble(simu, .name_repair = 'unique')
 }
 
 
 # Define some parameters
 N <- 1000 # Number of curves
-M <- 200  # Number of points per curves (do it with 50, 200, 1000)
-H <- c(0.2, 0.5, 0.8) # Hurst coefficient (do it with 0.4, 0.5, 0.6)
-sigma <- c(0.1) # Standard deviation of the noise (do it with 0, 0.01, 0.05, 0.1)
+M <- 200  # Number of points per curves
+H <- c(0.2, 0.5, 0.8) # Hurst coefficient 
+sigma <- c(0.01, 0.05, 0.1) # Standard deviation of the noise 
 
 # Do simulation
 simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M[m], H, sigma))
       
 piecewise_fractional_brownian <- list(
   simulation = simulation_
-  )
+)
 
 usethis::use_data(piecewise_fractional_brownian)
 

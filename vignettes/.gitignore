@@ -1,8 +1,2 @@
 *.html
 *.R
-*.blg
-*.bbl
-*.synctex.gz
-*.log
-*.bsr
-*.cls

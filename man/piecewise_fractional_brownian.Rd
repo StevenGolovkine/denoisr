@@ -4,11 +4,25 @@
 \name{piecewise_fractional_brownian}
 \alias{piecewise_fractional_brownian}
 \title{Piecewise fractional brownian trajectories}
-\format{An object of class \code{list} of length 1000.}
+\format{A list with 1000 elements. Each element corresponds to one simulation of
+a piecewise fractional Brownian trajectory. Each element is a list with
+3 elements which are:
+\itemize{
+\item \strong{t} The sampling points
+\item \strong{x} The trajectory with random noise
+\item \strong{x_true} The true underlying trajectory
+}}
 \usage{
 piecewise_fractional_brownian
 }
 \description{
-Piecewise fractional brownian trajectories
+A dataset containing the simulation of piecewise fractional Brownian motions.
+A piecewise fractional Brownian motion is defined by a non constant Hurst
+parameter along the sampling points. We observe the process at regularly
+spaced time \eqn{t_i = \frac{i}{M_n}}, where \eqn{i = 0, \dots, M_n}.
+We define a segmentation \eqn{\tau = (\tau_k)_{k=0, \dots, K+1}}, with
+\eqn{0 = \tau_0 < \tau_1 < \dots < \tau_{K} < \tau_{K+1} = 1}. So, on the
+interval \eqn{[\tau_k, \tau_{k+1}]}, for \eqn{k = 0, \dots, K}, the process
+is a fractional Brownian motion with Hurst parameter \eqn{H_k}.
 }
 \keyword{datasets}
