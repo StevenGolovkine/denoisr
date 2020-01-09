@@ -2,34 +2,47 @@
 % Please edit documentation in R/estimate_curve.R
 \name{estimate_curve}
 \alias{estimate_curve}
-\title{Perform the smoothing of individuals curves.}
+\title{Perform the smoothing of individual curve.}
 \usage{
 estimate_curve(curve, U, b, t0_list = NULL, kernel = "epanechnikov")
 }
 \arguments{
-\item{curve}{List of two vectors representing a curve:
-- $t Sampling points
-- $x Observed points}
+\item{curve}{A list, with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 
-\item{U}{Vector of points for the estimation}
+\item{U}{A vector of numerics, sampling points at which estimate the curve.}
 
-\item{b}{Bandwith}
+\item{b}{Numeric or vector of numerics, estimation of the bandwidth. If one
+is provided, we use a unique bandwidth for the curve. However, if a vector
+is given, the bandwidth changes depending on the sampling points.}
 
-\item{t0_list}{List of time at which the bandwidths have been estimated.}
+\item{t0_list}{A vector of numerics, times at which the bandwidths have been
+estimated. Only used if the parameter \code{b} is a vector.}
 
-\item{kernel}{Kernel name to use
+\item{kernel}{Character string, the kernel used for the estimation:
 \itemize{
 \item epanechnikov (default)
-\item uniforma
+\item uniform
 \item beta
 \item mBeta
 }}
 }
 \value{
-List of two vectors representating the estimated curve:
-- $t Sampling points
-- $x Predicted points
+A list, with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The estimated points.
+}
 }
 \description{
-Perform the smoothing of individuals curves.
+This function performs the smoothing of a curve using the Nadaraya-Watson
+estimator given a particular kernel.
+}
+\examples{
+estimate_curve(SmoothCurves::piecewise_fractional_brownian[[1]],
+               U = seq(0, 1, length.out = 200), b = c(0.2, 0.5, 0.8),
+               t0_list = c(0.16, 0.5, 0.83))
 }

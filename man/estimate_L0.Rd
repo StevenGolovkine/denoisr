@@ -2,30 +2,42 @@
 % Please edit documentation in R/estimate_L0.R
 \name{estimate_L0}
 \alias{estimate_L0}
-\title{Perform the estimation of L0.}
+\title{Perform an estimation of \eqn{L_0}}
 \usage{
-estimate_L0(data, t0 = 0, H0 = 0, k0 = 2, sigma = NULL, density = NULL)
+estimate_L0(data, t0 = 0, H0 = 0, k0 = 2, sigma = NULL, density = FALSE)
 }
 \arguments{
-\item{data}{List of curves to estimate by kernel regression.}
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 
-\item{t0}{The starting time for the estimation of H0. We consider the 8k0 - 7
-nearest points of t0 for the estimation of H0 when sigma is unknown.}
+\item{t0}{Numeric, the sampling point at which we estimate \eqn{H0}. We will
+consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
+\eqn{H_0} when \eqn{\sigma} is unknown.}
 
-\item{H0}{An estimation of H0.}
+\item{H0}{Numeric, an estimation of \eqn{H_0}}
 
-\item{k0}{For the computation of the gap between the different observations.
-Should be set as k0 = M / max(8, log(M)).}
+\item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider. Should
+be set as \eqn{k0 = (M / log(M) + 7) / 8}.}
 
-\item{sigma}{True value of sigma.
-If null, change estimate.}
+\item{sigma}{Numeric, true value of sigma. Can be NULL.}
 
-\item{density}{Density of the sampling points (currently, only consider
-uniform sampling points).}
+\item{density}{Logical, do the sampling points have a uniform distribution?
+(default is FALSE)}
 }
 \value{
-An estimation of L0.
+Numeric, an estimation of L0.
 }
 \description{
-Perform the estimation of L0.
+This function performs an estimation of \eqn{H_0} used for the estimation of
+the bandwidth for a univariate kernel regression estimator defined over
+continuous domains data using the method of \cite{add ref}.
 }
+\seealso{
+Other estimate \eqn{L_0}: 
+\code{\link{estimate_L0_list}()}
+}
+\concept{estimate \eqn{L_0}}

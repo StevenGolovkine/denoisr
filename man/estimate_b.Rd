@@ -2,20 +2,25 @@
 % Please edit documentation in R/estimate_b.R
 \name{estimate_b}
 \alias{estimate_b}
-\title{Perform the estimation of the bandwith}
+\title{Perform an estimation of the bandwith}
 \usage{
 estimate_b(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov")
 }
 \arguments{
-\item{data}{List of curves to estimate by kernel regression.}
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 
-\item{H0}{An estimation of H0.}
+\item{H0}{Numeric, an estimation of \eqn{H_0}.}
 
-\item{L0}{An estimation of L0.}
+\item{L0}{Numeric, an estimation of \eqn{L_0}.}
 
-\item{sigma}{An estimation of sigma.}
+\item{sigma}{Numeric, an estimation of \eqn{\sigma}.}
 
-\item{K}{Which kernel to use?
+\item{K}{Character string, the kernel used for the estimation:
 \itemize{
 \item epanechnikov (default)
 \item beta
@@ -23,8 +28,23 @@ estimate_b(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov")
 }}
 }
 \value{
-An estimation of H0.
+Numeric, an estimation of the bandwidth.
 }
 \description{
-Perform the estimation of the bandwith
+This function performs an estimation of the bandwidth for a univariate kernel
+regression estimator defined over continuous data using the method of
+\cite{add ref}. An estimation of \eqn{H_0}, \eqn{L_0} and \eqn{\sigma} have
+to be provided to estimate the bandwidth. Then, the bandwidth is given by:
+\deqn{
+  b = (\frac{\sigma^2 \| K \|^2}{\frac{H_0}{[H_0]!}L_0
+      \int \lvert K(v) \rvert \lvert v \rvert^{H_0}dv} \times 
+      \frac{1}{M})^{\frac{1}{2H_0 + 1}}
+     }
+where \eqn{M} is the expected number of points per curve.
 }
+\seealso{
+Other estimate bandwidth: 
+\code{\link{estimate_b_cv}()},
+\code{\link{estimate_b_list}()}
+}
+\concept{estimate bandwidth}

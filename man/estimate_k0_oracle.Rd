@@ -2,18 +2,27 @@
 % Please edit documentation in R/estimate_k0.R
 \name{estimate_k0_oracle}
 \alias{estimate_k0_oracle}
-\title{Perform the estimation of the oracle k0.}
+\title{Perform the estimation of the oracle \eqn{k_0}}
 \usage{
 estimate_k0_oracle(M, H)
 }
 \arguments{
-\item{M}{Mean number of sampling points per curve.}
+\item{M}{Numeric, mean number of sampling points per curve}
 
-\item{H}{Estimation of the regularity of the curves.}
+\item{H}{Numeric, estimation of \eqn{H_0}}
 }
 \value{
-The oracle k0.
+Numeric, the oracle \eqn{k_0}
 }
 \description{
-Perform the estimation of the oracle k0.
+This function performs the estimation of the oracle \eqn{k_0} as used in
+\cite{add ref}.
 }
+\examples{
+estimate_k0_oracle(200, 0.5)
+}
+\seealso{
+Other estimate \eqn{k_0}: 
+\code{\link{estimate_k0_pilot}()}
+}
+\concept{estimate \eqn{k_0}}

@@ -3,24 +3,35 @@
 ###############################################################################
 
 
-#' Perform the estimation of L0.
+#' Perform an estimation of \eqn{L_0}
 #'
+#' This function performs an estimation of \eqn{H_0} used for the estimation of
+#' the bandwidth for a univariate kernel regression estimator defined over 
+#' continuous domains data using the method of \cite{add ref}. 
+#' 
 #' @importFrom magrittr %>%
 #'
-#' @param data List of curves to estimate by kernel regression.
-#' @param t0 The starting time for the estimation of H0. We consider the 8k0 - 7
-#'  nearest points of t0 for the estimation of H0 when sigma is unknown.
-#' @param H0 An estimation of H0.
-#' @param k0 For the computation of the gap between the different observations.
-#'  Should be set as k0 = M / max(8, log(M)).
-#' @param sigma True value of sigma.
-#'  If null, change estimate.
-#' @param density Density of the sampling points (currently, only consider
-#'  uniform sampling points).
+#' @family estimate \eqn{L_0}
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param t0 Numeric, the sampling point at which we estimate \eqn{H0}. We will 
+#'  consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
+#'  \eqn{H_0} when \eqn{\sigma} is unknown.
+#' @param H0 Numeric, an estimation of \eqn{H_0}
+#' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
+#'  be set as \eqn{k0 = (M / log(M) + 7) / 8}.
+#' @param sigma Numeric, true value of sigma. Can be NULL.
+#' @param density Logical, do the sampling points have a uniform distribution? 
+#'  (default is FALSE)
 #'
-#' @return An estimation of L0.
+#' @return Numeric, an estimation of L0.
 estimate_L0 <- function(data, t0 = 0, H0 = 0,
-                        k0 = 2, sigma = NULL, density = NULL) {
+                        k0 = 2, sigma = NULL, density = FALSE) {
 
   # Estimate mu
   mu_hat <- data %>%
@@ -33,7 +44,7 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 
   nume <- 0
   deno <- 1
-  if (is.null(density)) { # Case where the density is not known
+  if (!density) { # Case where the density is not known
     if (is.null(sigma)) { # Subcase where sigma is not known
       idxs <- data %>%
         purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(4 * k0 - 2)]))
@@ -94,24 +105,43 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 }
 
 
-#' Perform the estimation of L0 over a list of t0.
+#' Perform the estimation of \eqn{L_0} given a list of \eqn{t_0}
+#'
+#' This function performs an estimation of \eqn{H_0} used for the estimation of
+#' the bandwidth for a univariate kernel regression estimator defined over 
+#' continuous domains data using the method of \cite{add ref}. 
 #'
 #' @importFrom magrittr %>%
+#' 
+#' @family estimate \eqn{L_0}
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param t0_list A vetor of numerics, the sampling points at which we estimate 
+#'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
+#'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
+#' @param H0_list A vector of numerics, an estimation of \eqn{H_0} at every 
+#'  \eqn{t_0} given in \code{t0_list}.
+#' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
+#'  be set as \eqn{k0 = (M / log(M) + 7) / 8}.
+#' @param sigma Numeric, true value of sigma. Can be NULL.
+#' @param density Logical, do the sampling points have a uniform distribution? 
+#'  (default is FALSE)
 #'
-#' @param data List of curves to estimate by kernel regression.
-#' @param t0_list Starting times for the estimation of H0. We consider the 8k0 - 7
-#'  nearest points of t0 for the estimation of H0 when sigma is unknown.
-#' @param H0_list Estimation of H0 at each t0.
-#' @param k0 For the computation of the gap between the different observations.
-#' @param sigma True value of sigma.
-#'  If null, change estimate.
-#' @param density Density of the sampling points (currently, only consider
-#'  uniform sampling points)?
-#'
-#' @return A list containing the estimation of H0 at each t0.
+#' @return A vector of numerics, an estimation of \eqn{L_0} at each \eqn{t_0}.
 #' @export
+#' @examples 
+#' estimate_L0_list(SmoothCurves::fractional_brownian, 
+#'                 t0_list = 0.5, H0_list = 0.5)
+#' estimate_L0_list(SmoothCurves::piecewise_fractional_brownian,
+#'                 t0_list = c(0.15, 0.5, 0.85), H0_list = c(0.2, 0.5, 0.8), 
+#'                 k0 = 6)
 estimate_L0_list <- function(data, t0_list, H0_list,
-                             k0 = 2, sigma = NULL, density = NULL) {
+                             k0 = 2, sigma = NULL, density = FALSE) {
   if (length(t0_list) != length(H0_list)) {
     stop("t0_list and H0_list must have the same length")
   }
@@ -119,6 +149,6 @@ estimate_L0_list <- function(data, t0_list, H0_list,
   t0_list %>%
     purrr::map2_dbl(H0_list, ~ estimate_L0(data,
       t0 = .x, H0 = .y,
-      k0 = k0, sigma = sigma, density = NULL
+      k0 = k0, sigma = sigma, density = density
     ))
 }

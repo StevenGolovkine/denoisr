@@ -2,29 +2,56 @@
 % Please edit documentation in R/estimate_b.R
 \name{estimate_b_list}
 \alias{estimate_b_list}
-\title{Perform the estimation of the bandwidth over a list of H0 and t0.}
+\title{Perform an estimation of the bandwidth given a list of \eqn{H_0} and \eqn{L_0}}
 \usage{
 estimate_b_list(data, H0_list, L0_list, sigma = 0, K = "epanechnikov")
 }
 \arguments{
-\item{data}{List of curves to estimate by kernel regression.}
-
-\item{H0_list}{List of estimates of H0.}
-
-\item{L0_list}{<- List of estimates of L0.}
-
-\item{sigma}{An estimation of sigma.}
-
-\item{K}{Which kernel to use?
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
 \itemize{
-\item epanechnikov
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
+
+\item{H0_list}{A vector of numerics, estimations of \eqn{H_0}.}
+
+\item{L0_list}{A vector of numerics, estimations of \eqn{L_0}.}
+
+\item{sigma}{Numeric, an estimation of \eqn{\sigma}.}
+
+\item{K}{Character string, the kernel used for the estimation:
+\itemize{
+\item epanechnikov (default)
 \item beta
 \item uniform
 }}
 }
 \value{
-List of estimates of the bandwidth.
+A vector of numerices, estimations of the bandwidth.
 }
 \description{
-Perform the estimation of the bandwidth over a list of H0 and t0.
+This function performs an estimation of the bandwidth for a univariate kernel
+regression estimator defined over continuous data using the method of
+\cite{add ref}. An estimation of \eqn{H_0}, \eqn{L_0} and \eqn{\sigma} have
+to be provided to estimate the bandwidth. Then, the bandwidth is given by:
+\deqn{
+  b = (\frac{\sigma^2 \| K \|^2}{\frac{H_0}{[H_0]!}L_0
+      \int \lvert K(v) \rvert \lvert v \rvert^{H_0}dv} \times 
+      \frac{1}{M})^{\frac{1}{2H_0 + 1}}
+     }
+where \eqn{M} is the expected number of points per curve.
 }
+\examples{
+estimate_b_list(SmoothCurves::fractional_brownian, 
+                H0_list = 0.5, L0_list = 1, sigma = 0.05)
+estimate_b_list(SmoothCurves::piecewise_fractional_brownian,
+                H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1),
+                sigma = 0.1, K = 'epanechnikov')
+}
+\seealso{
+Other estimate bandwidth: 
+\code{\link{estimate_b_cv}()},
+\code{\link{estimate_b}()}
+}
+\concept{estimate bandwidth}

@@ -2,16 +2,27 @@
 % Please edit documentation in R/estimate_sigma.R
 \name{estimate_sigma}
 \alias{estimate_sigma}
-\title{Perform the estimation of sigma}
+\title{Perform an estimation of the standard deviation of the noise}
 \usage{
 estimate_sigma(data)
 }
 \arguments{
-\item{data}{List of curves to estimate by kernel regression.}
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 }
 \value{
-An estimation of sigma.
+Numeric, an estimation of the standard deviation of the noise.
 }
 \description{
-Perform the estimation of sigma
+This function performs an estimation of the standard deviation of the noise
+in the curves. Based on \cite{add ref}, the following formula is used:
+\deqn{\hat{\sigma^2} = \frac{1}{N}\sum_{n = 1}^{N} 
+      \frac{1}{2(M_n - 1)}\sum_{l = 2}^{M_n}(Y_{n, (l)} - Y_{n, (l-1)})^2}
+}
+\examples{
+estimate_sigma(SmoothCurves::fractional_brownian)
 }

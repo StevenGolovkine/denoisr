@@ -2,16 +2,34 @@
 % Please edit documentation in R/estimate_b.R
 \name{estimate_b_cv}
 \alias{estimate_b_cv}
-\title{Perform the estimation of the bandwith using CV.}
+\title{Perform an estimation of the bandwidth using least-squares cross validation}
 \usage{
 estimate_b_cv(data)
 }
 \arguments{
-\item{data}{List of curves to estimate by kernel regression.}
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 }
 \value{
-An estimation of the bandwidth by cross-validation.
+Numeric, an estimation of the bandwidth.
 }
 \description{
-Perform the estimation of the bandwith using CV.
+The function performs an estimation of the bandwidth for a univariate kernel
+regression estimator defined over continuous data using least-square cross
+validation for each curve and return the average bandwidth among them.
 }
+\examples{
+estimate_b_cv(SmoothCurves::fractional_brownian)
+}
+\seealso{
+\code{\link[np]{npregbw}}
+
+Other estimate bandwidth: 
+\code{\link{estimate_b_list}()},
+\code{\link{estimate_b}()}
+}
+\concept{estimate bandwidth}

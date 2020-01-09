@@ -2,20 +2,43 @@
 % Please edit documentation in R/estimate_risk.R
 \name{estimate_risk}
 \alias{estimate_risk}
-\title{Perform the estimation of the risk on a set of curves.}
+\title{Perform an estimation of the risk on a set of curves at a particular point.}
 \usage{
 estimate_risk(curves, curves_estim, t0 = 0.5)
 }
 \arguments{
-\item{curves}{List of (true) curves.}
+\item{curves}{A list, where each element represents a real curve. Each curve
+have to be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 
-\item{curves_estim}{List of estimated curves.}
+\item{curves_estim}{A list, where each element represents an estimated curve.
+Each curve have to be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The estimated points.
+}}
 
-\item{t0}{The time point where to compute the risk}
+\item{t0}{Numeric, sampling point where the risk will be computed}
 }
 \value{
-List with the mean and max residual squared error in t0.
+A list, with the mean and max residual squared error in \eqn{t_0}.
 }
 \description{
-Perform the estimation of the risk on a set of curves.
+This function performs the estimation of the risk on a set of curves at a
+particular sampling points \eqn{t_0}. Both the real and estimated curves have
+to be sampled on the same grid.
+}
+\details{
+Actually, two risks are computed. They are defined as:
+\deqn{MeanRSE(t_0) = \frac{1}{N}\sum_{n = 1}^{N}(X_n(t_0) - \hat{X}_n(t_0))^2}
+and
+\deqn{MeanRSE(t_0) = \max_{1 \leq n \leq N} (X_n(t_0) - \hat{X}_n(t_0))^2}
+}
+\examples{
+data("fractional_brownian")
+curves_smoothed <- smooth_curves(fractional_brownian)$smooth
+estimate_risk(fractional_brownian, curves_smoothed, t0 = 0.5)
 }

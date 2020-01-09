@@ -3,20 +3,40 @@
 ################################################################################
 
 
-#' Perform the estimation of the bandwith
+#' Perform an estimation of the bandwith
+#' 
+#' This function performs an estimation of the bandwidth for a univariate kernel
+#' regression estimator defined over continuous data using the method of 
+#' \cite{add ref}. An estimation of \eqn{H_0}, \eqn{L_0} and \eqn{\sigma} have 
+#' to be provided to estimate the bandwidth. Then, the bandwidth is given by:
+#' \deqn{
+#'   b = (\frac{\sigma^2 \| K \|^2}{\frac{H_0}{[H_0]!}L_0
+#'       \int \lvert K(v) \rvert \lvert v \rvert^{H_0}dv} \times 
+#'       \frac{1}{M})^{\frac{1}{2H_0 + 1}}
+#'      }
+#' where \eqn{M} is the expected number of points per curve.
 #'
 #' @importFrom magrittr %>%
 #'
-#' @param data List of curves to estimate by kernel regression.
-#' @param H0 An estimation of H0.
-#' @param L0 An estimation of L0.
-#' @param sigma An estimation of sigma.
-#' @param K Which kernel to use?
-#'  - epanechnikov (default)
-#'  - beta
-#'  - uniform
+#' @family estimate bandwidth
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param H0 Numeric, an estimation of \eqn{H_0}.
+#' @param L0 Numeric, an estimation of \eqn{L_0}.
+#' @param sigma Numeric, an estimation of \eqn{\sigma}.
+#' @param K Character string, the kernel used for the estimation:
+#'  \itemize{
+#'  \item epanechnikov (default)
+#'  \item beta
+#'  \item uniform
+#'  }
 #'
-#' @return An estimation of H0.
+#' @return Numeric, an estimation of the bandwidth.
 estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 
   # Set kernel constants
@@ -50,23 +70,47 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
   (frac / mu_hat)**(1 / (2 * H0 + 1))
 }
 
-#' Perform the estimation of the bandwidth over a list of H0 and t0.
+#' Perform an estimation of the bandwidth given a list of \eqn{H_0} and \eqn{L_0}
+#' 
+#' This function performs an estimation of the bandwidth for a univariate kernel
+#' regression estimator defined over continuous data using the method of 
+#' \cite{add ref}. An estimation of \eqn{H_0}, \eqn{L_0} and \eqn{\sigma} have 
+#' to be provided to estimate the bandwidth. Then, the bandwidth is given by:
+#' \deqn{
+#'   b = (\frac{\sigma^2 \| K \|^2}{\frac{H_0}{[H_0]!}L_0
+#'       \int \lvert K(v) \rvert \lvert v \rvert^{H_0}dv} \times 
+#'       \frac{1}{M})^{\frac{1}{2H_0 + 1}}
+#'      }
+#' where \eqn{M} is the expected number of points per curve.
 #'
 #' @importFrom magrittr %>%
-#' @importFrom foreach foreach
-#' @importFrom foreach %dopar%
 #'
-#' @param data List of curves to estimate by kernel regression.
-#' @param H0_list List of estimates of H0.
-#' @param L0_list <- List of estimates of L0.
-#' @param sigma An estimation of sigma.
-#' @param K Which kernel to use?
-#'  - epanechnikov
-#'  - beta
-#'  - uniform
+#' @family estimate bandwidth
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param H0_list A vector of numerics, estimations of \eqn{H_0}.
+#' @param L0_list A vector of numerics, estimations of \eqn{L_0}.
+#' @param sigma Numeric, an estimation of \eqn{\sigma}.
+#' @param K Character string, the kernel used for the estimation:
+#'  \itemize{
+#'  \item epanechnikov (default)
+#'  \item beta
+#'  \item uniform
+#'  }
 #'
-#' @return List of estimates of the bandwidth.
+#' @return A vector of numerices, estimations of the bandwidth.
 #' @export
+#' @examples 
+#' estimate_b_list(SmoothCurves::fractional_brownian, 
+#'                 H0_list = 0.5, L0_list = 1, sigma = 0.05)
+#' estimate_b_list(SmoothCurves::piecewise_fractional_brownian,
+#'                 H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1),
+#'                 sigma = 0.1, K = 'epanechnikov')
 estimate_b_list <- function(data, H0_list, L0_list,
                             sigma = 0, K = "epanechnikov") {
   if (length(H0_list) != length(L0_list)) {
@@ -79,14 +123,30 @@ estimate_b_list <- function(data, H0_list, L0_list,
   ))
 }
 
-#' Perform the estimation of the bandwith using CV.
+#' Perform an estimation of the bandwidth using least-squares cross validation
+#' 
+#' The function performs an estimation of the bandwidth for a univariate kernel
+#' regression estimator defined over continuous data using least-square cross 
+#' validation for each curve and return the average bandwidth among them.
 #'
 #' @importFrom magrittr %>%
+#' @importFrom foreach foreach
+#' @importFrom foreach %dopar%
 #'
-#' @param data List of curves to estimate by kernel regression.
+#' @family estimate bandwidth
+#' @seealso \code{\link[np]{npregbw}}
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
 #'
-#' @return An estimation of the bandwidth by cross-validation.
+#' @return Numeric, an estimation of the bandwidth.
 #' @export
+#' @examples 
+#' estimate_b_cv(SmoothCurves::fractional_brownian)
 estimate_b_cv <- function(data) {
   # Create clusters for parallel computation
   cl <- parallel::detectCores() %>%

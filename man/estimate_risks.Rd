@@ -2,18 +2,42 @@
 % Please edit documentation in R/estimate_risk.R
 \name{estimate_risks}
 \alias{estimate_risks}
-\title{Perform the estimation of the risk on a set of curves along the points.}
+\title{Perform an estimation of the risk on a set of curves along the sampling points.}
 \usage{
 estimate_risks(curves, curves_estim)
 }
 \arguments{
-\item{curves}{List of (true) curves.}
+\item{curves}{A list, where each element represents a real curve. Each curve
+have to be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
+}}
 
-\item{curves_estim}{List of estimated curves.}
+\item{curves_estim}{A list, where each element represents an estimated curve.
+Each curve have to be defined as a list with two entries:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The estimated points.
+}}
 }
 \value{
-List with the mean of and max the integrated residual squared error.
+A list, with the mean and max integrated residual squared error
+in \eqn{t_0}.
 }
 \description{
-Perform the estimation of the risk on a set of curves along the points.
+This function performs the estimation of the risk on a set of curves along
+the sampling points. Both the real and estimated curves have to be sampled on
+the same grid.
+}
+\details{
+Actually, two risks are computed. They are defined as:
+\deqn{MeanIntRSE = \frac{1}{N}\sum_{n = 1}^{N}\int(X_n(t) - \hat{X}_n(t))^2dt}
+and
+\deqn{MeanIntRSE = \max_{1 \leq n \leq N} \int(X_n(t) - \hat{X}_n(t))^2dt}
+}
+\examples{
+data("fractional_brownian")
+curves_smoothed <- smooth_curves(fractional_brownian)$smooth
+estimate_risks(fractional_brownian, curves_smoothed)
 }

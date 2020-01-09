@@ -2,16 +2,25 @@
 % Please edit documentation in R/estimate_k0.R
 \name{estimate_k0_pilot}
 \alias{estimate_k0_pilot}
-\title{Perform the estimation of the pilot k0.}
+\title{Perform the estimation of the pilot \eqn{k_0}}
 \usage{
 estimate_k0_pilot(M)
 }
 \arguments{
-\item{M}{Mean number of samping points per curve.}
+\item{M}{Numeric, mean number of sampling points per curve}
 }
 \value{
-The pilot k0.
+Numeric, the pilot \eqn{k_0}
 }
 \description{
-Perform the estimation of the pilot k0.
+This function performs the estimation of the pilot \eqn{k_0} as used in
+\cite{add ref}.
 }
+\examples{
+estimate_k0_pilot(200)
+}
+\seealso{
+Other estimate \eqn{k_0}: 
+\code{\link{estimate_k0_oracle}()}
+}
+\concept{estimate \eqn{k_0}}

@@ -2,36 +2,60 @@
 % Please edit documentation in R/smooth_curves.R
 \name{smooth_curves}
 \alias{smooth_curves}
-\title{Perform a non-parametric smoothing of a set of curves.}
+\title{Perform a non-parametric smoothing of a set of curves}
 \usage{
-smooth_curves(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov")
+smooth_curves(data, U = NULL, t0_list = 0.5, k0_list = 2, K = "epanechnikov")
 }
 \arguments{
-\item{data}{A list of curves to smooth. Each entry of the list should have
-two elements:
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
 \itemize{
-\item $t which correspond to the time we observed the curve.
-\item $x which correspond to the values observed.
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
 }}
 
-\item{U}{Vector of points for the estimation.
-If NULL, smooth the curves on the same grid than they are observed.}
+\item{U}{A vector of numerics, sampling points at which estimate the curves.
+If NULL, the sampling points for the estimation are the same than the
+observed ones.}
 
-\item{t0}{The starting time for the estimation of H0. We consider the 8k0 - 7
-nearest points of t0 for the estimation of H0 when sigma is unknown. Can be
-a list.}
+\item{t0_list}{A vector of numerics, the sampling points at which we estimate
+\eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for
+the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.}
 
-\item{k0}{For the computation of the gap between the different observations.
-Should be set as k0 = M / max(8, log(M)).}
+\item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
+consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a
+different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
+put a unique numeric.}
 
-\item{K}{Kernel used for the estimation.
+\item{K}{Character string, the kernel used for the estimation:
 \itemize{
 \item epanechnikov (default)
+\item uniform
+\item beta
 }}
 }
 \value{
-A list of same size of \code{data} containing the smoothed curves.
+A list, which contains two elements. The first one is a list which
+contains the estimated parameters:
+\itemize{
+\item \strong{sigma} An estimation of the standard deviation of the noise
+\item \strong{H0} An estimation of \eqn{H_0}
+\item \strong{L0} An estimation of \eqn{L_0}
+\item \strong{b} An estimation of the bandwidth
+}
+The second one is another list which contains the estimation of the curves:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The estimated points.
+}
 }
 \description{
-Perform a non-parametric smoothing of a set of curves.
+This function performs a non-parametric smoothing of a set of curves using the
+Nadaraya-Watson estimator. The bandwidth is estimated using the method from
+\cite{add ref}.
+}
+\examples{
+df <- smooth_curves(SmoothCurves::fractional_brownian)
+df <- smooth_curves(SmoothCurves::piecewise_fractional_brownian, 
+                    t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 }

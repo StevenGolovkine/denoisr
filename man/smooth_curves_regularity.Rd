@@ -3,7 +3,7 @@
 \name{smooth_curves_regularity}
 \alias{smooth_curves_regularity}
 \title{Perform a non-parametric smoothing of a set of curves when the regularity is
-larger than 1.}
+larger than 1}
 \usage{
 smooth_curves_regularity(
   data,
@@ -15,39 +15,57 @@ smooth_curves_regularity(
 )
 }
 \arguments{
-\item{data}{A list of curves to smooth. Each entry of the list should have
-two elements:
+\item{data}{A list, where each element represents a curve. Each curve have to
+be defined as a list with two entries:
 \itemize{
-\item $t which corresponds to the time we observed the curve.
-\item $x which corresponds to the values observed.
-We assume that the underlying regularity of the curve is larger than 1.
+\item \strong{$t} The sampling points
+\item \strong{$x} The observed points.
 }}
 
-\item{U}{Vector of points for the estimation.
-If NULL, smooth the curves on the same grid than they are observed.}
+\item{U}{A vector of numerics, sampling points at which estimate the curves.
+If NULL, the sampling points for the estimation are the same than the
+observed ones.}
 
-\item{t0}{The starting time for the estimation of H0. We consider the 8k0 - 7
-nearest points of t0 for the estimation of H0 when sigma is unknown.}
+\item{t0}{Numeric, the sampling point at which we estimate \eqn{H0}. We will
+consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
+\eqn{H_0} when \eqn{\sigma} is unknown.}
 
-\item{k0}{For the computation of the gap between the different observations.
-Shouldd be set as k0 = M / max(8, log(M)).}
+\item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider. Should
+be set as \eqn{k0 = (M / log(M) + 7) / 8}.}
 
-\item{K}{Kernel used for the estimation.
+\item{K}{Character string, the kernel used for the estimation:
 \itemize{
 \item epanechnikov (default)
+\item uniform
+\item beta
 }}
 
-\item{eps}{Precision parameter.}
+\item{eps}{Numeric, precision parameter. It is used to control how much larger
+than 1, we have to be in order to consider to have a regularity larger than 1
+(default to 0.1).}
 }
 \value{
-A list with two entries:
+A list, which contains two elements. The first one is a list which
+contains the estimated parameters:
 \itemize{
-\item parameter which contains the estimation of sigma, H0, L0 and b.
-\item smooth which is a list of the same size than \code{data} containing the
-smoothed curves.
+\item \strong{sigma} An estimation of the standard deviation of the noise
+\item \strong{H0} An estimation of \eqn{H_0}
+\item \strong{L0} An estimation of \eqn{L_0}
+\item \strong{b} An estimation of the bandwidth
+}
+The second one is another list which contains the estimation of the curves:
+\itemize{
+\item \strong{$t} The sampling points
+\item \strong{$x} The estimated points.
 }
 }
 \description{
-Perform a non-parametric smoothing of a set of curves when the regularity is
-larger than 1.
+This function performs a non-parametric smoothing of a set of curves using the
+Nadaraya-Watson estimator when the regularity of the underlying curves is
+larger than 1. The bandwidth is estimated using the method from
+\cite{add ref}. In the case of a regularly larger than 1, we currently
+assume that the regularly is the same all over the curve.
+}
+\examples{
+df <- smooth_curves_regularity(SmoothCurves::fractional_brownian)
 }
