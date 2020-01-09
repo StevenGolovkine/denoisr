@@ -34,13 +34,7 @@ Numeric, an estimation of the bandwidth.
 This function performs an estimation of the bandwidth for a univariate kernel
 regression estimator defined over continuous data using the method of
 \cite{add ref}. An estimation of \eqn{H_0}, \eqn{L_0} and \eqn{\sigma} have
-to be provided to estimate the bandwidth. Then, the bandwidth is given by:
-\deqn{
-  b = (\frac{\sigma^2 \| K \|^2}{\frac{H_0}{\[H_0\]!}L_0
-      \int |K(v)| |v|^{H_0}dv} \times 
-      \frac{1}{M})^{\frac{1}{2H_0 + 1}}
-     }
-where \eqn{M} is the expected number of points per curve.
+to be provided to estimate the bandwidth.
 }
 \seealso{
 Other estimate bandwidth: 
