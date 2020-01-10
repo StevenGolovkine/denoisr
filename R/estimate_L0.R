@@ -42,7 +42,7 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
   theta <- function(v, k, idx) (v[idx + 2 * k - 1] - v[idx + k])**2
   eta <- function(v, k, idx, H) (v[idx + 2 * k - 1] - v[idx + k])**(2 * H)
 
-  nume <- 0
+  nume <- 1
   deno <- 1
   if (!density) { # Case where the density is not known
     if (is.null(sigma)) { # Subcase where sigma is not known
