@@ -26,18 +26,27 @@
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The estimated points.
 #'  } 
-#' @param t0 Numeric, sampling point where the risk will be computed
+#' @param t0_list A vector of numerics, sampling points where the risk will be 
+#'  computed. Can have a single value.
 #' 
 #' @return A list, with the mean and max residual squared error in \eqn{t_0}.
 #' @export
 #' @examples 
 #' data("fractional_brownian")
 #' curves_smoothed <- smooth_curves(fractional_brownian)$smooth
-#' estimate_risk(fractional_brownian, curves_smoothed, t0 = 0.5)
-estimate_risk <- function(curves, curves_estim, t0 = 0.5) {
-  risk <- estimateRisk(curves, curves_estim, t0)
+#' estimate_risk(fractional_brownian, curves_smoothed, t0_list = 0.5)
+estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
+  
+  risk_df <- dplyr::tibble(t0 = numeric(), 
+                           MeanRSE = numeric(), 
+                           MaxRSE = numeric())
+  
+  for(t0 in t0_list) {
+    risk <- estimateRisk(curves, curves_estim, t0)
+    risk_df <- risk_df %>% dplyr::add_row(t0 = t0, MeanRSE = risk[1], MaxRSE = risk[2])
+  }
 
-  c("MeanRSE" = risk[1], "MaxRSE" = risk[2])
+  risk_df
 }
 
 #' Perform an estimation of the risk on a set of curves along the sampling points.

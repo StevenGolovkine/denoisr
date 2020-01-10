@@ -21,6 +21,7 @@ LinkingTo:
     RcppArmadillo   
 Imports:
     doParallel (>= 1.0.15),
+    dplyr (>= 0.8.3),
     foreach (>= 1.4.7),
     iterators (>= 1.0.12),
     KernSmooth (>= 2.23-16),

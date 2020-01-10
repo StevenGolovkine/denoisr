@@ -4,7 +4,7 @@
 \alias{estimate_risk}
 \title{Perform an estimation of the risk on a set of curves at a particular point.}
 \usage{
-estimate_risk(curves, curves_estim, t0 = 0.5)
+estimate_risk(curves, curves_estim, t0_list = 0.5)
 }
 \arguments{
 \item{curves}{A list, where each element represents a real curve. Each curve
@@ -21,7 +21,8 @@ Each curve have to be defined as a list with two entries:
 \item \strong{$x} The estimated points.
 }}
 
-\item{t0}{Numeric, sampling point where the risk will be computed}
+\item{t0_list}{A vector of numerics, sampling points where the risk will be
+computed. Can have a single value.}
 }
 \value{
 A list, with the mean and max residual squared error in \eqn{t_0}.
@@ -40,5 +41,5 @@ and
 \examples{
 data("fractional_brownian")
 curves_smoothed <- smooth_curves(fractional_brownian)$smooth
-estimate_risk(fractional_brownian, curves_smoothed, t0 = 0.5)
+estimate_risk(fractional_brownian, curves_smoothed, t0_list = 0.5)
 }
