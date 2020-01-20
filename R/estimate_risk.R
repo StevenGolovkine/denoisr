@@ -114,7 +114,7 @@ estimate_risks <- function(curves, curves_estim) {
 #' @examples 
 #' data("fractional_brownian")
 #' curves_smoothed <- smooth_curves(fractional_brownian)$smooth
-#' estimate_risks(fractional_brownian[[1]], curves_smoothed[[1]])
+#' estimate_int_risk(fractional_brownian[[1]], curves_smoothed[[1]])
 estimate_int_risk <- function(curves, curves_estim) {
   estimateRiskCurve(curves, curves_estim)
 }

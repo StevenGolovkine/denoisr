@@ -5,6 +5,7 @@
 #' Convert \code{funData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::funData}
+#' @param norm Boolean, if TRUE, the sampling are normalized on [0, 1]
 #' 
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:
@@ -29,6 +30,7 @@ transform_funData <- function(data, norm = TRUE){
 #' Convert \code{irregFunData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::irregFunData}
+#' @param norm Boolean, if TRUE, the sampling are normalized on [0, 1]
 #' 
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:
@@ -55,6 +57,7 @@ transform_irregFunData <- function(data, norm = TRUE){
 #' Convert \code{multiFunData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::multiFunData}
+#' @param norm Boolean, if TRUE, the sampling are normalized on [0, 1]
 #'
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:

@@ -36,5 +36,5 @@ Actually, one risk is computed. They are defined as:
 \examples{
 data("fractional_brownian")
 curves_smoothed <- smooth_curves(fractional_brownian)$smooth
-estimate_risks(fractional_brownian[[1]], curves_smoothed[[1]])
+estimate_int_risk(fractional_brownian[[1]], curves_smoothed[[1]])
 }
