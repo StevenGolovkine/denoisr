@@ -85,3 +85,37 @@ estimate_risks <- function(curves, curves_estim) {
 
   c("MeanIntRSE" = risk[1], "MaxIntRSE" = risk[2])
 }
+
+
+#' Perform an estimation of the risk on one curve along the sampling points.
+#' 
+#' This function performs the estimation of the risk on one curve along 
+#' the sampling points. Both the real and estimated curve have to be sampled on
+#' the same grid.
+#' 
+#' Actually, one risk is computed. They are defined as:
+#' \deqn{IntRSE = \int(X_n(t) - \hat{X}_n(t))^2dt}
+#' 
+#' @param curves A list, where each element represents a real curve. Each curve 
+#'  have to be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param curves_estim A list, where each element represents an estimated curve. 
+#'  Each curve have to be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The estimated points.
+#'  }
+#'
+#' @return Numeric, the integrated mean squarred eror
+#' @export
+#' @examples 
+#' data("fractional_brownian")
+#' curves_smoothed <- smooth_curves(fractional_brownian)$smooth
+#' estimate_risks(fractional_brownian[[1]], curves_smoothed[[1]])
+estimate_int_risk <- function(curves, curves_estim) {
+  estimateRiskCurve(curves, curves_estim)
+}
+
