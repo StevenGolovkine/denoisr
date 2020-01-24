@@ -14,6 +14,8 @@
 #' and
 #' \deqn{MeanRSE(t_0) = \max_{1 \leq n \leq N} (X_n(t_0) - \hat{X}_n(t_0))^2}
 #'
+#' @importFrom magrittr %>%
+#' 
 #' @param curves A list, where each element represents a real curve. Each curve 
 #'  have to be defined as a list with two entries:
 #'  \itemize{

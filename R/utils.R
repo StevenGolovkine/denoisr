@@ -5,7 +5,7 @@
 #' Convert \code{funData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::funData}
-#' @param norm Boolean, if TRUE, the sampling are normalized on [0, 1]
+#' @param norm Boolean, if TRUE, the sampling are normalized on \eqn{\[0, 1]}
 #' 
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:
@@ -14,7 +14,7 @@
 #'   \item \strong{$x} The observed points
 #'  }
 #'  @export
-transform_funData <- function(data, norm = TRUE){
+funData2list <- function(data, norm = TRUE){
   t <- funData::argvals(data)[[1]]
   x <- funData::X(data)
   
@@ -30,7 +30,7 @@ transform_funData <- function(data, norm = TRUE){
 #' Convert \code{irregFunData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::irregFunData}
-#' @param norm Boolean, if TRUE, the sampling are normalized on [0, 1]
+#' @param norm Boolean, if TRUE, the sampling are normalized on \eqn{[0, 1]}
 #' 
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:
@@ -39,8 +39,8 @@ transform_funData <- function(data, norm = TRUE){
 #'   \item \strong{$x} The observed points
 #'  }
 #'  @export
-transform_irregFunData <- function(data, norm = TRUE){
-  t <- funData()
+irregFunData2list <- function(data, norm = TRUE){
+  t <- data@argvals
   x <- data@X
   
   data_list <- list()
@@ -57,7 +57,7 @@ transform_irregFunData <- function(data, norm = TRUE){
 #' Convert \code{multiFunData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::multiFunData}
-#' @param norm Boolean, if TRUE, the sampling are normalized on [0, 1]
+#' @param norm Boolean, if TRUE, the sampling are normalized on \eqn{[0, 1]}
 #'
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:
@@ -66,17 +66,17 @@ transform_irregFunData <- function(data, norm = TRUE){
 #'   \item \strong{$x} The observed points
 #'  }
 #'  @export
-transform_multiFunData <- function(data, norm = TRUE){
+multiFunData2list <- function(data, norm = TRUE){
   
   data_list <- list()
   cpt <- 1
   for(fun_data in data){
     if(inherits(fun_data, 'funData')) {
-      data_list[[cpt]] <- transform_funData(fun_data, norm)
+      data_list[[cpt]] <- funData2list(fun_data, norm)
     } else if(inherits(fun_data, 'irregFunData')) {
-      data_list[[cpt]] <- transform_irregFunData(fun_data, norm)
+      data_list[[cpt]] <- irregFunData2list(fun_data, norm)
     } else if(inherits(fun_data, 'multiFunData')){
-      data_list[[cpt]] <- transform_multiFunData(fun_data, norm)
+      data_list[[cpt]] <- multiFunData2list(fun_data, norm)
     } else{
       stop('Something went wrong with one of the functional data object!')
     }
