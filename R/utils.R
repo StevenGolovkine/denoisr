@@ -27,6 +27,30 @@ funData2list <- function(data, norm = TRUE){
   data_list
 }
 
+#' Convert comprehensive lists into \code{funData::funData} objects.
+#' 
+#' We assume that we \strong{know} that the curves are on the same interval.
+#' 
+#' @importFrom magrittr %>%
+#'  
+#' @param data_list A list, where each element represents a curve. Each curve is
+#'  defined as list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points
+#'   }
+#'   
+#' @return  An object of the class \code{funData::funData}
+#' @export
+list2funData <- function(data_list){
+  argvals <- data_list[[1]]$t
+  obs <- data_list %>% 
+    purrr::map_dfr("x") %>% 
+    as.matrix() %>% 
+    t()
+  funData::funData(argvals = argvals, X = obs)
+}
+
 #' Convert \code{irregFunData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::irregFunData}
@@ -52,6 +76,25 @@ irregFunData2list <- function(data, norm = TRUE){
   }
   
   data_list
+}
+
+#' Convert comprehensive lists into \code{funData::irregFunData} objects.
+#' 
+#' @importFrom magrittr %>%
+#'  
+#' @param data_list A list, where each element represents a curve. Each curve is
+#'  defined as list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points
+#'   }
+#'   
+#' @return  An object of the class \code{funData::irregFunData}
+#' @export
+list2irregFunData <- function(data_list){
+  argvalsList <- data_list %>% purrr::map("t")
+  obsList <- data_list %>% purrr::map("x")
+  funData::irregFunData(argvals = argvalsList, X = obsList)
 }
 
 #' Convert \code{multiFunData} objects into right format for this package
