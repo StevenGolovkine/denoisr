@@ -45,7 +45,7 @@ funData2list <- function(data, norm = TRUE){
 list2funData <- function(data_list){
   argvals <- data_list[[1]]$t
   obs <- data_list %>% 
-    purrr::map_dfr("x") %>% 
+    purrr::map_dfc("x") %>% 
     as.matrix() %>% 
     t()
   funData::funData(argvals = argvals, X = obs)
