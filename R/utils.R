@@ -5,7 +5,7 @@
 #' Convert \code{funData} objects into right format for this package
 #' 
 #' @param data An object of the class \code{funData::funData}
-#' @param norm Boolean, if TRUE, the sampling are normalized on \eqn{\[0, 1]}
+#' @param norm Boolean, if TRUE, the sampling are normalized on \eqn{[0, 1]}
 #' 
 #' @return A list, where each element represents a curve. Each curve is defined
 #'  as a list with two entries:
