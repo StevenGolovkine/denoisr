@@ -9,7 +9,7 @@ funData2list(data, norm = TRUE)
 \arguments{
 \item{data}{An object of the class \code{funData::funData}}
 
-\item{norm}{Boolean, if TRUE, the sampling are normalized on \eqn{\[0, 1]}}
+\item{norm}{Boolean, if TRUE, the sampling are normalized on \eqn{[0, 1]}}
 }
 \value{
 A list, where each element represents a curve. Each curve is defined
