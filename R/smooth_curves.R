@@ -54,6 +54,10 @@
 smooth_curves <- function(data, U = NULL, 
                           t0_list = 0.5, k0_list = 2, K = "epanechnikov") {
 
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   # Estimation of the noise
   sigma_estim <- estimate_sigma(data)
 
@@ -151,6 +155,10 @@ smooth_curves <- function(data, U = NULL,
 smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
                                      K = "epanechnikov", eps = 0.1) {
 
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   # Estimation of the noise
   sigma_estim <- estimate_sigma(data)
 

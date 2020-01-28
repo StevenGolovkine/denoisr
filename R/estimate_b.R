@@ -33,6 +33,10 @@
 #' @return Numeric, an estimation of the bandwidth.
 estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   # Set kernel constants
   if (K == "epanechnikov") {
     K_norm2 <- 0.6
@@ -101,6 +105,10 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 #'                 sigma = 0.1, K = 'epanechnikov')
 estimate_b_list <- function(data, H0_list, L0_list,
                             sigma = 0, K = "epanechnikov") {
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   if (length(H0_list) != length(L0_list)) {
     stop("H0_list and L0_list must have the same length.")
   }
@@ -110,6 +118,76 @@ estimate_b_list <- function(data, H0_list, L0_list,
     sigma = sigma, K = K
   ))
 }
+
+#' Perform an estimation of the bandwidth
+#'
+#' This function performs an estimation of the bandwidth to be used in the Nadaraya-Watson
+#' estimator. The bandwidth is estimated using the method from \cite{add ref}.
+#' 
+#' @importFrom magrittr %>%
+#'
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param t0_list A vector of numerics, the sampling points at which we estimate 
+#'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
+#'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
+#' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
+#'  consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a 
+#'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
+#'  put a unique numeric.
+#' @param K Character string, the kernel used for the estimation:
+#'  \itemize{
+#'   \item epanechnikov (default)
+#'   \item uniform
+#'   \item beta
+#'  }
+#'
+#' @return A list, with elements:
+#'  \itemize{
+#'   \item \strong{sigma} An estimation of the standard deviation of the noise
+#'   \item \strong{H0} An estimation of \eqn{H_0}
+#'   \item \strong{L0} An estimation of \eqn{L_0}
+#'   \item \strong{b} An estimation of the bandwidth
+#'  }
+#' @export
+#' @examples 
+#' b <- estimate_bandwidth(SmoothCurves::fractional_brownian)
+#' b <- estimate_bandwidth(SmoothCurves::piecewise_fractional_brownian, 
+#'                     t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2, K = "epanechnikov") {
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
+  # Estimation of the noise
+  sigma_estim <- estimate_sigma(data)
+  
+  # Estimation of H0
+  H0_estim <- estimate_H0_list(data, t0_list = t0_list, k0_list = k0_list, sigma = NULL)
+  
+  # Estimation of L0
+  L0_estim <- estimate_L0_list(data,
+                               t0_list = t0_list, H0_list = H0_estim,
+                               k0 = k0_list[1], sigma = NULL, density = FALSE
+  )
+  
+  # Estimation of the bandwidth
+  b_estim <- estimate_b_list(data,
+                             H0_list = H0_estim, L0_list = L0_estim,
+                             sigma = sigma_estim, K = K)
+  
+  list(
+    "sigma" = sigma_estim,
+    "H0" = H0_estim,
+    "L0" = L0_estim,
+    "b" = b_estim
+  )
+}
+
 
 #' Perform an estimation of the bandwidth using least-squares cross validation
 #' 
@@ -136,6 +214,10 @@ estimate_b_list <- function(data, H0_list, L0_list,
 #' @examples 
 #' estimate_b_cv(SmoothCurves::fractional_brownian)
 estimate_b_cv <- function(data) {
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   # Create clusters for parallel computation
   cl <- parallel::detectCores() %>%
     -1 %>%

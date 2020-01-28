@@ -28,6 +28,7 @@
 #'
 #' @return Numeric, an estimation of H0.
 estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
+
   theta <- function(v, k, idx) (v[idx + 2 * k - 1] - v[idx + k])**2
 
   first_part <- 0
@@ -102,6 +103,10 @@ estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #' estimate_H0_list(SmoothCurves::piecewise_fractional_brownian,
 #'                 t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   t0_list %>%
     purrr::map2_dbl(k0_list, ~ estimate_H0(data, t0 = .x, k0 = .y, sigma = sigma))
 }

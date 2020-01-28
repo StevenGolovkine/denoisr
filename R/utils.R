@@ -13,7 +13,7 @@
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points
 #'  }
-#'  @export
+#' @export
 funData2list <- function(data, norm = TRUE){
   t <- funData::argvals(data)[[1]]
   x <- funData::X(data)
@@ -62,7 +62,7 @@ list2funData <- function(data_list){
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points
 #'  }
-#'  @export
+#' @export
 irregFunData2list <- function(data, norm = TRUE){
   t <- data@argvals
   x <- data@X
@@ -108,7 +108,7 @@ list2irregFunData <- function(data_list){
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points
 #'  }
-#'  @export
+#' @export
 multiFunData2list <- function(data, norm = TRUE){
   
   data_list <- list()
@@ -126,4 +126,26 @@ multiFunData2list <- function(data, norm = TRUE){
     cpt <- cpt + 1
   }
   data_list
+}
+
+#' Check the input data and return a list in the right list format
+#' 
+#' @param data An object from the package \code{funData}
+#' 
+#' @return A list, where each element represents a curve. Each curve is defined 
+#'  as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points
+#'  }
+#' @export
+checkData <- function(data){
+  if (inherits(data, 'funData')){
+    data_ <- funData2list(data)
+  } else if (inherits(data, 'irregFunData')) {
+    data_ <- irregFunData2list(data)
+  } else {
+    stop('Wrong data type!')
+  }
+  data_
 }

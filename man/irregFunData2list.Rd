@@ -18,7 +18,6 @@ as a list with two entries:
 \item \strong{$t} The sampling points
 \item \strong{$x} The observed points
 }
-@export
 }
 \description{
 Convert \code{irregFunData} objects into right format for this package

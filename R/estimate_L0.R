@@ -142,6 +142,10 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 #'                 k0 = 6)
 estimate_L0_list <- function(data, t0_list, H0_list,
                              k0 = 2, sigma = NULL, density = FALSE) {
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   if (length(t0_list) != length(H0_list)) {
     stop("t0_list and H0_list must have the same length")
   }

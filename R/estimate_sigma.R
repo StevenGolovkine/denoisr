@@ -22,5 +22,9 @@
 #' @examples 
 #' estimate_sigma(SmoothCurves::fractional_brownian)
 estimate_sigma <- function(data) {
+  if(!inherits(data, 'list')){
+    data <- checkData(data)
+  }
+  
   estimateSigma(data)
 }
