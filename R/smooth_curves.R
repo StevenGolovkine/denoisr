@@ -74,17 +74,19 @@ smooth_curves <- function(data, U = NULL,
   b_estim <- estimate_b_list(data,
     H0_list = H0_estim, L0_list = L0_estim,
     sigma = sigma_estim, K = K
-  )
+  ) %>% 
+    transpose() %>% 
+    map(~ unname(unlist(.x)))
 
   # Estimation of the curves
   if (is.null(U)) {
-    curves <- data %>% purrr::map(~ estimate_curve(.x,
-      U = .x$t, b = b_estim,
+    curves <- data %>% purrr::map2(b_estim, ~ estimate_curve(.x,
+      U = .x$t, b = .y,
       t0_list = t0_list, kernel = K
     ))
   } else {
-    curves <- data %>% purrr::map(~ estimate_curve(.x,
-      U = U, b = b_estim,
+    curves <- data %>% purrr::map2(b_estim, ~ estimate_curve(.x,
+      U = U, b = .y,
       t0_list = t0_list, kernel = K
     ))
   }
@@ -184,17 +186,17 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
   L0_estim <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
 
   # Estimation of the bandwidth
-  b_estim <- estimate_b(data, sigma = sigma_estim, H0 = H0_estim + cpt, L0 = L0_estim)
+  b_estim <- estimate_b(data, sigma = sigma_estim, H0 = H0_estim + cpt, L0 = L0_estim) 
 
   # Estimation of the curves
   if (is.null(U)) {
-    curves <- data %>% purrr::map(~ estimate_curve(.x,
-      U = .x$t, b = b_estim,
+    curves <- data %>% purrr::map2(b_estim, ~ estimate_curve(.x,
+      U = .x$t, b = .y,
       t0_list = t0, kernel = K
     ))
   } else {
-    curves <- data %>% purrr::map(~ estimate_curve(.x,
-      U = U, b = b_estim,
+    curves <- data %>% purrr::map2(b_estim, ~ estimate_curve(.x,
+      U = U, b = .y,
       t0_list = t0, kernel = K
     ))
   }

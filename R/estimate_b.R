@@ -56,16 +56,15 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
   }
 
   # Estimate mu
-  mu_hat <- data %>%
-    purrr::map_int(~ length(.x$t)) %>%
-    mean()
+  M_n <- data %>%
+    purrr::map_int(~ length(.x$t))
 
   # Estimate b
   nume <- sigma**2 * K_norm2 * factorial(floor(H0))
   deno <- H0 * L0 * K_phi
   frac <- nume / deno
 
-  (frac / mu_hat)**(1 / (2 * H0 + 1))
+  (frac / M_n)**(1 / (2 * H0 + 1))
 }
 
 #' Perform an estimation of the bandwidth given a list of \eqn{H_0} and \eqn{L_0}
@@ -113,7 +112,7 @@ estimate_b_list <- function(data, H0_list, L0_list,
     stop("H0_list and L0_list must have the same length.")
   }
 
-  H0_list %>% purrr::map2_dbl(L0_list, ~ estimate_b(data,
+  H0_list %>% purrr::map2_dfc(L0_list, ~ estimate_b(data,
     H0 = .x, L0 = .y,
     sigma = sigma, K = K
   ))
@@ -236,5 +235,5 @@ estimate_b_cv <- function(data) {
 
   parallel::stopCluster(cl)
 
-  mean(unlist(bw_list))
+  bw_list
 }
