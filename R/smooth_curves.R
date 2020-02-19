@@ -75,8 +75,8 @@ smooth_curves <- function(data, U = NULL,
     H0_list = H0_estim, L0_list = L0_estim,
     sigma = sigma_estim, K = K
   ) %>% 
-    transpose() %>% 
-    map(~ unname(unlist(.x)))
+    purrr::transpose() %>% 
+    purrr::map(~ unname(unlist(.x)))
 
   # Estimation of the curves
   if (is.null(U)) {
@@ -171,11 +171,11 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
     L0 <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
     b <- estimate_b(data, sigma = sigma_estim, H0 = H0_estim + cpt, L0 = L0)
 
-    smooth <- data %>% purrr::map(~ list(
+    smooth <- data %>% purrr::map2(b, ~ list(
       t = .x$t,
       x = KernSmooth::locpoly(.x$t, .x$x,
         drv = 1 + cpt,
-        bandwidth = b, gridsize = length(.x$t)
+        bandwidth = .y, gridsize = length(.x$t)
       )$y
     ))
     H0_estim <- estimate_H0(smooth, t0 = t0, k0 = k0, sigma = NULL)
