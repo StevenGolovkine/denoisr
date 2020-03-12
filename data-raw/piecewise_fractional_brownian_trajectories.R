@@ -74,16 +74,16 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
 
 # Define some parameters
 N <- 1000 # Number of curves
-M <- 200  # Number of points per curves
+M <- 300  # Number of points per curves
 H <- c(0.2, 0.5, 0.8) # Hurst coefficient 
-sigma <- c(0.01, 0.05, 0.1) # Standard deviation of the noise 
+sigma <- c(0.05) # Standard deviation of the noise 
 
 # Do simulation
-simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M[m], H, sigma))
+simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M, H, sigma))
       
-piecewise_fractional_brownian <- list(
-  simulation = simulation_
-)
+piecewise_fractional_brownian <- simulation_ %>% map(~ list(t = .x$...1, 
+                                                            x = .x$...3, 
+                                                            x_true = .x$...2))
 
-usethis::use_data(piecewise_fractional_brownian)
+usethis::use_data(piecewise_fractional_brownian, overwrite = TRUE)
 

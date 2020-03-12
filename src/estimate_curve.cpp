@@ -26,10 +26,11 @@ arma::vec epaKernelSmoothingCurve(
     double cpt = 0;
     // Loop over the known points
     for (arma::uword k=0; k<M; k++){
-
       if (std::abs(T(k) - U(i)) <= b(i)){
+        //if (std::abs(T(k) - U(i)) != 0){
         Y_hat(i) += (Y(k) * (1 - std::pow((T(k) - U(i))/b(i), 2)));
         cpt += (1 - std::pow((T(k) - U(i))/b(i), 2));
+        //}
       }
     }
     if(cpt == 0){
