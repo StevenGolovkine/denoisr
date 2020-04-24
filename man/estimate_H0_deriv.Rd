@@ -18,6 +18,10 @@ be defined as a list with two entries:
 consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
 \eqn{H_0} when \eqn{\sigma} is unknown.}
 
+\item{eps}{Numeric, precision parameter. It is used to control how much larger
+than 1, we have to be in order to consider to have a regularity larger than 1
+(default to 0.01).}
+
 \item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider.}
 
 \item{sigma}{Numeric, true value of sigma. Can be NULL.}
@@ -32,6 +36,7 @@ continuous domains data in the case the curves are derivables.
 }
 \seealso{
 Other estimate \eqn{H_0}: 
+\code{\link{estimate_H0_deriv_list}()},
 \code{\link{estimate_H0_list}()},
 \code{\link{estimate_H0}()}
 }

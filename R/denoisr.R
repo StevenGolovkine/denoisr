@@ -1,4 +1,4 @@
-#' SmoothCurves: A package for the smoothing of a set of curves.
+#' denoisr: A package for the smoothing of a set of curves.
 #' 
 #' The package provides functions in order to smooth a set of curves. The idea is
 #' to perform non-parametric kernel regression of each of curves using the 
@@ -9,5 +9,5 @@
 #' (assuming they have the same). Then, the estimation of the bandwidth follows.
 #' 
 #' @docType package
-#' @name SmoothCurves
+#' @name denoisr
 NULL

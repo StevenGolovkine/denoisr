@@ -42,7 +42,7 @@ This function performs the smoothing of a curve using the Nadaraya-Watson
 estimator given a particular kernel.
 }
 \examples{
-estimate_curve(SmoothCurves::piecewise_fractional_brownian[[1]],
+estimate_curve(denoisr::piecewise_fractional_brownian[[1]],
                U = seq(0, 1, length.out = 200), b = c(0.2, 0.5, 0.8),
                t0_list = c(0.16, 0.5, 0.83))
 }

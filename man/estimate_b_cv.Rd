@@ -23,7 +23,7 @@ regression estimator defined over continuous data using least-square cross
 validation for each curve and return the average bandwidth among them.
 }
 \examples{
-estimate_b_cv(SmoothCurves::fractional_brownian)
+estimate_b_cv(denoisr::fractional_brownian)
 }
 \seealso{
 \code{\link[np]{npregbw}}

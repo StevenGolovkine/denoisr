@@ -96,11 +96,11 @@ estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #' @return A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 #' @export
 #' @examples 
-#' estimate_H0_list(SmoothCurves::fractional_brownian, 
+#' estimate_H0_list(denoisr::fractional_brownian, 
 #'                 t0_list = 0.5, k0_list = 6)
-#' estimate_H0_list(SmoothCurves::piecewise_fractional_brownian,
+#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
 #'                 t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-#' estimate_H0_list(SmoothCurves::piecewise_fractional_brownian,
+#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
 #'                 t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
   if(!inherits(data, 'list')){
@@ -194,11 +194,11 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
 #' @return A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 #' @export
 #' @examples 
-#' estimate_H0_list(SmoothCurves::fractional_brownian, 
+#' estimate_H0_list(denoisr::fractional_brownian, 
 #'                 t0_list = 0.5, k0_list = 6)
-#' estimate_H0_list(SmoothCurves::piecewise_fractional_brownian,
+#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
 #'                 t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-#' estimate_H0_list(SmoothCurves::piecewise_fractional_brownian,
+#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
 #'                 t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 estimate_H0_deriv_list <- function(data, t0_list, eps = 0.01, k0_list = 2, sigma = NULL) {
   if(!inherits(data, 'list')){

@@ -4,14 +4,16 @@
 \name{fractional_brownian}
 \alias{fractional_brownian}
 \title{Fractional brownian trajectories}
-\format{A list with 1000 elements. Each element corresponds to one simulation of
+\format{
+A list with 1000 elements. Each element corresponds to one simulation of
 a fractional Brownian trajectory. Each element is a list with 3 elements which
 are:
 \itemize{
 \item \strong{t} The sampling points
 \item \strong{x} The trajectory with random noise
 \item \strong{x_true} The true underlying trajectory
-}}
+}
+}
 \usage{
 fractional_brownian
 }

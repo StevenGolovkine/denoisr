@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // epaKernelSmoothingCurve
 arma::vec epaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
-RcppExport SEXP _SmoothCurves_epaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
+RcppExport SEXP _denoisr_epaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -22,7 +22,7 @@ END_RCPP
 }
 // uniKernelSmoothingCurve
 arma::vec uniKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
-RcppExport SEXP _SmoothCurves_uniKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
+RcppExport SEXP _denoisr_uniKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,7 +36,7 @@ END_RCPP
 }
 // betaKernelSmoothingCurve
 arma::vec betaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
-RcppExport SEXP _SmoothCurves_betaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
+RcppExport SEXP _denoisr_betaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -50,7 +50,7 @@ END_RCPP
 }
 // modifiedBetaKernelSmoothingCurve
 arma::vec modifiedBetaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
-RcppExport SEXP _SmoothCurves_modifiedBetaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
+RcppExport SEXP _denoisr_modifiedBetaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -64,7 +64,7 @@ END_RCPP
 }
 // estimateRisk
 Rcpp::List estimateRisk(const List& curves, const List& curves_estim, const double& t0);
-RcppExport SEXP _SmoothCurves_estimateRisk(SEXP curvesSEXP, SEXP curves_estimSEXP, SEXP t0SEXP) {
+RcppExport SEXP _denoisr_estimateRisk(SEXP curvesSEXP, SEXP curves_estimSEXP, SEXP t0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -77,7 +77,7 @@ END_RCPP
 }
 // estimateRiskCurve
 double estimateRiskCurve(const List& curve, const List& curve_estim);
-RcppExport SEXP _SmoothCurves_estimateRiskCurve(SEXP curveSEXP, SEXP curve_estimSEXP) {
+RcppExport SEXP _denoisr_estimateRiskCurve(SEXP curveSEXP, SEXP curve_estimSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -89,7 +89,7 @@ END_RCPP
 }
 // estimateRiskCurves
 List estimateRiskCurves(const List& curves, const List& curves_estim);
-RcppExport SEXP _SmoothCurves_estimateRiskCurves(SEXP curvesSEXP, SEXP curves_estimSEXP) {
+RcppExport SEXP _denoisr_estimateRiskCurves(SEXP curvesSEXP, SEXP curves_estimSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -101,7 +101,7 @@ END_RCPP
 }
 // estimateSigma
 double estimateSigma(const List& curves);
-RcppExport SEXP _SmoothCurves_estimateSigma(SEXP curvesSEXP) {
+RcppExport SEXP _denoisr_estimateSigma(SEXP curvesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -112,7 +112,7 @@ END_RCPP
 }
 // estimateSigmaMSE
 double estimateSigmaMSE(const List& curves, const List& curves_estim);
-RcppExport SEXP _SmoothCurves_estimateSigmaMSE(SEXP curvesSEXP, SEXP curves_estimSEXP) {
+RcppExport SEXP _denoisr_estimateSigmaMSE(SEXP curvesSEXP, SEXP curves_estimSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -124,19 +124,19 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SmoothCurves_epaKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_epaKernelSmoothingCurve, 4},
-    {"_SmoothCurves_uniKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_uniKernelSmoothingCurve, 4},
-    {"_SmoothCurves_betaKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_betaKernelSmoothingCurve, 4},
-    {"_SmoothCurves_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_SmoothCurves_modifiedBetaKernelSmoothingCurve, 4},
-    {"_SmoothCurves_estimateRisk", (DL_FUNC) &_SmoothCurves_estimateRisk, 3},
-    {"_SmoothCurves_estimateRiskCurve", (DL_FUNC) &_SmoothCurves_estimateRiskCurve, 2},
-    {"_SmoothCurves_estimateRiskCurves", (DL_FUNC) &_SmoothCurves_estimateRiskCurves, 2},
-    {"_SmoothCurves_estimateSigma", (DL_FUNC) &_SmoothCurves_estimateSigma, 1},
-    {"_SmoothCurves_estimateSigmaMSE", (DL_FUNC) &_SmoothCurves_estimateSigmaMSE, 2},
+    {"_denoisr_epaKernelSmoothingCurve", (DL_FUNC) &_denoisr_epaKernelSmoothingCurve, 4},
+    {"_denoisr_uniKernelSmoothingCurve", (DL_FUNC) &_denoisr_uniKernelSmoothingCurve, 4},
+    {"_denoisr_betaKernelSmoothingCurve", (DL_FUNC) &_denoisr_betaKernelSmoothingCurve, 4},
+    {"_denoisr_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_denoisr_modifiedBetaKernelSmoothingCurve, 4},
+    {"_denoisr_estimateRisk", (DL_FUNC) &_denoisr_estimateRisk, 3},
+    {"_denoisr_estimateRiskCurve", (DL_FUNC) &_denoisr_estimateRiskCurve, 2},
+    {"_denoisr_estimateRiskCurves", (DL_FUNC) &_denoisr_estimateRiskCurves, 2},
+    {"_denoisr_estimateSigma", (DL_FUNC) &_denoisr_estimateSigma, 1},
+    {"_denoisr_estimateSigmaMSE", (DL_FUNC) &_denoisr_estimateSigmaMSE, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_SmoothCurves(DllInfo *dll) {
+RcppExport void R_init_denoisr(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

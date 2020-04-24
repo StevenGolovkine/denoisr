@@ -48,8 +48,8 @@
 #'  } 
 #' @export
 #' @examples 
-#' df <- smooth_curves(SmoothCurves::fractional_brownian)
-#' df <- smooth_curves(SmoothCurves::piecewise_fractional_brownian, 
+#' df <- smooth_curves(denoisr::fractional_brownian)
+#' df <- smooth_curves(denoisr::piecewise_fractional_brownian, 
 #'                     t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 smooth_curves <- function(data, U = NULL, 
                           t0_list = 0.5, k0_list = 2, K = "epanechnikov") {
@@ -153,7 +153,7 @@ smooth_curves <- function(data, U = NULL,
 #'  } 
 #' @export
 #' @examples 
-#' df <- smooth_curves_regularity(SmoothCurves::fractional_brownian)
+#' df <- smooth_curves_regularity(denoisr::fractional_brownian)
 smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
                                      K = "epanechnikov", eps = 0.1) {
 

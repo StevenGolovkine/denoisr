@@ -20,7 +20,7 @@
 #' @return Numeric, an estimation of the standard deviation of the noise.
 #' @export
 #' @examples 
-#' estimate_sigma(SmoothCurves::fractional_brownian)
+#' estimate_sigma(denoisr::fractional_brownian)
 estimate_sigma <- function(data) {
   if(!inherits(data, 'list')){
     data <- checkData(data)

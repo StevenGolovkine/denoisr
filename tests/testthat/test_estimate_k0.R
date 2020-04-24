@@ -2,7 +2,7 @@
 #                     Tests of the file estimate_k0.R                          #
 ################################################################################
 
-library(SmoothCurves)
+library(denoisr)
 
 test_that("estimate_k0_pilot is double", {
   expect_equal(estimate_k0_pilot(200), 21)

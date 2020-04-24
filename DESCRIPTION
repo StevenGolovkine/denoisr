@@ -1,4 +1,4 @@
-Package: SmoothCurves
+Package: denoisr
 Type: Package
 Title: Nonparametric Kernel Smoothing Methods for Functional Data
 Version: 1.0.1
@@ -12,10 +12,10 @@ Description: Nonparametric kernel smoothing methods that handle irregularly
     sampled functional data.  
 License: MIT + file LICENSE
 LazyData: true
-URL: https://github.com/StevenGolovkine/SmoothCurves
-BugReports: https://github.com/StevenGolovkine/SmoothCurves/issues
+URL: https://github.com/StevenGolovkine/denoisr
+BugReports: https://github.com/StevenGolovkine/denoisr/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 LinkingTo: 
     Rcpp,
     RcppArmadillo   

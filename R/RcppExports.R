@@ -2,38 +2,38 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 epaKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_SmoothCurves_epaKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
+    .Call('_denoisr_epaKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b)
 }
 
 uniKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_SmoothCurves_uniKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
+    .Call('_denoisr_uniKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b)
 }
 
 betaKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_SmoothCurves_betaKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
+    .Call('_denoisr_betaKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b)
 }
 
 modifiedBetaKernelSmoothingCurve <- function(U, T, Y, b) {
-    .Call('_SmoothCurves_modifiedBetaKernelSmoothingCurve', PACKAGE = 'SmoothCurves', U, T, Y, b)
+    .Call('_denoisr_modifiedBetaKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b)
 }
 
 estimateRisk <- function(curves, curves_estim, t0) {
-    .Call('_SmoothCurves_estimateRisk', PACKAGE = 'SmoothCurves', curves, curves_estim, t0)
+    .Call('_denoisr_estimateRisk', PACKAGE = 'denoisr', curves, curves_estim, t0)
 }
 
 estimateRiskCurve <- function(curve, curve_estim) {
-    .Call('_SmoothCurves_estimateRiskCurve', PACKAGE = 'SmoothCurves', curve, curve_estim)
+    .Call('_denoisr_estimateRiskCurve', PACKAGE = 'denoisr', curve, curve_estim)
 }
 
 estimateRiskCurves <- function(curves, curves_estim) {
-    .Call('_SmoothCurves_estimateRiskCurves', PACKAGE = 'SmoothCurves', curves, curves_estim)
+    .Call('_denoisr_estimateRiskCurves', PACKAGE = 'denoisr', curves, curves_estim)
 }
 
 estimateSigma <- function(curves) {
-    .Call('_SmoothCurves_estimateSigma', PACKAGE = 'SmoothCurves', curves)
+    .Call('_denoisr_estimateSigma', PACKAGE = 'denoisr', curves)
 }
 
 estimateSigmaMSE <- function(curves, curves_estim) {
-    .Call('_SmoothCurves_estimateSigmaMSE', PACKAGE = 'SmoothCurves', curves, curves_estim)
+    .Call('_denoisr_estimateSigmaMSE', PACKAGE = 'denoisr', curves, curves_estim)
 }
 

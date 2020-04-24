@@ -38,9 +38,9 @@ the bandwidth for a univariate kernel regression estimator defined over
 continuous domains data using the method of \cite{add ref}.
 }
 \examples{
-estimate_L0_list(SmoothCurves::fractional_brownian, 
+estimate_L0_list(denoisr::fractional_brownian, 
                 t0_list = 0.5, H0_list = 0.5)
-estimate_L0_list(SmoothCurves::piecewise_fractional_brownian,
+estimate_L0_list(denoisr::piecewise_fractional_brownian,
                 t0_list = c(0.15, 0.5, 0.85), H0_list = c(0.2, 0.5, 0.8), 
                 k0 = 6)
 }

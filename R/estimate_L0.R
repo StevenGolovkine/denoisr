@@ -135,9 +135,9 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 #' @return A vector of numerics, an estimation of \eqn{L_0} at each \eqn{t_0}.
 #' @export
 #' @examples 
-#' estimate_L0_list(SmoothCurves::fractional_brownian, 
+#' estimate_L0_list(denoisr::fractional_brownian, 
 #'                 t0_list = 0.5, H0_list = 0.5)
-#' estimate_L0_list(SmoothCurves::piecewise_fractional_brownian,
+#' estimate_L0_list(denoisr::piecewise_fractional_brownian,
 #'                 t0_list = c(0.15, 0.5, 0.85), H0_list = c(0.2, 0.5, 0.8), 
 #'                 k0 = 6)
 estimate_L0_list <- function(data, t0_list, H0_list,

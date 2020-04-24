@@ -45,7 +45,7 @@ estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
   
   for(t0 in t0_list) {
     risk <- estimateRisk(curves, curves_estim, t0)
-    risk_df <- risk_df %>% dplyr::add_row(t0 = t0, MeanRSE = risk[1], MaxRSE = risk[2])
+    risk_df <- risk_df %>% dplyr::add_row(t0 = t0, MeanRSE = risk[[1]], MaxRSE = risk[[2]])
   }
 
   risk_df

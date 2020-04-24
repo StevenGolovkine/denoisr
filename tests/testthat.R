@@ -1,4 +1,4 @@
 library(testthat)
-library(SmoothCurves)
+library(denoisr)
 
-test_check("SmoothCurves")
+test_check("denoisr")

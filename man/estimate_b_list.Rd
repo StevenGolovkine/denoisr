@@ -37,9 +37,9 @@ regression estimator defined over continuous data using the method of
 to be provided to estimate the bandwidth.
 }
 \examples{
-estimate_b_list(SmoothCurves::fractional_brownian, 
+estimate_b_list(denoisr::fractional_brownian, 
                 H0_list = 0.5, L0_list = 1, sigma = 0.05)
-estimate_b_list(SmoothCurves::piecewise_fractional_brownian,
+estimate_b_list(denoisr::piecewise_fractional_brownian,
                 H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1),
                 sigma = 0.1, K = 'epanechnikov')
 }

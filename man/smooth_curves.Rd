@@ -55,7 +55,7 @@ Nadaraya-Watson estimator. The bandwidth is estimated using the method from
 \cite{add ref}.
 }
 \examples{
-df <- smooth_curves(SmoothCurves::fractional_brownian)
-df <- smooth_curves(SmoothCurves::piecewise_fractional_brownian, 
+df <- smooth_curves(denoisr::fractional_brownian)
+df <- smooth_curves(denoisr::piecewise_fractional_brownian, 
                     t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 }

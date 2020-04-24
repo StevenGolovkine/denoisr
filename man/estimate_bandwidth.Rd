@@ -44,7 +44,7 @@ This function performs an estimation of the bandwidth to be used in the Nadaraya
 estimator. The bandwidth is estimated using the method from \cite{add ref}.
 }
 \examples{
-b <- estimate_bandwidth(SmoothCurves::fractional_brownian)
-b <- estimate_bandwidth(SmoothCurves::piecewise_fractional_brownian, 
+b <- estimate_bandwidth(denoisr::fractional_brownian)
+b <- estimate_bandwidth(denoisr::piecewise_fractional_brownian, 
                     t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 }

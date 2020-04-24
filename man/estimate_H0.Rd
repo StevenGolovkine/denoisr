@@ -33,6 +33,7 @@ continuous domains data using the method of \cite{add ref}.
 }
 \seealso{
 Other estimate \eqn{H_0}: 
+\code{\link{estimate_H0_deriv_list}()},
 \code{\link{estimate_H0_deriv}()},
 \code{\link{estimate_H0_list}()}
 }

@@ -67,5 +67,5 @@ larger than 1. The bandwidth is estimated using the method from
 assume that the regularly is the same all over the curve.
 }
 \examples{
-df <- smooth_curves_regularity(SmoothCurves::fractional_brownian)
+df <- smooth_curves_regularity(denoisr::fractional_brownian)
 }
