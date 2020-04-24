@@ -1,8 +1,8 @@
 # denoisr
 
 <!-- badges: start -->
-[![Build Status](https://travis-ci.org/StevenGolovkine/SmoothCurves.svg?branch=master)](https://travis-ci.org/StevenGolovkine/SmoothCurves)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b4308fd1af24122a357cd712486c0fe)](https://www.codacy.com/manual/StevenGolovkine/SmoothCurves?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=StevenGolovkine/SmoothCurves&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/StevenGolovkine/denoisr.svg?branch=master)](https://travis-ci.org/StevenGolovkine/denoisr)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d5b2b6c6083c4d269ace4a8a1b8103b3)](https://www.codacy.com/manual/StevenGolovkine/denoisr?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=StevenGolovkine/denoisr&amp;utm_campaign=Badge_Grade)
 <!-- badges: end -->
 
 The goal of `denoisr` is to ...
