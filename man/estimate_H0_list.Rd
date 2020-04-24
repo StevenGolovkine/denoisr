@@ -29,7 +29,7 @@ put a unique numeric.}
 A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 }
 \description{
-This function performs an esimtation of \eqn{H_0} used for the estimation of
+This function performs an estimation of \eqn{H_0} used for the estimation of
 the bandwidth for a univariate kernel regression estimator defined over
 continuous domains data using the method of \cite{add ref}.
 }
@@ -43,6 +43,7 @@ estimate_H0_list(SmoothCurves::piecewise_fractional_brownian,
 }
 \seealso{
 Other estimate \eqn{H_0}: 
+\code{\link{estimate_H0_deriv}()},
 \code{\link{estimate_H0}()}
 }
 \concept{estimate \eqn{H_0}}
