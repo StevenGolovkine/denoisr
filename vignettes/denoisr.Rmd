@@ -1,0 +1,119 @@
+---
+title: "Introduction to `denoisr`"
+author: "Steven Golovkine"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{denoisr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+*References:*
+
+  * funData: An S4 Class for Functional Data, Clara Happ-Kurz, 2019, https://CRAN.R-project.org/package=funData
+
+# Introduction
+
+`denoisr` is a *R* package which permits to smooth (remove the noise) functional
+data by, first, estimate the Hurst coefficient of the underlying generating
+process. 
+
+Functional data to smooth should be defined on a univariate compact, but can be
+irregularly sampled. `denoisr` can also be used only for Hurst parameter 
+estimation.
+
+`denoisr` have a support for the package [`funData`](https://cran.r-project.org/web/packages/funData/index.html).
+
+## Example on temperature data 
+
+This section performs the smoothing of the Canadian temperature Weather data.
+
+```{r setup, warning=FALSE, message=FALSE}
+# Load packages
+library(denoisr)
+library(funData)
+library(tidyverse)
+```
+
+
+```{r load_data}
+data("canadian_temperature_daily")
+```
+
+```{r convert_funData}
+data_fd <- list2funData(canadian_temperature_daily)
+```
+
+
+```{r plot_data}
+plot(data_fd)
+```
+
+```{r smooth_data}
+smooth_data <- smooth_curves(canadian_temperature_daily, 
+                             t0_list = 0.5, 
+                             k0_list = 5)
+```
+
+```{r plot_data2}
+smooth_data_fd <- list2funData(smooth_data$smooth)
+plot(smooth_data_fd)
+```
+
+
+## Example on simulated data
+
+### On fractional brownian motion
+
+```{r load_brownian}
+data("fractional_brownian")
+```
+
+```{r smooth_data_brown}
+smooth_data <- smooth_curves(fractional_brownian, 
+                             t0_list = 0.5, 
+                             k0_list = 8)
+```
+
+```{r estimate_H_brow}
+print(smooth_data$parameter$H0)
+```
+
+
+```{r plot_brown}
+# Plot a particular observation
+plot(fractional_brownian[[1]]$t, fractional_brownian[[1]]$x)
+lines(fractional_brownian[[1]]$t, fractional_brownian[[1]]$x_true, col = 'blue', lwd = 2)
+lines(smooth_data$smooth[[1]]$t, smooth_data$smooth[[1]]$x, col = 'red', lwd = 2)
+```
+
+### On fractional brownian motion
+
+```{r load_piecewise_brownian}
+data("piecewise_fractional_brownian")
+```
+
+```{r smooth_data_piecebrown}
+smooth_data <- smooth_curves(piecewise_fractional_brownian, 
+                             t0_list = c(0.15, 0.5, 0.85), 
+                             k0_list = c(14, 12, 12))
+```
+
+```{r estimate H_piecebrow}
+print(smooth_data$parameter$H0)
+```
+
+```{r plot_piecewise_brow}
+# Plot a particular observation
+plot(piecewise_fractional_brownian[[1]]$t, piecewise_fractional_brownian[[1]]$x)
+lines(piecewise_fractional_brownian[[1]]$t, piecewise_fractional_brownian[[1]]$x_true, col = 'blue', lwd = 2)
+lines(smooth_data$smooth[[1]]$t, smooth_data$smooth[[1]]$x, col = 'red', lwd = 2)
+```
