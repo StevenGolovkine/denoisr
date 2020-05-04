@@ -39,14 +39,6 @@ the bandwidth for a univariate kernel regression estimator defined over
 continuous domains data using the method of \cite{add ref} in the case the
 curves are derivables.
 }
-\examples{
-estimate_H0_list(denoisr::fractional_brownian, 
-                t0_list = 0.5, k0_list = 6)
-estimate_H0_list(denoisr::piecewise_fractional_brownian,
-                t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-estimate_H0_list(denoisr::piecewise_fractional_brownian,
-                t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
-}
 \seealso{
 Other estimate \eqn{H_0}: 
 \code{\link{estimate_H0_deriv}()},

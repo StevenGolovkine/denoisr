@@ -34,7 +34,8 @@ Actually, one risk is computed. They are defined as:
 \deqn{IntRSE = \int(X_n(t) - \hat{X}_n(t))^2dt}
 }
 \examples{
-data("fractional_brownian")
-curves_smoothed <- smooth_curves(fractional_brownian)$smooth
-estimate_int_risk(fractional_brownian[[1]], curves_smoothed[[1]])
+df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+                                            H = 0.5, sigma = 0.05)
+curves_smoothed <- smooth_curves(df)$smooth
+estimate_int_risk(df[[1]], curves_smoothed[[1]])
 }

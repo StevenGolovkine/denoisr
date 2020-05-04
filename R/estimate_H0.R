@@ -96,12 +96,15 @@ estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #' @return A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 #' @export
 #' @examples 
-#' estimate_H0_list(denoisr::fractional_brownian, 
-#'                 t0_list = 0.5, k0_list = 6)
-#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
-#'                 t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
-#'                 t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+#'                                             H = 0.5, sigma = 0.05)
+#' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+#'                                                    H = c(0.2, 0.5, 0.8), 
+#'                                                    sigma = 0.05)
+#' H0 <- estimate_H0_list(df, t0_list = 0.5, k0_list = 6)
+#' H0 <- estimate_H0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
+#'                        k0_list = c(2, 4, 6))
+#' H0 <- estimate_H0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
   if(!inherits(data, 'list')){
     data <- checkData(data)
@@ -193,13 +196,6 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
 #'
 #' @return A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 #' @export
-#' @examples 
-#' estimate_H0_list(denoisr::fractional_brownian, 
-#'                 t0_list = 0.5, k0_list = 6)
-#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
-#'                 t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-#' estimate_H0_list(denoisr::piecewise_fractional_brownian,
-#'                 t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 estimate_H0_deriv_list <- function(data, t0_list, eps = 0.01, k0_list = 2, sigma = NULL) {
   if(!inherits(data, 'list')){
     data <- checkData(data)

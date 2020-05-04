@@ -40,7 +40,6 @@ This section performs the smoothing of the Canadian temperature Weather data.
 # Load packages
 library(denoisr)
 library(funData)
-library(tidyverse)
 ```
 
 
@@ -73,14 +72,17 @@ plot(smooth_data_fd)
 
 ### On fractional brownian motion
 
-```{r load_brownian}
-data("fractional_brownian")
+```{r load_brownian, warning=FALSE, message=FALSE}
+# Simulate some data
+set.seed(42)
+fractional_brownian <- generate_fractional_brownian(N = 1000, M = 300, 
+                                                    H = 0.5, sigma = 0.05)
 ```
 
 ```{r smooth_data_brown}
 smooth_data <- smooth_curves(fractional_brownian, 
                              t0_list = 0.5, 
-                             k0_list = 8)
+                             k0_list = 14)
 ```
 
 ```{r estimate_H_brow}
@@ -97,12 +99,15 @@ lines(smooth_data$smooth[[1]]$t, smooth_data$smooth[[1]]$x, col = 'red', lwd = 2
 
 ### On fractional brownian motion
 
-```{r load_piecewise_brownian}
-data("piecewise_fractional_brownian")
+```{r load_piecewise_brownian, warning=FALSE, message=FALSE}
+set.seed(42)
+piece_frac_brown <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+                                                           H = c(0.2, 0.5, 0.8), 
+                                                           sigma = 0.05)
 ```
 
 ```{r smooth_data_piecebrown}
-smooth_data <- smooth_curves(piecewise_fractional_brownian, 
+smooth_data <- smooth_curves(piece_frac_brown, 
                              t0_list = c(0.15, 0.5, 0.85), 
                              k0_list = c(14, 12, 12))
 ```
@@ -113,7 +118,7 @@ print(smooth_data$parameter$H0)
 
 ```{r plot_piecewise_brow}
 # Plot a particular observation
-plot(piecewise_fractional_brownian[[1]]$t, piecewise_fractional_brownian[[1]]$x)
-lines(piecewise_fractional_brownian[[1]]$t, piecewise_fractional_brownian[[1]]$x_true, col = 'blue', lwd = 2)
+plot(piece_frac_brown[[1]]$t, piece_frac_brown[[1]]$x)
+lines(piece_frac_brown[[1]]$t, piece_frac_brown[[1]]$x_true, col = 'blue', lwd = 2)
 lines(smooth_data$smooth[[1]]$t, smooth_data$smooth[[1]]$x, col = 'red', lwd = 2)
 ```

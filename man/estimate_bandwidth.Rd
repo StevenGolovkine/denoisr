@@ -44,7 +44,12 @@ This function performs an estimation of the bandwidth to be used in the Nadaraya
 estimator. The bandwidth is estimated using the method from \cite{add ref}.
 }
 \examples{
-b <- estimate_bandwidth(denoisr::fractional_brownian)
-b <- estimate_bandwidth(denoisr::piecewise_fractional_brownian, 
-                    t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+                                            H = 0.5, sigma = 0.05)
+b <- estimate_bandwidth(df)
+
+df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+                                                   H = c(0.2, 0.5, 0.8), 
+                                                   sigma = 0.05)
+b <- estimate_bandwidth(df_piece, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 }

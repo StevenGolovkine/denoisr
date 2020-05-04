@@ -96,12 +96,16 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov") {
 #'
 #' @return A vector of numerices, estimations of the bandwidth.
 #' @export
-#' @examples 
-#' estimate_b_list(denoisr::fractional_brownian, 
-#'                 H0_list = 0.5, L0_list = 1, sigma = 0.05)
-#' estimate_b_list(denoisr::piecewise_fractional_brownian,
-#'                 H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1),
-#'                 sigma = 0.1, K = 'epanechnikov')
+#' @examples
+#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+#'                                             H = 0.5, sigma = 0.05)
+#' b <- estimate_b_list(df, H0_list = 0.5, L0_list = 1, sigma = 0.05)
+#' 
+#' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+#'                                                    H = c(0.2, 0.5, 0.8), 
+#'                                                    sigma = 0.05)
+#' b <- estimate_b_list(df_piece, H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1),
+#'                      sigma = 0.1, K = 'epanechnikov')
 estimate_b_list <- function(data, H0_list, L0_list,
                             sigma = 0, K = "epanechnikov") {
   if(!inherits(data, 'list')){
@@ -153,10 +157,15 @@ estimate_b_list <- function(data, H0_list, L0_list,
 #'   \item \strong{b} An estimation of the bandwidth
 #'  }
 #' @export
-#' @examples 
-#' b <- estimate_bandwidth(denoisr::fractional_brownian)
-#' b <- estimate_bandwidth(denoisr::piecewise_fractional_brownian, 
-#'                     t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+#' @examples
+#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+#'                                             H = 0.5, sigma = 0.05)
+#' b <- estimate_bandwidth(df)
+#' 
+#' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+#'                                                    H = c(0.2, 0.5, 0.8), 
+#'                                                    sigma = 0.05)
+#' b <- estimate_bandwidth(df_piece, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2, K = "epanechnikov") {
   if(!inherits(data, 'list')){
     data <- checkData(data)
@@ -211,7 +220,9 @@ estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2, K = "epanechnik
 #' @return Numeric, an estimation of the bandwidth.
 #' @export
 #' @examples 
-#' estimate_b_cv(denoisr::fractional_brownian)
+#' df <- denoisr::generate_fractional_brownian(N = 5, M = 300, 
+#'                                             H = 0.5, sigma = 0.05)
+#' b <- estimate_b_cv(df)
 estimate_b_cv <- function(data) {
   if(!inherits(data, 'list')){
     data <- checkData(data)

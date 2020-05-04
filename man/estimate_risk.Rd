@@ -39,7 +39,8 @@ and
 \deqn{MeanRSE(t_0) = \max_{1 \leq n \leq N} (X_n(t_0) - \hat{X}_n(t_0))^2}
 }
 \examples{
-data("fractional_brownian")
-curves_smoothed <- smooth_curves(fractional_brownian)$smooth
-estimate_risk(fractional_brownian, curves_smoothed, t0_list = 0.5)
+df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+                                            H = 0.5, sigma = 0.05)
+curves_smoothed <- smooth_curves(df)$smooth
+estimate_risk(df, curves_smoothed, t0_list = 0.5)
 }

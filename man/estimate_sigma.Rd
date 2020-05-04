@@ -24,5 +24,7 @@ in the curves. Based on \cite{add ref}, the following formula is used:
       \frac{1}{2(M_n - 1)}\sum_{l = 2}^{M_n}(Y_{n, (l)} - Y_{n, (l-1)})^2}
 }
 \examples{
-estimate_sigma(denoisr::fractional_brownian)
+df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+                                            H = 0.5, sigma = 0.05)
+estimate_sigma(df)
 }

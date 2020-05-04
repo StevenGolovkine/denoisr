@@ -48,9 +48,14 @@
 #'  } 
 #' @export
 #' @examples 
-#' df <- smooth_curves(denoisr::fractional_brownian)
-#' df <- smooth_curves(denoisr::piecewise_fractional_brownian, 
-#'                     t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+#'                                             H = 0.5, sigma = 0.05)
+#' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+#'                                                    H = c(0.2, 0.5, 0.8), 
+#'                                                    sigma = 0.05)
+#' df_smooth <- smooth_curves(df)
+#' df_piece_smooth <- smooth_curves(df_piece, t0_list = c(0.15, 0.5, 0.85), 
+#'                                  k0_list = 6)
 smooth_curves <- function(data, U = NULL, 
                           t0_list = 0.5, k0_list = 2, K = "epanechnikov") {
 
@@ -152,8 +157,10 @@ smooth_curves <- function(data, U = NULL,
 #'   \item \strong{$x} The estimated points.
 #'  } 
 #' @export
-#' @examples 
-#' df <- smooth_curves_regularity(denoisr::fractional_brownian)
+#' @examples
+#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+#'                                             H = 0.5, sigma = 0.05)
+#' df_smooth <- smooth_curves_regularity(df)
 smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
                                      K = "epanechnikov", eps = 0.1) {
 

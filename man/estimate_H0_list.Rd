@@ -34,12 +34,15 @@ the bandwidth for a univariate kernel regression estimator defined over
 continuous domains data using the method of \cite{add ref}.
 }
 \examples{
-estimate_H0_list(denoisr::fractional_brownian, 
-                t0_list = 0.5, k0_list = 6)
-estimate_H0_list(denoisr::piecewise_fractional_brownian,
-                t0_list = c(0.15, 0.5, 0.85), k0_list = c(2, 4, 6))
-estimate_H0_list(denoisr::piecewise_fractional_brownian,
-                t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
+df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
+                                            H = 0.5, sigma = 0.05)
+df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+                                                   H = c(0.2, 0.5, 0.8), 
+                                                   sigma = 0.05)
+H0 <- estimate_H0_list(df, t0_list = 0.5, k0_list = 6)
+H0 <- estimate_H0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
+                       k0_list = c(2, 4, 6))
+H0 <- estimate_H0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 }
 \seealso{
 Other estimate \eqn{H_0}: 
