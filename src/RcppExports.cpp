@@ -62,6 +62,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// LOOmean
+arma::vec LOOmean(const List& curves, const arma::vec& U, const List& b, const arma::uword& n);
+RcppExport SEXP _denoisr_LOOmean(SEXP curvesSEXP, SEXP USEXP, SEXP bSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type curves(curvesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
+    Rcpp::traits::input_parameter< const List& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::uword& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(LOOmean(curves, U, b, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// covariance
+arma::mat covariance(const List& curves, const arma::vec& sampling_points, const List& b, const List& h);
+RcppExport SEXP _denoisr_covariance(SEXP curvesSEXP, SEXP sampling_pointsSEXP, SEXP bSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type curves(curvesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type sampling_points(sampling_pointsSEXP);
+    Rcpp::traits::input_parameter< const List& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const List& >::type h(hSEXP);
+    rcpp_result_gen = Rcpp::wrap(covariance(curves, sampling_points, b, h));
+    return rcpp_result_gen;
+END_RCPP
+}
 // estimateRisk
 Rcpp::List estimateRisk(const List& curves, const List& curves_estim, const double& t0);
 RcppExport SEXP _denoisr_estimateRisk(SEXP curvesSEXP, SEXP curves_estimSEXP, SEXP t0SEXP) {
@@ -128,6 +156,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_denoisr_uniKernelSmoothingCurve", (DL_FUNC) &_denoisr_uniKernelSmoothingCurve, 4},
     {"_denoisr_betaKernelSmoothingCurve", (DL_FUNC) &_denoisr_betaKernelSmoothingCurve, 4},
     {"_denoisr_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_denoisr_modifiedBetaKernelSmoothingCurve, 4},
+    {"_denoisr_LOOmean", (DL_FUNC) &_denoisr_LOOmean, 4},
+    {"_denoisr_covariance", (DL_FUNC) &_denoisr_covariance, 4},
     {"_denoisr_estimateRisk", (DL_FUNC) &_denoisr_estimateRisk, 3},
     {"_denoisr_estimateRiskCurve", (DL_FUNC) &_denoisr_estimateRiskCurve, 2},
     {"_denoisr_estimateRiskCurves", (DL_FUNC) &_denoisr_estimateRiskCurves, 2},

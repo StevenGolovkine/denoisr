@@ -17,6 +17,14 @@ modifiedBetaKernelSmoothingCurve <- function(U, T, Y, b) {
     .Call('_denoisr_modifiedBetaKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b)
 }
 
+LOOmean <- function(curves, U, b, n) {
+    .Call('_denoisr_LOOmean', PACKAGE = 'denoisr', curves, U, b, n)
+}
+
+covariance <- function(curves, sampling_points, b, h) {
+    .Call('_denoisr_covariance', PACKAGE = 'denoisr', curves, sampling_points, b, h)
+}
+
 estimateRisk <- function(curves, curves_estim, t0) {
     .Call('_denoisr_estimateRisk', PACKAGE = 'denoisr', curves, curves_estim, t0)
 }

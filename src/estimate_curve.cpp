@@ -186,4 +186,3 @@ arma::vec modifiedBetaKernelSmoothingCurve(
   
   return Y_hat;
 }
-
