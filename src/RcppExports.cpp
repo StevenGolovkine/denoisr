@@ -76,17 +76,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// covariance
-arma::mat covariance(const List& curves, const arma::vec& sampling_points, const List& b, const List& h);
-RcppExport SEXP _denoisr_covariance(SEXP curvesSEXP, SEXP sampling_pointsSEXP, SEXP bSEXP, SEXP hSEXP) {
+// mean_cpp
+arma::vec mean_cpp(const List& curves, const arma::vec& U, const List& b);
+RcppExport SEXP _denoisr_mean_cpp(SEXP curvesSEXP, SEXP USEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const List& >::type curves(curvesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
+    Rcpp::traits::input_parameter< const List& >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(mean_cpp(curves, U, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// covariance_cpp
+arma::mat covariance_cpp(const List& curves, const List& meanLOO_curves, const arma::vec& sampling_points, const List& b, const List& h);
+RcppExport SEXP _denoisr_covariance_cpp(SEXP curvesSEXP, SEXP meanLOO_curvesSEXP, SEXP sampling_pointsSEXP, SEXP bSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type curves(curvesSEXP);
+    Rcpp::traits::input_parameter< const List& >::type meanLOO_curves(meanLOO_curvesSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type sampling_points(sampling_pointsSEXP);
     Rcpp::traits::input_parameter< const List& >::type b(bSEXP);
     Rcpp::traits::input_parameter< const List& >::type h(hSEXP);
-    rcpp_result_gen = Rcpp::wrap(covariance(curves, sampling_points, b, h));
+    rcpp_result_gen = Rcpp::wrap(covariance_cpp(curves, meanLOO_curves, sampling_points, b, h));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -157,7 +171,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_denoisr_betaKernelSmoothingCurve", (DL_FUNC) &_denoisr_betaKernelSmoothingCurve, 4},
     {"_denoisr_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_denoisr_modifiedBetaKernelSmoothingCurve, 4},
     {"_denoisr_LOOmean", (DL_FUNC) &_denoisr_LOOmean, 4},
-    {"_denoisr_covariance", (DL_FUNC) &_denoisr_covariance, 4},
+    {"_denoisr_mean_cpp", (DL_FUNC) &_denoisr_mean_cpp, 3},
+    {"_denoisr_covariance_cpp", (DL_FUNC) &_denoisr_covariance_cpp, 5},
     {"_denoisr_estimateRisk", (DL_FUNC) &_denoisr_estimateRisk, 3},
     {"_denoisr_estimateRiskCurve", (DL_FUNC) &_denoisr_estimateRiskCurve, 2},
     {"_denoisr_estimateRiskCurves", (DL_FUNC) &_denoisr_estimateRiskCurves, 2},

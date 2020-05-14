@@ -21,8 +21,12 @@ LOOmean <- function(curves, U, b, n) {
     .Call('_denoisr_LOOmean', PACKAGE = 'denoisr', curves, U, b, n)
 }
 
-covariance <- function(curves, sampling_points, b, h) {
-    .Call('_denoisr_covariance', PACKAGE = 'denoisr', curves, sampling_points, b, h)
+mean_cpp <- function(curves, U, b) {
+    .Call('_denoisr_mean_cpp', PACKAGE = 'denoisr', curves, U, b)
+}
+
+covariance_cpp <- function(curves, meanLOO_curves, sampling_points, b, h) {
+    .Call('_denoisr_covariance_cpp', PACKAGE = 'denoisr', curves, meanLOO_curves, sampling_points, b, h)
 }
 
 estimateRisk <- function(curves, curves_estim, t0) {

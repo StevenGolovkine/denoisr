@@ -31,11 +31,11 @@ arma::vec LOOmean(
       mycurve = curves[m];
       arma::vec X = mycurve["x"];
       arma::vec T = mycurve["t"];
-      
+
       arma::vec bandwidth = b[m];
 
       res.col(cpt) = epaKernelSmoothingCurve(U, T, X, bandwidth);
-      
+
       cpt++;
     }
   }
@@ -43,10 +43,34 @@ arma::vec LOOmean(
   return mean(res, 1);
 }
 
+// [[Rcpp::export]]
+arma::vec mean_cpp(
+  const List & curves, // Curves list ($x and $t)
+  const arma::vec & U, //Estimation points
+  const List & b // Smoothing badnwidths
+){
+  // Get parameters
+  arma::uword N = curves.length(); // Number of curves
+  arma::uword L = U.n_elem; // Number of sampling points
+  List mycurve = curves[0];
+    
+  arma::mat res(L, N);
+  for(arma::uword n=0; n<N; n++){
+    mycurve = curves[n];
+    arma::vec T = mycurve["t"];
+    arma::vec X = mycurve["x"];
+    
+    res.col(n) = LOOmean(curves, U, b, n);
+  }
+  
+  return mean(res, 1);
+}
+
 
 // [[Rcpp::export]]
-arma::mat covariance(
+arma::mat covariance_cpp(
     const List & curves, // Curves list ($x and $t)
+    const List & meanLOO_curves, // Mean LOO curves list
     const arma::vec & sampling_points, // Estimation points
     const List & b, // Smoothing bandwidth 
     const List & h // Smoothing bandwidth
@@ -54,9 +78,9 @@ arma::mat covariance(
   
   // Get parameters
   arma::uword N = curves.length(); // Number of curves
-  arma::vec U = sampling_points; // Number of sampling points
+  arma::vec U = sampling_points;
   List mycurve = curves[0];
-  
+
   // Define output
   arma::mat res(U.n_elem, U.n_elem);
   
@@ -67,14 +91,16 @@ arma::mat covariance(
     arma::vec T = mycurve["t"];
     arma::vec X = mycurve["x"];
     
-    arma::vec mean_curve = LOOmean(curves, T, b, n);
+    arma::vec mean_curve = meanLOO_curves[n];
     arma::vec smooth_curve = epaKernelSmoothingCurve(T, T, X, b[n]);
     arma::vec smooth_curve_unmean = smooth_curve - mean_curve;
     
     smooths_U.col(n) = epaKernelSmoothingCurve(U, T, smooth_curve_unmean, h[n]);
     smooths_V.col(n) = epaKernelSmoothingCurve(U, T, smooth_curve_unmean, h[n]);
   }
+  
 
   res = cov(smooths_U.t(), smooths_V.t(), 1); // Normalisation using N
   return res;
 }
+

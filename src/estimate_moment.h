@@ -12,9 +12,15 @@ arma::vec LOOmean(
     const arma::uword & n // Curve to remove from the estimation
 );
 
-arma::mat covariance(
+arma::vec mean_cpp(
     const List & curves, // Curves list ($x and $t)
-    const arma::vec & U, // Estimation points
+    const arma::vec & U, //Estimation points
+    const List & b // Smoothing badnwidths
+);
+
+arma::mat covariance_cpp(
+    const List & curves, // Curves list ($x and $t)
+    const arma::vec & sampling_points, // Estimation points
     const List & b, // Smoothing bandwidth 
     const List & h // Smoothing bandwidth
 );

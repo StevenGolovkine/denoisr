@@ -4,7 +4,7 @@ author: "Steven Golovkine"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{denoisr}
+  %\VignetteIndexEntry{Introduction to `denoisr`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,107 +18,393 @@ knitr::opts_chunk$set(
 
 *References:*
 
-  * funData: An S4 Class for Functional Data, Clara Happ-Kurz, 2019, https://CRAN.R-project.org/package=funData
+  * J. O. Ramsay, Spencer Graves and Giles Hooker (2020). fda: Functional Data Analysis. R package version 5.1.4. https://CRAN.R-project.org/package=fda
+  * Happ-Kurz C (2020). “Object-Oriented Software for Functional Data.” _Journal of Statistical Software_, *93*(5), 1-38. doi: 10.18637/jss.v093.i05 (URL: https://doi.org/10.18637/jss.v093.i05).
 
-# Introduction
+## Introduction
 
-`denoisr` is a *R* package which permits to smooth (remove the noise) functional
+`denoisr` is a **R** package which permits to smooth (remove the noise from) functional
 data by, first, estimate the Hurst coefficient of the underlying generating
 process. 
 
 Functional data to smooth should be defined on a univariate compact, but can be
 irregularly sampled. `denoisr` can also be used only for Hurst parameter 
-estimation.
+estimation. And finally, there is also some functions to compute the mean curve and the corariance surface.
 
 `denoisr` have a support for the package [`funData`](https://cran.r-project.org/web/packages/funData/index.html).
 
-## Example on temperature data 
+## Model
 
-This section performs the smoothing of the Canadian temperature Weather data.
+Let $I$ be a compact interval of $\mathbb{R}$. We assume $X^{(1)}, \dots, X^{(N)}$ to be an independent sample of a random process $X = \left(X_t : t \in I\right)$ with continuous trajectories. For each $1 \leq n \leq N$, and given a positive integer $M_n$, let $T_m^{(n)}, 1 \leq m \leq M_n$ be the random observation times for the curve $X^{(n)}$. These times are obtained as independent copies of a variable $T$ taking values in $I$. The integers $M_1, \dots, M_N$ represent an independent sample of an integer-valued random variable $M$ with expectation $\mu$. We assume that the realizations $X$, $M$ and $T$ are mutually independent. The observations consist of the pairs $\left(Y_m^{(n)}, T_m^{(n)}\right) \in \mathbb{R} \times I$ where $Y_m^{(n)}$ is defined as
+$$Y_m^{(n)} = X^{(n)}(T_m^{(n)}) + \varepsilon_m^{(n)}, \quad 1 \leq n \leq N,~ 1 \leq m \leq M_n,$$
+and $\varepsilon_m^{(n)}$ are independent copies of a centered error variable $\varepsilon$.
+
+ Let $t_0 \in I$ an arbitrarily fixed piont. The aim is to estimate $X^{(1)}(t_0), \dots, X^{(N)}(t_0)$.
 
 ```{r setup, warning=FALSE, message=FALSE}
 # Load packages
 library(denoisr)
+library(dplyr)
 library(funData)
+library(ggplot2)
+library(reshape2)
 ```
+
+## Example on temperature data 
+
+The Canadian temperature data correspond to the daily temperature at $35$ different locations in Canada averaged over 1960 to 1994. This dataset is included in the package [`fda`](https://CRAN.R-project.org/package=fda).
+
+This section performs the smoothing of the Canadian temperature Weather data.
 
 
 ```{r load_data}
+# Load data
 data("canadian_temperature_daily")
 ```
 
+This package manipulates lists to define functional data. So, functions are provided to convert it as functional data object defined in the package *funData*.
+
 ```{r convert_funData}
+# Convert list to funData object
 data_fd <- list2funData(canadian_temperature_daily)
 ```
 
+So, we can use all the available function for `funData` object. As an example, we can plot the data with the `ggplot2` style.
 
-```{r plot_data}
-plot(data_fd)
+```{r plot_data, fig.height=4.35, fig.width=7}
+# Plot of the data
+autoplot(data_fd) + 
+  labs(title = 'Daily Temperature Data',
+       x = 'Normalized Day of Year',
+       y = 'Temperature in °C') +
+  theme_minimal()
 ```
 
+
+The smoothing of the curves can be performed using the function `smooth_curves`. It accepts the parameter `t0_list` which correspond to the times where we want to estimate the bandwidth and the parameter `k0_list` which is the considered neighborhood.
+
 ```{r smooth_data}
+# Smooth the data
 smooth_data <- smooth_curves(canadian_temperature_daily, 
                              t0_list = 0.5, 
                              k0_list = 5)
 ```
 
-```{r plot_data2}
+Then, we can plot the smoothed data.
+```{r plot_data2, fig.height=4.35, fig.width=7}
+# Plot of the smoothed data
 smooth_data_fd <- list2funData(smooth_data$smooth)
-plot(smooth_data_fd)
+autoplot(smooth_data_fd) +
+  labs(title = 'Smooth Daily Temperature Data',
+       x = 'Normalized Day of Year',
+       y = 'Temperature in °C') +
+  theme_minimal()
 ```
+
+Finally, we show on particular curve along its smoothed version to look at the impact of smoothing.
+```{r plot_data3, fig.height=4.35, fig.width=7}
+# Plot one realisation of the smoothed data
+montreal <- tibble(t = canadian_temperature_daily$Montreal$t,
+                   Data = canadian_temperature_daily$Montreal$x,
+                   Smooth = smooth_data$smooth$Montreal$x) %>% 
+  reshape2::melt(id = 't')
+ggplot(montreal, aes(x = t, y = value, color = variable)) +
+  geom_line() +
+  labs(title = 'Example of Montreal',
+       x = 'Normalized Day of Year',
+       y = 'Temperature in °C',
+       color = '') +
+  theme_minimal()
+
+```
+
+### Mean and Covariance
+
+First, we compute the mean curve. The mean curve is defined as the mean of the Leave-One-Out mean curves that are computed after removing one curve sequentially.
+```{r compute_mean}
+# Compute the mean curve
+mean_curve <- estimate_mean(canadian_temperature_daily,
+                            U = seq(0, 1, length.out = 501),
+                            b = smooth_data$parameter$b)
+```
+
+Show the mean function along the complete set of curves.
+```{r plot_mean, fig.height=4.35, fig.width=7}
+mean_curve_plot <- tibble(t = seq(0, 1, length.out = 501), x = mean_curve)
+autoplot(data_fd) +
+  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
+  labs(title = 'Daily Temperature Data',
+       x = 'Normalized Day of Year',
+       y = 'Temperature in °C') +
+  theme_minimal()
+```
+
+Next, we compute the covariance surface. The covariance surface is defined as a 2-dimensional Nadaraya-Watson estimator of the smoothed version of the noisy curves.
+```{r compute_covariance}
+# Compute the covariance surface
+U <- seq(0, 1, length.out = 101)
+cov_surface <- estimate_covariance(canadian_temperature_daily,
+                                   U = U,
+                                   b = smooth_data$parameter$b,
+                                   h = 0.05)
+```
+
+Show the covariance surface.
+```{r plot_covariance, fig.height=5, fig.width=5, fig.align='center'}
+cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
+ggplot(cov_surface_plot) + 
+  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
+  labs(title = 'Covariance surface of daily temperature data',
+       x = '',
+       y = '',
+       fill = 'Level') +
+  theme_minimal()
+```
+
 
 
 ## Example on simulated data
 
+We will do the same analysis on some simulated datasets.
+
+
 ### On fractional brownian motion
+
+First, we will do the analysis on a dataset of fractional brownian motion. A fractional brownian motion is a continuous-time Gaussian process $B_H(t)$ on $[0, 1]$, such that:
+
+  * $B_H(0) = 0$
+
+  * $\mathbb{E}(B_H(t)) = 0, \quad \forall t \in [0, 1]$
+
+  * $\mathbb{E}(B_H(s)B_H(t)) = \frac{1}{2}\left(\lvert s\rvert^{2H} + \lvert t\rvert^{2H} - \lvert t - s\rvert^{2H}\right)$ where $H$ is a real number in $(0, 1)$, named Hurst parameter.
+  
 
 ```{r load_brownian, warning=FALSE, message=FALSE}
 # Simulate some data
 set.seed(42)
-fractional_brownian <- generate_fractional_brownian(N = 1000, M = 300, 
+fractional_brownian <- generate_fractional_brownian(N = 100, M = 350, 
                                                     H = 0.5, sigma = 0.05)
 ```
 
 ```{r smooth_data_brown}
+# Smooth the data
 smooth_data <- smooth_curves(fractional_brownian, 
                              t0_list = 0.5, 
                              k0_list = 14)
 ```
 
 ```{r estimate_H_brow}
+# Estimation of the Hurst coefficient
 print(smooth_data$parameter$H0)
 ```
 
 
-```{r plot_brown}
+```{r plot_brown, fig.height=4.35, fig.width=7}
 # Plot a particular observation
-plot(fractional_brownian[[1]]$t, fractional_brownian[[1]]$x)
-lines(fractional_brownian[[1]]$t, fractional_brownian[[1]]$x_true, col = 'blue', lwd = 2)
-lines(smooth_data$smooth[[1]]$t, smooth_data$smooth[[1]]$x, col = 'red', lwd = 2)
+obs <- tibble(t = fractional_brownian[[1]]$t,
+              Noisy = fractional_brownian[[1]]$x,
+              Truth = fractional_brownian[[1]]$x_true,
+              Smooth = smooth_data$smooth[[1]]$x) %>% 
+  reshape2::melt(id = 't')
+ggplot(obs, aes(x = t, y = value, color = variable)) +
+  geom_line() +
+  labs(title = 'Fractional brownian motion',
+       x = 'Normalized time',
+       y = 'Value',
+       color = '') +
+  theme_minimal()
 ```
 
-### On fractional brownian motion
+```{r mean_frac_brown}
+# Compute the mean curve
+mean_curve <- estimate_mean(fractional_brownian,
+                            U = seq(0, 1, length.out = 100),
+                            b = smooth_data$parameter$b)
+```
+
+```{r plot_mean_frac_brown, fig.height=4.35, fig.width=7}
+data_fd <- list2irregFunData(fractional_brownian)
+mean_curve_plot <- tibble(t = seq(0, 1, length.out = 100), x = mean_curve)
+autoplot(data_fd) +
+  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
+  labs(title = 'Fractional brownian motion',
+       x = 'Normalized time',
+       y = 'Value') +
+  theme_minimal()
+```
+
+```{r compute_covariance_frac_brown}
+# Compute the covariance surface
+U <- seq(0, 1, length.out = 101)
+cov_surface <- estimate_covariance(fractional_brownian,
+                                   U = U,
+                                   b = smooth_data$parameter$b,
+                                   h = 0.05)
+```
+
+```{r plot_covariance_frac_brown, fig.height=5, fig.width=5, fig.align='center'}
+# Show the covariance surface
+cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
+ggplot(cov_surface_plot) + 
+  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
+  labs(title = 'Covariance surface of fractional brownian motion',
+       x = '',
+       y = '',
+       fill = 'Level') +
+  theme_minimal()
+```
+
+
+### On piecewise fractional brownian motion
 
 ```{r load_piecewise_brownian, warning=FALSE, message=FALSE}
 set.seed(42)
-piece_frac_brown <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+piece_frac_brown <- generate_piecewise_fractional_brownian(N = 150, M = 350, 
                                                            H = c(0.2, 0.5, 0.8), 
                                                            sigma = 0.05)
 ```
 
 ```{r smooth_data_piecebrown}
+# Smooth the data
 smooth_data <- smooth_curves(piece_frac_brown, 
                              t0_list = c(0.15, 0.5, 0.85), 
-                             k0_list = c(14, 12, 12))
+                             k0_list = c(14, 14, 14))
 ```
 
 ```{r estimate H_piecebrow}
+# Estimation of the Hurst coefficient
 print(smooth_data$parameter$H0)
 ```
 
-```{r plot_piecewise_brow}
+```{r plot_piece_brown, fig.height=4.35, fig.width=7}
 # Plot a particular observation
-plot(piece_frac_brown[[1]]$t, piece_frac_brown[[1]]$x)
-lines(piece_frac_brown[[1]]$t, piece_frac_brown[[1]]$x_true, col = 'blue', lwd = 2)
-lines(smooth_data$smooth[[1]]$t, smooth_data$smooth[[1]]$x, col = 'red', lwd = 2)
+obs <- tibble(t = piece_frac_brown[[1]]$t,
+              Noisy = piece_frac_brown[[1]]$x,
+              Truth = piece_frac_brown[[1]]$x_true,
+              Smooth = smooth_data$smooth[[1]]$x) %>% 
+  reshape2::melt(id = 't')
+ggplot(obs, aes(x = t, y = value, color = variable)) +
+  geom_line() +
+  labs(title = 'Piecewise fractional brownian motion',
+       x = 'Normalized time',
+       y = 'Value',
+       color = '') +
+  theme_minimal()
 ```
+
+```{r mean_piece_frac_brown}
+# Compute the mean curve
+mean_curve <- estimate_mean(piece_frac_brown,
+                            U = seq(0, 1, length.out = 100),
+                            b = smooth_data$parameter$b,
+                            t0_list = c(0.15, 0.5, 0.85))
+```
+
+```{r plot_mean_piece_frac_brown, fig.height=4.35, fig.width=7}
+data_fd <- list2irregFunData(piece_frac_brown)
+mean_curve_plot <- tibble(t = seq(0, 1, length.out = 100), x = mean_curve)
+autoplot(data_fd) +
+  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
+  labs(title = 'Fractional brownian motion',
+       x = 'Normalized time',
+       y = 'Value') +
+  theme_minimal()
+```
+
+```{r compute_covariance_piece_frac_brown}
+# Compute the covariance surface
+U <- seq(0, 1, length.out = 101)
+cov_surface <- estimate_covariance(piece_frac_brown,
+                                   U = U,
+                                   b = smooth_data$parameter$b,
+                                   h = 0.05,
+                                   t0_list = c(0.15, 0.5, 0.85))
+```
+
+```{r plot_covariance_piece_frac_brown, fig.height=5, fig.width=5, fig.align='center'}
+# Show the covariance surface
+cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
+ggplot(cov_surface_plot) + 
+  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
+  labs(title = 'Covariance surface of \n piecewise fractional brownian motion',
+       x = '',
+       y = '',
+       fill = 'Level') +
+  theme_minimal()
+```
+
+### On integrated fractional brownian motion
+
+```{r load_inte_brownian, warning=FALSE, message=FALSE}
+# Simulate some data
+set.seed(42)
+inte_fractional_brownian <- generate_integrate_fractional_brownian(N = 100, M = 350, H = 0.5, sigma = 0.025)
+```
+
+```{r smooth_data_inte_brown}
+# Smooth the data
+smooth_data <- smooth_curves_regularity(inte_fractional_brownian, 
+                                        t0 = 0.5, k0 = 14)
+```
+
+```{r estimate_H_inte_brow}
+# Estimation of the Hurst coefficient
+print(smooth_data$parameter$H0)
+```
+
+
+```{r plot_inte_brown, fig.height=4.35, fig.width=7}
+# Plot a particular observation
+obs <- tibble(t = inte_fractional_brownian[[1]]$t,
+              Noisy = inte_fractional_brownian[[1]]$x,
+              Truth = inte_fractional_brownian[[1]]$x_true,
+              Smooth = smooth_data$smooth[[1]]$x) %>% 
+  reshape2::melt(id = 't')
+ggplot(obs, aes(x = t, y = value, color = variable)) +
+  geom_line() +
+  labs(title = 'Integreted Fractional brownian motion',
+       x = 'Normalized time',
+       y = 'Value',
+       color = '') +
+  theme_minimal()
+```
+
+```{r mean_frac_inte_brown}
+# Compute the mean curve
+mean_curve <- estimate_mean(inte_fractional_brownian,
+                            U = seq(0, 1, length.out = 100),
+                            b = smooth_data$parameter$b)
+```
+
+```{r plot_mean_inte_frac_brown, fig.height=4.35, fig.width=7}
+data_fd <- list2irregFunData(inte_fractional_brownian)
+mean_curve_plot <- tibble(t = seq(0, 1, length.out = 100), x = mean_curve)
+autoplot(data_fd) +
+  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
+  labs(title = 'Integrated fractional brownian motion',
+       x = 'Normalized time',
+       y = 'Value') +
+  theme_minimal()
+```
+
+```{r compute_covariance_inte_frac_brown}
+# Compute the covariance surface
+U <- seq(0, 1, length.out = 101)
+cov_surface <- estimate_covariance(inte_fractional_brownian,
+                                   U = U,
+                                   b = smooth_data$parameter$b,
+                                   h = 0.05)
+```
+
+```{r plot_covariance_inte_frac_brown, fig.height=5, fig.width=5, fig.align='center'}
+# Show the covariance surface
+cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
+ggplot(cov_surface_plot) + 
+  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
+  labs(title = 'Covariance surface of integrated fractional brownian motion',
+       x = '',
+       y = '',
+       fill = 'Level') +
+  theme_minimal()
+```
+
