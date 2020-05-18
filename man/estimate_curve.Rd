@@ -46,6 +46,7 @@ df_piece <- generate_piecewise_fractional_brownian(N = 1, M = 300,
                                                    H = c(0.2, 0.5, 0.8), 
                                                    sigma = 0.05)
 estimate_curve(df_piece[[1]],
-               U = seq(0, 1, length.out = 200), b = c(0.2, 0.5, 0.8),
+               U = seq(0, 1, length.out = 200),
+               b = c(0.2, 0.5, 0.8),
                t0_list = c(0.16, 0.5, 0.83))
 }

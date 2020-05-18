@@ -16,7 +16,7 @@ have to be defined as a list with two entries:
 
 \item{b}{A list of bandwidth}
 
-\item{n}{The curves to remove from the estimation}
+\item{n}{The curve to remove from the estimation}
 
 \item{t0_list}{A list of time at which the bandwidths have been estimated.
 (default = NULL)}
@@ -26,4 +26,8 @@ A vector representing the LOO mean curve.
 }
 \description{
 This function performs the computation of a leave-one-out mean curve.
+}
+\examples{
+df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
+estimate_LOO_mean(df, b = 0.01, n = 1)
 }

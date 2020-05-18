@@ -13,12 +13,15 @@
 #'   \item \strong{$x} The observed points
 #'  }
 #' @param b A list of bandwidth
-#' @param n The curves to remove from the estimation
+#' @param n The curve to remove from the estimation
 #' @param t0_list A list of time at which the bandwidths have been estimated.
 #'  (default = NULL)
 #'  
 #' @return A vector representing the LOO mean curve.
 #' @export
+#' @examples
+#' df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
+#' estimate_LOO_mean(df, b = 0.01, n = 1)
 estimate_LOO_mean <- function(curves, b, n, t0_list = NULL){
   
   U <- curves[[n]][['t']]
@@ -55,6 +58,9 @@ estimate_LOO_mean <- function(curves, b, n, t0_list = NULL){
 #'  
 #' @return A vector representing the mean curve.
 #' @export
+#' @examples
+#' df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
+#' estimate_mean(df, U = seq(0, 1, length.out = 101), b = 0.01)
 estimate_mean <- function(curves, U, b, t0_list = NULL){
   
   if ((length(b[[1]]) > 1) & is.null(t0_list)){
@@ -95,6 +101,9 @@ estimate_mean <- function(curves, U, b, t0_list = NULL){
 #' @return A matrix of shape (length(U), length(U)) which is an estimation of
 #'  the covariance matrix.
 #' @export
+#' @examples
+#' df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
+#' estimate_covariance(df, U = seq(0, 1, length.out = 11), b = 0.01, h = 0.05)
 estimate_covariance <- function(curves, U, b, h, t0_list = NULL){
   
   

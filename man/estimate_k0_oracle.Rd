@@ -23,6 +23,7 @@ estimate_k0_oracle(200, 0.5)
 }
 \seealso{
 Other estimate \eqn{k_0}: 
-\code{\link{estimate_k0_pilot}()}
+\code{\link{estimate_k0_pilot}()},
+\code{\link{estimate_k0}()}
 }
 \concept{estimate \eqn{k_0}}

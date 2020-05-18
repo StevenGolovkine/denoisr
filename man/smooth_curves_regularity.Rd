@@ -31,7 +31,7 @@ consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
 \eqn{H_0} when \eqn{\sigma} is unknown.}
 
 \item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider. Should
-be set as \eqn{k0 = (M / log(M) + 7) / 8}.}
+be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
 
 \item{K}{Character string, the kernel used for the estimation:
 \itemize{
@@ -67,7 +67,8 @@ larger than 1. The bandwidth is estimated using the method from
 assume that the regularly is the same all over the curve.
 }
 \examples{
-df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-                                            H = 0.5, sigma = 0.05)
-df_smooth <- smooth_curves_regularity(df)
+df <- generate_integrate_fractional_brownian(N = 1000, M = 300, 
+                                              H = 0.5, sigma = 0.01)
+df_smooth <- smooth_curves_regularity(df, U = seq(0, 1, length.out = 101), 
+                                      t0 = 0.5, k0 = 14)
 }

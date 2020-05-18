@@ -10,7 +10,8 @@ integrate_fractional_brownian_trajectory(M, H, sigma, L = 1)
 \item{M}{An integer, expected number of points in the trajectory.
 The number of points follows a Poisson distribution with mean \eqn{M}.}
 
-\item{H}{Numeric, Hurst coefficient. \eqn{0 < H < 1}}
+\item{H}{Numeric, Hurst coefficient. \eqn{0 < H < 1}. As we return its
+integrated version, the true Hurst will be 1 + H.}
 
 \item{sigma}{A vector of numerics, standard deviation of the noise to add to
 the fractional Brownian motion.}

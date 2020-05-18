@@ -24,7 +24,7 @@ than 1, we have to be in order to consider to have a regularity larger than 1
 (default to 0.1).}
 
 \item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
-consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a
+consider. Should be set as \deqn{k0 = M * exp(-log(log(M))^2)}. We can set a
 different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
 put a unique numeric.}
 
@@ -38,6 +38,11 @@ This function performs an estimation of \eqn{H_0} used for the estimation of
 the bandwidth for a univariate kernel regression estimator defined over
 continuous domains data using the method of \cite{add ref} in the case the
 curves are derivables.
+}
+\examples{
+df <- generate_integrate_fractional_brownian(N = 1000, M = 300,
+                                             H = 0.5, sigma = 0.01)
+H0 <- estimate_H0_deriv_list(df, t0_list = 0.5, eps = 0.01, k0_list = 14)
 }
 \seealso{
 Other estimate \eqn{H_0}: 

@@ -23,7 +23,7 @@
 #'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
 #'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
 #' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
-#'  consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a 
+#'  consider. Should be set as \deqn{k0 = M* exp(-log(log(M))^2)}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
 #'  put a unique numeric.
 #' @param K Character string, the kernel used for the estimation:
@@ -48,12 +48,12 @@
 #'  } 
 #' @export
 #' @examples 
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#' df_smooth <- smooth_curves(df)
+#' 
 #' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
 #'                                                    H = c(0.2, 0.5, 0.8), 
 #'                                                    sigma = 0.05)
-#' df_smooth <- smooth_curves(df)
 #' df_piece_smooth <- smooth_curves(df_piece, t0_list = c(0.15, 0.5, 0.85), 
 #'                                  k0_list = 6)
 smooth_curves <- function(data, U = NULL, 
@@ -67,7 +67,8 @@ smooth_curves <- function(data, U = NULL,
   sigma_estim <- estimate_sigma(data)
 
   # Estimation of H0
-  H0_estim <- estimate_H0_list(data, t0_list = t0_list, k0_list = k0_list, sigma = NULL)
+  H0_estim <- estimate_H0_list(data, t0_list = t0_list, k0_list = k0_list, 
+                               sigma = NULL)
 
   # Estimation of L0
   L0_estim <- estimate_L0_list(data,
@@ -132,7 +133,7 @@ smooth_curves <- function(data, U = NULL,
 #'  consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
 #'  \eqn{H_0} when \eqn{\sigma} is unknown.
 #' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
-#'  be set as \eqn{k0 = (M / log(M) + 7) / 8}.
+#'  be set as \eqn{k0 = M * exp(-log(log(M))^2)}.
 #' @param K Character string, the kernel used for the estimation:
 #'  \itemize{
 #'   \item epanechnikov (default)
@@ -158,9 +159,10 @@ smooth_curves <- function(data, U = NULL,
 #'  } 
 #' @export
 #' @examples
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
-#' df_smooth <- smooth_curves_regularity(df)
+#' df <- generate_integrate_fractional_brownian(N = 1000, M = 300, 
+#'                                               H = 0.5, sigma = 0.01)
+#' df_smooth <- smooth_curves_regularity(df, U = seq(0, 1, length.out = 101), 
+#'                                       t0 = 0.5, k0 = 14)
 smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
                                      K = "epanechnikov", eps = 0.1) {
 

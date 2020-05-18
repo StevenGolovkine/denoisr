@@ -2,6 +2,23 @@
 #         Functions for k0 parameter estimation using regularity               #
 ################################################################################
 
+#' Perform the estimation of the recommanded \eqn{k_0}
+#' 
+#' This function performs the estimation of the recommanded \eqn{k_0} as used in
+#' \cite{add ref}.
+#' 
+#' @family estimate \eqn{k_0}
+#' 
+#' @param M Numeric, mean number of sampling points per curve
+#' 
+#' @return Numeric, the recommanded \eqn{k_0}
+#' @export
+#' @examples
+#' estimate_k0(200)
+estimate_k0 <- function(M) {
+  trunc(M * exp(-log(log(M))**2))
+}
+
 #' Perform the estimation of the pilot \eqn{k_0}
 #'
 #' This function performs the estimation of the pilot \eqn{k_0} as used in 

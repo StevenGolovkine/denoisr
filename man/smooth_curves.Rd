@@ -23,7 +23,7 @@ observed ones.}
 the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.}
 
 \item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
-consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a
+consider. Should be set as \deqn{k0 = M* exp(-log(log(M))^2)}. We can set a
 different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
 put a unique numeric.}
 
@@ -55,12 +55,12 @@ Nadaraya-Watson estimator. The bandwidth is estimated using the method from
 \cite{add ref}.
 }
 \examples{
-df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-                                            H = 0.5, sigma = 0.05)
+df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+df_smooth <- smooth_curves(df)
+
 df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
                                                    H = c(0.2, 0.5, 0.8), 
                                                    sigma = 0.05)
-df_smooth <- smooth_curves(df)
 df_piece_smooth <- smooth_curves(df_piece, t0_list = c(0.15, 0.5, 0.85), 
                                  k0_list = 6)
 }

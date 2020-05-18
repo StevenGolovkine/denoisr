@@ -34,8 +34,7 @@
 #' @return A list, with the mean and max residual squared error in \eqn{t_0}.
 #' @export
 #' @examples 
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' curves_smoothed <- smooth_curves(df)$smooth
 #' estimate_risk(df, curves_smoothed, t0_list = 0.5)
 estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
@@ -46,7 +45,9 @@ estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
   
   for(t0 in t0_list) {
     risk <- estimateRisk(curves, curves_estim, t0)
-    risk_df <- risk_df %>% dplyr::add_row(t0 = t0, MeanRSE = risk[[1]], MaxRSE = risk[[2]])
+    risk_df <- risk_df %>% dplyr::add_row(t0 = t0, 
+                                          MeanRSE = risk[[1]], 
+                                          MaxRSE = risk[[2]])
   }
 
   risk_df
@@ -80,8 +81,7 @@ estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
 #'  in \eqn{t_0}.
 #' @export
 #' @examples 
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' curves_smoothed <- smooth_curves(df)$smooth
 #' estimate_risks(df, curves_smoothed)
 estimate_risks <- function(curves, curves_estim) {
@@ -116,8 +116,7 @@ estimate_risks <- function(curves, curves_estim) {
 #' @return Numeric, the integrated mean squarred eror
 #' @export
 #' @examples 
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' curves_smoothed <- smooth_curves(df)$smooth
 #' estimate_int_risk(df[[1]], curves_smoothed[[1]])
 estimate_int_risk <- function(curves, curves_estim) {

@@ -21,7 +21,7 @@ consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
 \item{H0}{Numeric, an estimation of \eqn{H_0}}
 
 \item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider. Should
-be set as \eqn{k0 = (M / log(M) + 7) / 8}.}
+be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
 
 \item{sigma}{Numeric, true value of sigma. Can be NULL.}
 

@@ -23,8 +23,9 @@
 #'  consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
 #'  \eqn{H_0} when \eqn{\sigma} is unknown.
 #' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
-#'  be set as \eqn{k0 = (M / log(M) + 7) / 8}.
-#' @param sigma Numeric, true value of sigma. Can be NULL.
+#'  be set as \eqn{k0 = M * exp(-log(log(M))^2)}.
+#' @param sigma Numeric, true value of sigma. Can be NULL if true value 
+#'  is unknown.
 #'
 #' @return Numeric, an estimation of H0.
 estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
@@ -96,12 +97,12 @@ estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #' @return A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 #' @export
 #' @examples 
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#' H0 <- estimate_H0_list(df, t0_list = 0.5, k0_list = 6)
+#' 
 #' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
 #'                                                    H = c(0.2, 0.5, 0.8), 
 #'                                                    sigma = 0.05)
-#' H0 <- estimate_H0_list(df, t0_list = 0.5, k0_list = 6)
 #' H0 <- estimate_H0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
 #'                        k0_list = c(2, 4, 6))
 #' H0 <- estimate_H0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
@@ -189,14 +190,19 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
 #'  than 1, we have to be in order to consider to have a regularity larger than 1
 #'  (default to 0.1).
 #' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
-#'  consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a 
+#'  consider. Should be set as \deqn{k0 = M * exp(-log(log(M))^2)}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
 #'  put a unique numeric.
 #' @param sigma Numeric, true value of sigma. Can be NULL.
 #'
 #' @return A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 #' @export
-estimate_H0_deriv_list <- function(data, t0_list, eps = 0.01, k0_list = 2, sigma = NULL) {
+#' @examples
+#' df <- generate_integrate_fractional_brownian(N = 1000, M = 300,
+#'                                              H = 0.5, sigma = 0.01)
+#' H0 <- estimate_H0_deriv_list(df, t0_list = 0.5, eps = 0.01, k0_list = 14)
+estimate_H0_deriv_list <- function(data, t0_list, eps = 0.01, k0_list = 2,
+                                   sigma = NULL) {
   if(!inherits(data, 'list')){
     data <- checkData(data)
   }

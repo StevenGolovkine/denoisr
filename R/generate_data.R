@@ -220,7 +220,8 @@ generate_piecewise_fractional_brownian <- function(N = 100, M = 100,
 #' 
 #' @param M An integer, expected number of points in the trajectory.
 #'   The number of points follows a Poisson distribution with mean \eqn{M}.
-#' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}
+#' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}. As we return its
+#'  integrated version, the true Hurst will be 1 + H.
 #' @param sigma A vector of numerics, standard deviation of the noise to add to
 #'  the fractional Brownian motion.
 #' @param L Numeric, multiplicative constant.
@@ -267,7 +268,8 @@ integrate_fractional_brownian_trajectory <- function(M, H, sigma, L = 1) {
 #' @param N An integer, number of curves to simulate.
 #' @param M An integer, expected number of points in the trajectory.
 #'   The number of points follows a Poisson distribution with mean \eqn{M}.
-#' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}
+#' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}. As we return its
+#'  integrated version, the true Hurst will be 1 + H.
 #' @param sigma A vector of numerics, standard deviation of the noise to add to
 #'  the fractional Brownian motion.
 #' @param L Numeric, multiplicative constant.
@@ -281,7 +283,6 @@ integrate_fractional_brownian_trajectory <- function(M, H, sigma, L = 1) {
 #'  }
 #'  
 #' @export
-#' 
 #' @examples
 #' generate_integrate_fractional_brownian(100, 50, 0.7, 0.1)
 #' generate_integrate_fractional_brownian(100, 50, 0.5, 0.05, 2)

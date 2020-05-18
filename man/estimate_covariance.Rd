@@ -30,3 +30,7 @@ the covariance matrix.
 \description{
 This function performs the estimation of the covariance of a set of curves.
 }
+\examples{
+df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
+estimate_covariance(df, U = seq(0, 1, length.out = 11), b = 0.01, h = 0.05)
+}

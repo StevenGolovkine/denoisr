@@ -28,3 +28,7 @@ A vector representing the mean curve.
 This function performs the estimation of the leave-one-out mean curve of a
 set of curves.
 }
+\examples{
+df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
+estimate_mean(df, U = seq(0, 1, length.out = 101), b = 0.01)
+}

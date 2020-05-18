@@ -20,8 +20,7 @@
 #' @return Numeric, an estimation of the standard deviation of the noise.
 #' @export
 #' @examples
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' estimate_sigma(df)
 estimate_sigma <- function(data) {
   if(!inherits(data, 'list')){

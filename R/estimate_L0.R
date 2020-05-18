@@ -24,7 +24,7 @@
 #'  \eqn{H_0} when \eqn{\sigma} is unknown.
 #' @param H0 Numeric, an estimation of \eqn{H_0}
 #' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
-#'  be set as \eqn{k0 = (M / log(M) + 7) / 8}.
+#'  be set as \eqn{k0 = M * exp(-log(log(M))^2)}.
 #' @param sigma Numeric, true value of sigma. Can be NULL.
 #' @param density Logical, do the sampling points have a uniform distribution? 
 #'  (default is FALSE)
@@ -127,7 +127,7 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 #' @param H0_list A vector of numerics, an estimation of \eqn{H_0} at every 
 #'  \eqn{t_0} given in \code{t0_list}.
 #' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
-#'  be set as \eqn{k0 = (M / log(M) + 7) / 8}.
+#'  be set as \eqn{k0 = M * exp(-log(log(M))^2)}.
 #' @param sigma Numeric, true value of sigma. Can be NULL.
 #' @param density Logical, do the sampling points have a uniform distribution? 
 #'  (default is FALSE)
@@ -135,14 +135,12 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 #' @return A vector of numerics, an estimation of \eqn{L_0} at each \eqn{t_0}.
 #' @export
 #' @examples
-#' df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-#'                                             H = 0.5, sigma = 0.05)
+#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#' L0 <- estimate_L0_list(df, t0_list = 0.5, H0_list = 0.5)
 #' 
 #' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
 #'                                                    H = c(0.2, 0.5, 0.8), 
 #'                                                    sigma = 0.05)
-#'                                                    
-#' L0 <- estimate_L0_list(df, t0_list = 0.5, H0_list = 0.5)
 #' L0 <- estimate_L0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
 #'                        H0_list = c(0.2, 0.5, 0.8), k0 = 6)
 estimate_L0_list <- function(data, t0_list, H0_list,
