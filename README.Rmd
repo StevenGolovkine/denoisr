@@ -39,7 +39,11 @@ You can learn more about thm in `vignette('denoisr')`.
 
 ## Installation
 
-The package is not yet on CRAN.
+The package is not yet on CRAN. But, you can install from source with
+
+```{r, eval=FALSE}
+devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.1.tar.gz")
+```
 
 ## Development version
 
