@@ -1,10 +1,10 @@
 ---
-title: "Introduction to `denoisr`"
+title: "Introduction to denoisr"
 author: "Steven Golovkine"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to `denoisr`}
+  %\VignetteIndexEntry{Introduction to denoisr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

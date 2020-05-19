@@ -71,7 +71,7 @@ autoplot(data_fd) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_data-1.png" width="100%" />
+<img src="man/figures/README-plot_data-1.svg" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 # Smooth the data
@@ -90,7 +90,7 @@ autoplot(smooth_data_fd) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_data2-1.png" width="100%" />
+<img src="man/figures/README-plot_data2-1.svg" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 # Plot one realisation of the smoothed data
@@ -107,7 +107,7 @@ ggplot(montreal, aes(x = t, y = value, color = variable)) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_data3-1.png" width="100%" />
+<img src="man/figures/README-plot_data3-1.svg" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 # Compute the mean curve
@@ -126,7 +126,7 @@ autoplot(data_fd) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_mean-1.png" width="100%" />
+<img src="man/figures/README-plot_mean-1.svg" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 # Compute the covariance surface
@@ -148,4 +148,4 @@ ggplot(cov_surface_plot) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_covariance-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-plot_covariance-1.svg" width="100%" style="display: block; margin: auto;" />

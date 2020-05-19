@@ -9,6 +9,7 @@ knitr::opts_chunk$set(
   collapse=TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
+  dev = 'svg',
   out.width = "100%")
 options(tibble.print_min = 5, tibble.print_max = 5)
 ```
@@ -69,7 +70,7 @@ data("canadian_temperature_daily")
 data_fd <- list2funData(canadian_temperature_daily)
 ```
 
-```{r plot_data, fig.height=4.35, fig.width=7}
+```{r plot_data, fig.height=4.35, fig.width=7, fig.align='center'}
 # Plot of the data
 autoplot(data_fd) + 
   labs(title = 'Daily Temperature Data',
@@ -85,7 +86,7 @@ smooth_data <- smooth_curves(canadian_temperature_daily,
                              k0_list = 5)
 ```
 
-```{r plot_data2, fig.height=4.35, fig.width=7}
+```{r plot_data2, fig.height=4.35, fig.width=7, fig.align='center'}
 # Plot of the smoothed data
 smooth_data_fd <- list2funData(smooth_data$smooth)
 autoplot(smooth_data_fd) +
@@ -95,7 +96,7 @@ autoplot(smooth_data_fd) +
   theme_minimal()
 ```
 
-```{r plot_data3, fig.height=4.35, fig.width=7}
+```{r plot_data3, fig.height=4.35, fig.width=7, fig.align='center'}
 # Plot one realisation of the smoothed data
 montreal <- tibble(t = canadian_temperature_daily$Montreal$t,
                    Data = canadian_temperature_daily$Montreal$x,
@@ -118,7 +119,7 @@ mean_curve <- estimate_mean(canadian_temperature_daily,
                             b = smooth_data$parameter$b)
 ```
 
-```{r plot_mean, fig.height=4.35, fig.width=7}
+```{r plot_mean, fig.height=4.35, fig.width=7, fig.align='center'}
 mean_curve_plot <- tibble(t = seq(0, 1, length.out = 501), x = mean_curve)
 autoplot(data_fd) +
   geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
