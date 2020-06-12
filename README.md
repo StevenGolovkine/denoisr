@@ -9,6 +9,8 @@
 Status](https://travis-ci.org/StevenGolovkine/denoisr.svg?branch=master)](https://travis-ci.org/StevenGolovkine/denoisr)
 [![Codacy
 Badge](https://api.codacy.com/project/badge/Grade/d5b2b6c6083c4d269ace4a8a1b8103b3)](https://www.codacy.com/manual/StevenGolovkine/denoisr?utm_source=github.com&utm_medium=referral&utm_content=StevenGolovkine/denoisr&utm_campaign=Badge_Grade)
+[![DOI](https://zenodo.org/badge/215247523.svg)](https://zenodo.org/badge/latestdoi/215247523)
+
 <!-- badges: end -->
 
 ## Overview
@@ -30,7 +32,12 @@ You can learn more about thm in `vignette('denoisr')`.
 
 ## Installation
 
-The package is not yet on CRAN.
+The package is not yet on CRAN. But, you can install from source
+with
+
+``` r
+devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.1.tar.gz")
+```
 
 ## Development version
 
