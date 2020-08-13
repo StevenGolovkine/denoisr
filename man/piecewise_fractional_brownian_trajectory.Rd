@@ -4,7 +4,7 @@
 \alias{piecewise_fractional_brownian_trajectory}
 \title{Generate piecewise fractional Brownian motion with a random noise}
 \usage{
-piecewise_fractional_brownian_trajectory(M, H, sigma)
+piecewise_fractional_brownian_trajectory(M, H, sigma, pdf = NULL)
 }
 \arguments{
 \item{M}{An integer, expected number of points in the trajectory.
@@ -13,7 +13,10 @@ THe number of points follows a Poisson distribution with mean \eqn{M}.}
 \item{H}{A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}}
 
 \item{sigma}{A vector of numerics, standard deviation of the noise to add to
-the piecewise fractional Brownian motion.}
+the piecewise fractional Brownian motion. Should have the length of H. It
+adds heteroscedastic noise to the data.}
+
+\item{pdf}{A function for the generation of the sampling points.}
 }
 \value{
 A tibble containing the following elements:

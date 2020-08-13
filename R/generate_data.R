@@ -112,7 +112,9 @@ generate_fractional_brownian <- function(N = 100, M = 10, H = 0.5,
 #'   THe number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}
 #' @param sigma A vector of numerics, standard deviation of the noise to add to 
-#'  the piecewise fractional Brownian motion.
+#'  the piecewise fractional Brownian motion. Should have the length of H. It
+#'  adds heteroscedastic noise to the data.
+#' @param pdf A function for the generation of the sampling points.
 #'  
 #' @return A tibble containing the following elements:
 #'  \itemize{
@@ -121,7 +123,7 @@ generate_fractional_brownian <- function(N = 100, M = 10, H = 0.5,
 #'   \item \strong{...3} The trajectory contaminated by noise with standard 
 #'   deviation \eqn{\sigma}
 #'  }
-piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
+piecewise_fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL){
   
   M_n <- rpois(1, M)
   
@@ -131,11 +133,16 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
   }
   M_nn[length(H)] <- M_n - sum(M_nn)
   
-  t <- c()
-  for(i in 1:length(H)){
-    t <- c(t, seq((i - 1) / length(H), i / length(H), length.out = M_nn[i]))
+  if (!inherits(pdf, "function")) {
+    t <- c()
+    for(i in 1:length(H)){
+      t <- c(t, seq((i - 1) / length(H), i / length(H), length.out = M_nn[i]))
+    }
+  } else {
+    t <- pdf(M_n)
+    t <- t[order(t)]
   }
-  
+
   x <- list()
   for(i in seq_along(H)){
     x[i] <- list(as.vector(somebm::fbm(hurst = H[i], n = M_nn[i] - 1)))
@@ -148,18 +155,18 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
   }
   
   # Start to fill the data
-  simu <- matrix(rep(0, length(y) * (length(sigma) + 2)), nrow = length(y))
+  simu <- matrix(rep(0, length(y) * 3), nrow = length(y))
   simu[, 1] <- t
   simu[, 2] <- y
   
   e <- rnorm(length(y), mean = 0, sd = 1)
   
-  # Add columns with homoscedastic noise.
-  j <- 3
-  for (i in sigma) {
-    simu[, j] <- y + i * e
-    j = j + 1
+  if (length(sigma) > 1){
+    sigma <- rep(sigma, M_nn)
   }
+  
+  # Add columns with homoscedastic noise.
+  simu[, 3] <- y + sigma * e
   
   dplyr::as_tibble(simu, .name_repair = 'unique')
 }
@@ -181,7 +188,9 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
 #'   THe number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}
 #' @param sigma A vector of numerics, standard deviation of the noise to add to 
-#'  the piecewise fractional Brownian motion.
+#'  the piecewise fractional Brownian motion. Should have the length of H. It
+#'  adds heteroscedastic noise to the data.
+#' @param pdf A function for the generation of the sampling points.
 #'  
 #' @return A tibble containing the following elements:
 #'  \itemize{
@@ -196,9 +205,12 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma){
 #' generate_piecewise_fractional_brownian(100, 50, c(0.2, 0.5, 0.8), 0.1)
 generate_piecewise_fractional_brownian <- function(N = 100, M = 100, 
                                                    H = c(0.2, 0.5, 0.8), 
-                                                   sigma = 0.05){
+                                                   sigma = 0.05,
+                                                   pdf = NULL){
   
-  simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M, H, sigma))
+  simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M, H,
+                                                                          sigma,
+                                                                          pdf))
   purrr::map(simulation_, ~ list(t = .x$...1, x = .x$...3, x_true = .x$...2))
 }
 

@@ -8,7 +8,8 @@ generate_piecewise_fractional_brownian(
   N = 100,
   M = 100,
   H = c(0.2, 0.5, 0.8),
-  sigma = 0.05
+  sigma = 0.05,
+  pdf = NULL
 )
 }
 \arguments{
@@ -20,7 +21,10 @@ THe number of points follows a Poisson distribution with mean \eqn{M}.}
 \item{H}{A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}}
 
 \item{sigma}{A vector of numerics, standard deviation of the noise to add to
-the piecewise fractional Brownian motion.}
+the piecewise fractional Brownian motion. Should have the length of H. It
+adds heteroscedastic noise to the data.}
+
+\item{pdf}{A function for the generation of the sampling points.}
 }
 \value{
 A tibble containing the following elements:
