@@ -36,7 +36,7 @@ The package is not yet on CRAN. But, you can install from source
 with
 
 ``` r
-devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.1.tar.gz")
+devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.2.tar.gz")
 ```
 
 ## Development version
