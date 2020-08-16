@@ -4,7 +4,14 @@
 \alias{estimate_L0_list}
 \title{Perform the estimation of \eqn{L_0} given a list of \eqn{t_0}}
 \usage{
-estimate_L0_list(data, t0_list, H0_list, k0 = 2, sigma = NULL, density = FALSE)
+estimate_L0_list(
+  data,
+  t0_list,
+  H0_list,
+  k0_list = 2,
+  sigma = NULL,
+  density = FALSE
+)
 }
 \arguments{
 \item{data}{A list, where each element represents a curve. Each curve have to
@@ -21,8 +28,8 @@ the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.}
 \item{H0_list}{A vector of numerics, an estimation of \eqn{H_0} at every
 \eqn{t_0} given in \code{t0_list}.}
 
-\item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider. Should
-be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
+\item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
+consider. Should be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
 
 \item{sigma}{Numeric, true value of sigma. Can be NULL.}
 

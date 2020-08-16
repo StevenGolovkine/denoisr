@@ -45,7 +45,7 @@ You can learn more about them in `vignette('denoisr')`.
 The package is not yet on CRAN. But, you can install from source with
 
 ```{r, eval=FALSE}
-devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.2.tar.gz")
+devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.3.tar.gz")
 ```
 
 ## Development version

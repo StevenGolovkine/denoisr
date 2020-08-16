@@ -119,9 +119,10 @@ estimate_b_list <- function(data, H0_list, L0_list,
     stop("H0_list and L0_list must have the same length.")
   }
 
-  H0_list %>% purrr::map2_dfc(L0_list, ~ estimate_b(data,
-    H0 = .x, L0 = .y,
-    sigma = sigma, K = K
+  purrr::pmap_dfc(list(H0_list, L0_list, sigma),
+                  function(H0, L0, s) estimate_b(data,
+                                                 H0 = H0, L0 = L0,
+                                                 sigma = s, K = K
   ))
 }
 
@@ -176,7 +177,7 @@ estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2,
   }
   
   # Estimation of the noise
-  sigma_estim <- estimate_sigma(data)
+  sigma_estim <- estimate_sigma_list(data, t0_list, k0_list)
   
   # Estimation of H0
   H0_estim <- estimate_H0_list(data, t0_list = t0_list, k0_list = k0_list, sigma = NULL)
@@ -184,7 +185,7 @@ estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2,
   # Estimation of L0
   L0_estim <- estimate_L0_list(data,
                                t0_list = t0_list, H0_list = H0_estim,
-                               k0 = k0_list[1], sigma = NULL, density = FALSE
+                               k0_list = k0_list, sigma = NULL, density = FALSE
   )
   
   # Estimation of the bandwidth

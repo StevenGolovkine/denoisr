@@ -19,7 +19,7 @@ be defined as a list with two entries:
 the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.}
 
 \item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
-consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a
+consider. Should be set as \deqn{k0 = M * exp(-(log(log(M))**2))}. We can set a
 different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
 put a unique numeric.}
 

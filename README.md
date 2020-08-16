@@ -28,15 +28,14 @@ different functions to estimate various parameters:
   - `estimate_mean()` and `estimate_covariance()` estimate the
     leave-one-out smoothing mean and covariance.
 
-You can learn more about thm in `vignette('denoisr')`.
+You can learn more about them in `vignette('denoisr')`.
 
 ## Installation
 
-The package is not yet on CRAN. But, you can install from source
-with
+The package is not yet on CRAN. But, you can install from source with
 
 ``` r
-devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.1.tar.gz")
+devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.3.tar.gz")
 ```
 
 ## Development version
@@ -85,6 +84,8 @@ autoplot(data_fd) +
 smooth_data <- smooth_curves(canadian_temperature_daily, 
                              t0_list = 0.5, 
                              k0_list = 5)
+#> New names:
+#> * NA -> ...1
 ```
 
 ``` r

@@ -7,7 +7,7 @@
 estimate_H0_deriv(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL)
 }
 \arguments{
-\item{data}{A lis, where each element represents a curve. Each curve have to
+\item{data}{A list, where each element represents a curve. Each curve have to
 be defined as a list with two entries:
 \itemize{
 \item \strong{$t} The sampling points

@@ -17,11 +17,13 @@ be defined as a list with two entries:
 
 \item{t0_list}{A vector of numerics, the sampling points at which we estimate
 \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for
-the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.}
+the estimation of \eqn{H_0} when \eqn{\sigma} is unknown. Be careful not to
+consider \eqn{t_0} close to the bound of the interval because local
+polynomials do not behave well in this case.}
 
 \item{eps}{Numeric, precision parameter. It is used to control how much larger
 than 1, we have to be in order to consider to have a regularity larger than 1
-(default to 0.1).}
+(default to 0.01). Should be set as \deqn{\epsilon = log^{-2}(M)}.}
 
 \item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
 consider. Should be set as \deqn{k0 = M * exp(-log(log(M))^2)}. We can set a

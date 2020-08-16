@@ -4,7 +4,7 @@
 \alias{estimate_sigma}
 \title{Perform an estimation of the standard deviation of the noise}
 \usage{
-estimate_sigma(data)
+estimate_sigma(data, t0 = 0.5, k0 = 2)
 }
 \arguments{
 \item{data}{A list, where each element represents a curve. Each curve have to
@@ -13,6 +13,13 @@ be defined as a list with two entries:
 \item \strong{$t} The sampling points
 \item \strong{$x} The observed points.
 }}
+
+\item{t0}{Numeric, the sampling point at which we estimate \eqn{\sigma}. We will
+consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for the estimation of
+\eqn{\sigma}}
+
+\item{k0}{Numeric, the number of neighbors of \eqn{t_0} to consider. Should
+be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
 }
 \value{
 Numeric, an estimation of the standard deviation of the noise.
@@ -25,5 +32,5 @@ in the curves. Based on \cite{add ref}, the following formula is used:
 }
 \examples{
 df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-estimate_sigma(df)
+estimate_sigma(df, t0 = 0.5, k0 = 14)
 }

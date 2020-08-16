@@ -1,7 +1,7 @@
 Package: denoisr
 Type: Package
 Title: Nonparametric Kernel Smoothing Methods for Functional Data
-Version: 1.0.2
+Version: 1.0.3
 Date: 2019-06-14
 Depends: R (>= 2.10)
 Authors@R: person("Steven", "Golovkine", 

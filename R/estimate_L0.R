@@ -126,8 +126,8 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 #'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
 #' @param H0_list A vector of numerics, an estimation of \eqn{H_0} at every 
 #'  \eqn{t_0} given in \code{t0_list}.
-#' @param k0 Numeric, the number of neighbors of \eqn{t_0} to consider. Should 
-#'  be set as \eqn{k0 = M * exp(-log(log(M))^2)}.
+#' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to
+#'  consider. Should be set as \eqn{k0 = M * exp(-log(log(M))^2)}.
 #' @param sigma Numeric, true value of sigma. Can be NULL.
 #' @param density Logical, do the sampling points have a uniform distribution? 
 #'  (default is FALSE)
@@ -144,7 +144,7 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0,
 #' L0 <- estimate_L0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
 #'                        H0_list = c(0.2, 0.5, 0.8), k0 = 6)
 estimate_L0_list <- function(data, t0_list, H0_list,
-                             k0 = 2, sigma = NULL, density = FALSE) {
+                             k0_list = 2, sigma = NULL, density = FALSE) {
   if(!inherits(data, 'list')){
     data <- checkData(data)
   }
@@ -153,9 +153,8 @@ estimate_L0_list <- function(data, t0_list, H0_list,
     stop("t0_list and H0_list must have the same length")
   }
 
-  t0_list %>%
-    purrr::map2_dbl(H0_list, ~ estimate_L0(data,
-      t0 = .x, H0 = .y,
-      k0 = k0, sigma = sigma, density = density
-    ))
+  purrr::pmap_dbl(list(t0_list, H0_list, k0_list),
+                  function(t0, H0, k0) estimate_L0(data, t0 = t0, H0 = H0,
+                                                   k0 = k0, sigma = sigma,
+                                                   density = density))
 }

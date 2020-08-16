@@ -89,7 +89,7 @@ estimate_H0 <- function(data, t0 = 0, k0 = 2, sigma = NULL) {
 #'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
 #'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
 #' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
-#'  consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a 
+#'  consider. Should be set as \deqn{k0 = M * exp(-(log(log(M))**2))}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
 #'  put a unique numeric.
 #' @param sigma Numeric, true value of sigma. Can be NULL.
@@ -126,7 +126,7 @@ estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
 #' 
 #' @family estimate \eqn{H_0}
 #' 
-#' @param data A lis, where each element represents a curve. Each curve have to
+#' @param data A list, where each element represents a curve. Each curve have to
 #' be defined as a list with two entries:
 #' \itemize{
 #'  \item \strong{$t} The sampling points
@@ -143,15 +143,17 @@ estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
 #' 
 #' @return Numeric, an estimation of \eqn{H_0}.
 estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
-  
-  sigma_estim <- estimate_sigma(data)
+
+  sigma_estim <- estimate_sigma(data, t0, k0)
   
   H0_estim <- estimate_H0(data, t0 = t0, k0 = k0, sigma = sigma)
+  cat('H0_estim :',  H0_estim, '\n')
   cpt <- 0
-  while (H0_estim > 1 + eps){
+  while (H0_estim > 1 - eps){
     L0 <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
+    cat('L0:', L0, '\n')
     b <- estimate_b(data, sigma = sigma_estim, H0 = cpt + H0_estim, L0 = L0)
-    
+    cat('b: ', b[1], '\n')
     smooth <- data %>% purrr::map2(b, ~ list(
       t = .x$t,
       x = KernSmooth::locpoly(.x$t, .x$x,
@@ -160,6 +162,7 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
       )$y
     ))
     H0_estim <- estimate_H0(smooth, t0 = t0, k0 = k0, sigma = sigma)
+    cat('H0_estim:', H0_estim, '\n')
     cpt <- cpt + 1
   }
   cpt + H0_estim
@@ -185,10 +188,12 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
 #'  } 
 #' @param t0_list A vector of numerics, the sampling points at which we estimate 
 #'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
-#'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
+#'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown. Be careful not to
+#'  consider \eqn{t_0} close to the bound of the interval because local 
+#'  polynomials do not behave well in this case.
 #' @param eps Numeric, precision parameter. It is used to control how much larger 
 #'  than 1, we have to be in order to consider to have a regularity larger than 1
-#'  (default to 0.1).
+#'  (default to 0.01). Should be set as \deqn{\epsilon = log^{-2}(M)}.
 #' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
 #'  consider. Should be set as \deqn{k0 = M * exp(-log(log(M))^2)}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 

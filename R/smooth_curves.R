@@ -64,7 +64,7 @@ smooth_curves <- function(data, U = NULL,
   }
   
   # Estimation of the noise
-  sigma_estim <- estimate_sigma(data)
+  sigma_estim <- estimate_sigma_list(data, t0_list, k0_list)
 
   # Estimation of H0
   H0_estim <- estimate_H0_list(data, t0_list = t0_list, k0_list = k0_list, 
@@ -73,7 +73,7 @@ smooth_curves <- function(data, U = NULL,
   # Estimation of L0
   L0_estim <- estimate_L0_list(data,
     t0_list = t0_list, H0_list = H0_estim,
-    k0 = k0_list[1], sigma = NULL, density = FALSE
+    k0_list = k0_list, sigma = NULL, density = FALSE
   )
 
   # Estimation of the bandwidth
@@ -171,31 +171,19 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
   }
   
   # Estimation of the noise
-  sigma_estim <- estimate_sigma(data)
+  sigma_estim <- estimate_sigma_list(data, t0, k0)
 
   # Estimation of H0
-  H0_estim <- estimate_H0(data, t0 = t0, k0 = k0, sigma = NULL) # H > 1
-  cpt <- 0
-  while (H0_estim > 1 + eps) {
-    L0 <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
-    b <- estimate_b(data, sigma = sigma_estim, H0 = H0_estim + cpt, L0 = L0)
-
-    smooth <- data %>% purrr::map2(b, ~ list(
-      t = .x$t,
-      x = KernSmooth::locpoly(.x$t, .x$x,
-        drv = 1 + cpt,
-        bandwidth = .y, gridsize = length(.x$t)
-      )$y
-    ))
-    H0_estim <- estimate_H0(smooth, t0 = t0, k0 = k0, sigma = NULL)
-    cpt <- cpt + 1
-  }
+  H0_estim <- estimate_H0_deriv_list(data, t0_list = t0, eps = eps, k0_list = k0)
 
   # Estimation of L0
-  L0_estim <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
+  L0_estim <- estimate_L0_list(data, t0_list = t0, H0_list = H0_estim, k0_list = k0)
 
   # Estimation of the bandwidth
-  b_estim <- estimate_b(data, sigma = sigma_estim, H0 = H0_estim + cpt, L0 = L0_estim) 
+  b_estim <- estimate_b_list(data, H0_list = H0_estim,
+                             L0_list = L0_estim, sigma = sigma_estim, K = K) %>%
+    purrr::transpose() %>% 
+    purrr::map(~ unname(unlist(.x)))
 
   # Estimation of the curves
   if (is.null(U)) {
@@ -209,11 +197,11 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
       t0_list = t0, kernel = K
     ))
   }
-
+  
   list(
     "parameter" = list(
       "sigma" = sigma_estim,
-      "H0" = H0_estim + cpt,
+      "H0" = H0_estim,
       "L0" = L0_estim,
       "b" = b_estim
     ),
