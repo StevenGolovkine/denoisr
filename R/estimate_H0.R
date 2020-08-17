@@ -147,13 +147,11 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
   sigma_estim <- estimate_sigma(data, t0, k0)
   
   H0_estim <- estimate_H0(data, t0 = t0, k0 = k0, sigma = sigma)
-  cat('H0_estim :',  H0_estim, '\n')
+  
   cpt <- 0
   while (H0_estim > 1 - eps){
     L0 <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
-    cat('L0:', L0, '\n')
     b <- estimate_b(data, sigma = sigma_estim, H0 = cpt + H0_estim, L0 = L0)
-    cat('b: ', b[1], '\n')
     smooth <- data %>% purrr::map2(b, ~ list(
       t = .x$t,
       x = KernSmooth::locpoly(.x$t, .x$x,
@@ -162,7 +160,6 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
       )$y
     ))
     H0_estim <- estimate_H0(smooth, t0 = t0, k0 = k0, sigma = sigma)
-    cat('H0_estim:', H0_estim, '\n')
     cpt <- cpt + 1
   }
   cpt + H0_estim
