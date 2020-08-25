@@ -149,7 +149,7 @@ estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
   H0_estim <- estimate_H0(data, t0 = t0, k0 = k0, sigma = sigma)
   
   cpt <- 0
-  while (H0_estim > 1 - eps){
+  while ((H0_estim > 1 - eps) & (cpt < 5)){
     L0 <- estimate_L0(data, t0 = t0, H0 = cpt + H0_estim, k0 = k0)
     b <- estimate_b(data, sigma = sigma_estim, H0 = cpt + H0_estim, L0 = L0)
     smooth <- data %>% purrr::map2(b, ~ list(

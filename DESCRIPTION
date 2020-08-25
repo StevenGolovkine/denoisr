@@ -15,7 +15,7 @@ LazyData: true
 URL: https://github.com/StevenGolovkine/denoisr
 BugReports: https://github.com/StevenGolovkine/denoisr/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 LinkingTo: 
     Rcpp,
     RcppArmadillo   
