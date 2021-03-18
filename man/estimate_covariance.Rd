@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_moment.R
 \name{estimate_covariance}
 \alias{estimate_covariance}
-\title{Perform an estimation of the covariancce}
+\title{Perform an estimation of the covariance}
 \usage{
 estimate_covariance(curves, U, b, h, t0_list = NULL)
 }

@@ -90,7 +90,7 @@ autoplot(data_fd) +
 # Smooth the data
 smooth_data <- smooth_curves(canadian_temperature_daily, 
                              t0_list = 0.5, 
-                             k0_list = 5)
+                             k0_list = 15)
 ```
 
 ```{r plot_data2, fig.height=4.35, fig.width=7, fig.align='center'}

@@ -34,7 +34,7 @@ arma::vec epaKernelSmoothingCurve(
       }
     }
     if(cpt == 0){
-      Y_hat(i) = 0;
+      Y_hat(i) = R_NaN;
     } else{
       Y_hat(i) /= cpt;
     }
@@ -71,7 +71,7 @@ arma::vec uniKernelSmoothingCurve(
       }
     }
     if(cpt == 0){
-      Y_hat(i) = 0;
+      Y_hat(i) = R_NaN;
     } else{
       Y_hat(i) /= cpt;
     }

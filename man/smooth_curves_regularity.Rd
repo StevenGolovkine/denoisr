@@ -11,7 +11,10 @@ smooth_curves_regularity(
   t0 = 0.5,
   k0 = 2,
   K = "epanechnikov",
-  eps = 0.1
+  gamma = 0.5,
+  Gamma = 1,
+  reason = "curve",
+  old = FALSE
 )
 }
 \arguments{
@@ -40,9 +43,16 @@ be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
 \item beta
 }}
 
-\item{eps}{Numeric, precision parameter. It is used to control how much larger
-than 1, we have to be in order to consider to have a regularity larger than 1
-(default to 0.1).}
+\item{gamma}{float, default=0.5}
+
+\item{Gamma}{float, default=1}
+
+\item{reason}{Character string, for what purpose we compute the bandwidth
+\itemize{
+\item curve (default)
+\item mean
+\item covariance
+}}
 }
 \value{
 A list, which contains two elements. The first one is a list which

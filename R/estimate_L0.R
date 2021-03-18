@@ -2,6 +2,12 @@
 #        Functions for L0 parameter estimation using regularity               #
 ###############################################################################
 
+# Reference
+# ---------
+# * Golovkine S., Klutchnikoff N., Patilea V. (2020) - Learning the smoothness
+# of noisy curves with applications to online curves denoising.
+# * Golovkine S., Klutchnikoff N., Patilea V. (2021) - Adaptive estimation of
+# irregular mean and covariance functions.
 
 #' Perform an estimation of \eqn{L_0}
 #'
@@ -30,8 +36,8 @@
 #'  (default is FALSE)
 #'
 #' @return Numeric, an estimation of L0.
-estimate_L0 <- function(data, t0 = 0, H0 = 0,
-                        k0 = 2, sigma = NULL, density = FALSE) {
+estimate_L0 <- function(data, t0 = 0, H0 = 0, k0 = 2, sigma = NULL, density = FALSE) {
+  if(H0 > 1) H0 = 1
 
   # Estimate mu
   mu_hat <- data %>%

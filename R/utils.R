@@ -149,3 +149,67 @@ checkData <- function(data){
   }
   data_
 }
+
+#' Convert \code{ssfcov} objects into right format for this package
+#' 
+#' @param time Vector, observation times.
+#' @param x Vector, observation values.
+#' @param subject Vector, observation id.
+#' 
+#' @return A list, where each element represents a curve. Each curve is defined
+#'  as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points
+#'  }
+#'  
+#' @references ssfcov, R package. See Cai and Yuan, Nonparametric Covariance
+#'  Function Estimation for Functional and Longitudinal Data - 2010.
+#' @export
+cai2list <- function(time, x, subject){
+  results <- list()
+  for(zz in unique(subject)){
+    results[[zz]] <- list(t = time[subject == zz], x = x[subject == zz])
+  }
+  results
+}
+
+#' Convert comprehensive lists into \code{ssfcov} objects.
+#' 
+#' @importFrom magrittr %>%
+#' 
+#' @param data list, where each element represents a curve. Each curve is defined
+#'  as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points
+#'  }
+#'
+#' @return A dataframe where the columns are:
+#'  \itemize{
+#'   \item \strong{$time} The observation times.
+#'   \item \strong{x} The observation values.
+#'   \item \strong{subject} The observation id.
+#'  }
+#'  
+#' @references ssfcov, R package. See Cai and Yuan, Nonparametric Covariance
+#'  Function Estimation for Functional and Longitudinal Data - 2010.
+#' @export
+list2cai <- function(data){
+  results <- data %>% purrr::map_dfr(~ data.frame(time = .x$t, x = .x$x),
+                                     .id = 'obs')
+  results
+}
+
+
+#' Generate logarithmic spaced sequence
+#' 
+#' @param from Numeric
+#' @param to Numeric
+#' @param length.out Numeric
+#' 
+#' @return Vector
+#' @export
+lseq <- function(from = 1, to = 100, length.out = 51) {
+  exp(seq(log(from), log(to), length.out = length.out))
+}

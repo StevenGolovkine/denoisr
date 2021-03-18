@@ -50,8 +50,10 @@ estimate_curve <- function(curve, U, b,
   if (length(b) == 1) {
     bandwidth <- rep(b, length(U))
   } else if ((length(b) != length(U)) & !is.null(t0_list)) {
-    idx <- U %>% purrr::map_dbl(~ order(abs(.x - t0_list))[1])
-    bandwidth <- b[idx]
+    #idx <- U %>% purrr::map_dbl(~ order(abs(.x - t0_list))[1])
+    #bandwidth <- b[idx]
+    bandwidth <- approx(t0_list, b, xout = U,
+                        yleft = b[1], yright = b[length(b)])$y
   } else if (length(b) == length(U)) {
     bandwidth <- b
   } else {

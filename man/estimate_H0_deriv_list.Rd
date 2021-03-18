@@ -5,7 +5,7 @@
 \title{Perform an estimation of \eqn{H_0} given a list of \eqn{t_0} when the curves
 are derivables}
 \usage{
-estimate_H0_deriv_list(data, t0_list, eps = 0.01, k0_list = 2, sigma = NULL)
+estimate_H0_deriv_list(data, t0_list, gamma = 0.5, Gamma = 1)
 }
 \arguments{
 \item{data}{A list, where each element represents a curve. Each curve have to
@@ -15,22 +15,14 @@ be defined as a list with two entries:
 \item \strong{$x} The observed points.
 }}
 
-\item{t0_list}{A vector of numerics, the sampling points at which we estimate
-\eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for
-the estimation of \eqn{H_0} when \eqn{\sigma} is unknown. Be careful not to
-consider \eqn{t_0} close to the bound of the interval because local
-polynomials do not behave well in this case.}
+\item{t0_list}{Vector, the sampling point at which we estimate \eqn{H0}. It
+corresponds to \eqn{t_2} in the equation (10) of the paper.}
 
-\item{eps}{Numeric, precision parameter. It is used to control how much larger
-than 1, we have to be in order to consider to have a regularity larger than 1
-(default to 0.01). Should be set as \deqn{\epsilon = log^{-2}(M)}.}
+\item{gamma}{Numeric, constant \eqn{\gamma} used in the theorem 1 in the paper.
+Should be between 0 and 1.}
 
-\item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
-consider. Should be set as \deqn{k0 = M * exp(-log(log(M))^2)}. We can set a
-different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
-put a unique numeric.}
-
-\item{sigma}{Numeric, true value of sigma. Can be NULL.}
+\item{Gamma}{Numeric, constant \eqn{\Gamma} used in the theorem 1 in the paper.
+Should be striclty greater than 0.}
 }
 \value{
 A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
@@ -38,18 +30,26 @@ A vector of numeric, an estimation of \eqn{H_0} at each \eqn{t_0}.
 \description{
 This function performs an estimation of \eqn{H_0} used for the estimation of
 the bandwidth for a univariate kernel regression estimator defined over
-continuous domains data using the method of \cite{add ref} in the case the
-curves are derivables.
+continuous domains data using the method of \cite{Golovkine et al. (2021)}
+in the case the curves are derivables.
 }
 \examples{
 df <- generate_integrate_fractional_brownian(N = 1000, M = 300,
                                              H = 0.5, sigma = 0.01)
-H0 <- estimate_H0_deriv_list(df, t0_list = 0.5, eps = 0.01, k0_list = 14)
+H0 <- estimate_H0_deriv_list(df, t0_list = 0.5)
+}
+\references{
+Golovkine S., Klutchnikoff N., Patilea V. (2021) - Adaptive
+estimation of irregular mean and covariance functions.
 }
 \seealso{
 Other estimate \eqn{H_0}: 
+\code{\link{estimate_H0_deriv_list_old}()},
+\code{\link{estimate_H0_deriv_old}()},
 \code{\link{estimate_H0_deriv}()},
+\code{\link{estimate_H0_list_old}()},
 \code{\link{estimate_H0_list}()},
+\code{\link{estimate_H0_old}()},
 \code{\link{estimate_H0}()}
 }
 \concept{estimate \eqn{H_0}}

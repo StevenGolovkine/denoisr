@@ -2,6 +2,108 @@
 #                     Functions for moments estimation                         #
 ################################################################################
 
+#' Perform an estimation of the mean
+#' 
+#' This function performs the estimation of the mean of a set of curves.
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param U A vector of numerics, sampling points at which estimate the curves.
+#' @param t0_list A vector of numerics, the sampling points at which we estimate 
+#'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
+#'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
+#' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
+#'  consider. Should be set as \deqn{k0 = M* exp(-log(log(M))^2)}. We can set a 
+#'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
+#'  put a unique numeric.
+#'  @return A list of with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points (equal to U)
+#'   \item \strong{$x} The observed points.
+#'  }
+#' @export
+mean_ll <- function(data, U = seq(0, 1, length.out = 101),
+                    t0_list = 0.5, k0_list = 2,
+                    grid = lseq(0.001, 0.1, length.out = 101),
+                    nb_obs_minimal = 2, K = 'uniform'){
+  
+  data_smooth <- smooth_curves_mean(data, U = U, t0_list = t0_list,
+                                    k0_list = k0_list, grid = grid,
+                                    nb_obs_minimal = nb_obs_minimal, K = K)
+  mu <- data_smooth$smooth %>% 
+    purrr::map_dfc(~ .x$x) %>% 
+    rowMeans(na.rm = TRUE)
+  
+  list(
+    "parameter" = data_smooth$parameter,
+    "mu" = mu
+  )
+}
+
+#' Perform an estimation of the covariance
+#' 
+#' This function performs the estimation of the covariance of a set of curves.
+#' 
+#' @param data A list, where each element represents a curve. Each curve have to
+#'  be defined as a list with two entries:
+#'  \itemize{
+#'   \item \strong{$t} The sampling points
+#'   \item \strong{$x} The observed points.
+#'  } 
+#' @param U A vector of numerics, sampling points at which estimate the curves.
+#' @param t0_list A vector of numerics, the sampling points at which we estimate 
+#'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
+#'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
+#' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
+#'  consider. Should be set as \deqn{k0 = M* exp(-log(log(M))^2)}. We can set a 
+#'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
+#'  put a unique numeric.
+#' @param centered Boolean, default=FALSE. Does the data have already been
+#'  centered?
+#'
+#' @return A matrix of shape (length(U), length(U)) which is an estimation of
+#'  the covariance matrix.
+#' @export
+covariance <- function(data, U = seq(0, 1, length.out = 101),
+                       t0_list = 0.5, k0_list = 2,
+                       t0_list_mean = seq(0.1, 0.9, by = 0.1), 
+                       centered = FALSE, dense = FALSE){
+  
+  if(!centered){
+    if(!dense){
+      data_ <- list2cai(data)
+      time_to_pred <- data_$time
+      
+      mean_curve <- mean_ll(data, U = time_to_pred, 
+                            t0_list = t0_list_mean, k0_list = k0_list)
+      data_$x <- data_$x - mean_curve
+      data_unmean <- cai2list(data_$time, data_$x, data_$obs)
+    } else {
+      mean_curve <- mean_ll(data, U = data[[1]]$t, 
+                            t0_list = t0_list_mean, k0_list = k0_list)
+      data_unmean <- data %>% map(~ list(t = .x$t,
+                                         x = .x$x - mean_curve))
+    }
+    data <- data_unmean
+  }
+  
+  data_smooth <- smooth_curves(data, U = U, t0_list = t0_list,
+                               k0_list = k0_list, reason = "covariance")
+  data_smooth <- data_smooth$smooth
+  
+  cov_sum <- cov_count <- matrix(0, length(U), length(U))
+  for(obs in 1:length(data_smooth)){
+    obs_points <- which(!is.na(data_smooth[[obs]]$x))
+    cov_count[obs_points, obs_points] <- cov_count[obs_points, obs_points] + 1
+    cov_sum[obs_points, obs_points] <- cov_sum[obs_points, obs_points] + tcrossprod(data_smooth[[obs]]$x[obs_points])
+  }
+  cov_sum / cov_count
+}
+
 #' Perform a leave-one-out mean curve
 #' 
 #' This function performs the computation of a leave-one-out mean curve.
@@ -82,7 +184,7 @@ estimate_mean <- function(curves, U, b, t0_list = NULL){
   as.vector(mean_cpp(curves, U, bandwidth))
 } 
 
-#' Perform an estimation of the covariancce
+#' Perform an estimation of the covariance
 #' 
 #' This function performs the estimation of the covariance of a set of curves.
 #'
@@ -105,7 +207,6 @@ estimate_mean <- function(curves, U, b, t0_list = NULL){
 #' df <- generate_fractional_brownian(N = 10, M = 300, H = 0.5, sigma = 0.05)
 #' estimate_covariance(df, U = seq(0, 1, length.out = 11), b = 0.01, h = 0.05)
 estimate_covariance <- function(curves, U, b, h, t0_list = NULL){
-  
   
   if (length(b) == 1) {
     band_b <- curves %>% purrr::map(~ rep(b, length(.x$t)))
