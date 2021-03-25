@@ -4,7 +4,14 @@
 \alias{estimate_curve}
 \title{Perform the smoothing of individual curve.}
 \usage{
-estimate_curve(curve, U, b, t0_list = NULL, kernel = "epanechnikov")
+estimate_curve(
+  curve,
+  U,
+  b,
+  t0_list = NULL,
+  kernel = "epanechnikov",
+  n_obs_min = 1
+)
 }
 \arguments{
 \item{curve}{A list, with two entries:
@@ -29,6 +36,8 @@ estimated. Only used if the parameter \code{b} is a vector.}
 \item beta
 \item mBeta
 }}
+
+\item{n_obs_min}{Integer, minimum number of observation for the smoothing}
 }
 \value{
 A list, with two entries:

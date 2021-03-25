@@ -248,7 +248,7 @@ estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
   # Define constants
   q1 <- L0 / factorial(floor(H0))
   q2 <- sigma
-  q3 <- variance
+  q3 <- sqrt(variance)
   q4 <- 2 * q1 * q3
   
   risk <- rep(NA, length(grid))
@@ -256,13 +256,14 @@ estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
     current_b <- grid[b]
     
     n_obs <- data %>% map_dbl(~ sum(abs(.x$t - t0) <= current_b))
-    WN <- sum(n_obs >= nb_obs_minimal)
-    n_obs[n_obs == 0] <- NA
+    n_obs[n_obs < nb_obs_minimal] <- NA
+    WN <- sum(!is.na(n_obs))
     nb_points <- WN / mean(1 / n_obs, na.rm = TRUE)
     
     risk[b] <- q1**2 * current_b**(2 * H0) +
       q2**2 / nb_points +
-      (q3**2 + q4 * current_b**H0) * (1 / WN - 1 / length(data))
+      q3**2 * (1 / WN - 1 / length(data)) +
+      q4 * current_b**H0 * (1 / WN - 1 / length(data))
   }
   
   grid[which.min(risk)]
@@ -364,7 +365,7 @@ estimate_bandwidth_mean <- function(data, t0_list = 0.5, k0_list = 2,
   sigma_estim <- estimate_sigma_list(data, t0_list, k0_list)
   
   # Estimation of H0 and variance
-  data_presmooth <- presmoothing(data, t0_list, gamma = 0.4)
+  data_presmooth <- presmoothing(data, t0_list, gamma = 0.5)
   H0_estim <- estimate_H0_list(data_presmooth)
   variance_estim <- estimate_var(data_presmooth)
   

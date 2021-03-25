@@ -34,7 +34,7 @@ arma::vec LOOmean(
 
       arma::vec bandwidth = b[m];
 
-      res.col(cpt) = epaKernelSmoothingCurve(U, T, X, bandwidth);
+      res.col(cpt) = epaKernelSmoothingCurve(U, T, X, bandwidth, 1);
 
       cpt++;
     }
@@ -92,11 +92,11 @@ arma::mat covariance_cpp(
     arma::vec X = mycurve["x"];
     
     arma::vec mean_curve = meanLOO_curves[n];
-    arma::vec smooth_curve = epaKernelSmoothingCurve(T, T, X, b[n]);
+    arma::vec smooth_curve = epaKernelSmoothingCurve(T, T, X, b[n], 1);
     arma::vec smooth_curve_unmean = smooth_curve - mean_curve;
     
-    smooths_U.col(n) = epaKernelSmoothingCurve(U, T, smooth_curve_unmean, h[n]);
-    smooths_V.col(n) = epaKernelSmoothingCurve(U, T, smooth_curve_unmean, h[n]);
+    smooths_U.col(n) = epaKernelSmoothingCurve(U, T, smooth_curve_unmean, h[n], 1);
+    smooths_V.col(n) = epaKernelSmoothingCurve(U, T, smooth_curve_unmean, h[n], 1);
   }
   
 

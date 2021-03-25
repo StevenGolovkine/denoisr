@@ -29,6 +29,7 @@
 #'   \item beta
 #'   \item mBeta 
 #'  }
+#' @param n_obs_min Integer, minimum number of observation for the smoothing
 #' @useDynLib denoisr
 #'
 #' @return A list, with two entries:
@@ -45,8 +46,8 @@
 #'                U = seq(0, 1, length.out = 200),
 #'                b = c(0.2, 0.5, 0.8),
 #'                t0_list = c(0.16, 0.5, 0.83))
-estimate_curve <- function(curve, U, b,
-                           t0_list = NULL, kernel = "epanechnikov") {
+estimate_curve <- function(curve, U, b, t0_list = NULL,
+                           kernel = "epanechnikov", n_obs_min = 1) {
   if (length(b) == 1) {
     bandwidth <- rep(b, length(U))
   } else if ((length(b) != length(U)) & !is.null(t0_list)) {
@@ -61,9 +62,9 @@ estimate_curve <- function(curve, U, b,
   }
 
   if (kernel == "epanechnikov") {
-    x_hat <- epaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
+    x_hat <- epaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth, n_obs_min)
   } else if (kernel == "uniform") {
-    x_hat <- uniKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
+    x_hat <- uniKernelSmoothingCurve(U, curve$t, curve$x, bandwidth, n_obs_min)
   } else if (kernel == "beta") {
     x_hat <- betaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
   } else if (kernel == "mBeta") {

@@ -141,11 +141,13 @@ smooth_curves_mean <- function(data, U = NULL, t0_list = 0.5, k0_list = 2,
   if (is.null(U)) {
     curves <- data %>% 
       purrr::map(~ estimate_curve(.x, U = .x$t, b = b_estim,
-                                  t0_list = t0_list, kernel = K))
+                                  t0_list = t0_list, kernel = K,
+                                  n_obs_min = nb_obs_minimal))
   } else {
     curves <- data %>% 
       purrr::map(~ estimate_curve(.x, U = U, b = b_estim,
-                                  t0_list = t0_list, kernel = K))
+                                  t0_list = t0_list, kernel = K,
+                                  n_obs_min = nb_obs_minimal))
   }
   
   list(
