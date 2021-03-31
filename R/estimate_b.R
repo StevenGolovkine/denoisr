@@ -234,36 +234,43 @@ estimate_bandwidth_curves <- function(data, t0_list = 0.5, k0_list = 2,
 #'  risk is performed. The default is a logarithmic sequence from 0.001 to 0.1.
 #' @param nb_obs_minimal Numeric, minimal number of points, in the neighborhood,
 #'  to be considered in the computation of the mean. The default is 2.
+#' @param type_k Integer, used kernel. If 1, uniform kernel, If 2, Epanechnikov
+#'  kernel. If 3, biweight kernel.
 #'
 #' @return Numeric, an estimation of the bandwidth.
 #' @export
 estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
                             grid = lseq(0.001, 0.1, length.out = 101),
-                            nb_obs_minimal = 2) {
+                            nb_obs_minimal = 2, type_k = 2) {
   
   if(!inherits(data, 'list')){
     data <- checkData(data)
   }
   
   # Define constants
-  q1 <- L0 / factorial(floor(H0))
+  cst_k <- switch(type_k,  
+               1 / (1 + H0), 
+               1.5 * (1 / (1 + H0) - 1 / (3 + H0)),
+               1.875 * (1 / (1 + H0) - 2 / (3 + H0) + 1 / (5 + H0)))
+  q1 <- L0 / factorial(floor(H0)) * cst_k
   q2 <- sigma
   q3 <- sqrt(variance)
-  q4 <- 2 * q1 * q3
   
   risk <- rep(NA, length(grid))
   for(b in 1:length(grid)){
     current_b <- grid[b]
     
-    n_obs <- data %>% map_dbl(~ sum(abs(.x$t - t0) <= current_b))
-    n_obs[n_obs < nb_obs_minimal] <- NA
-    WN <- sum(!is.na(n_obs))
-    nb_points <- WN / mean(1 / n_obs, na.rm = TRUE)
+    wi <- data %>% map_dbl(~ neighbors(.x$t, t0, current_b, nb_obs_minimal))
+    WN <- sum(wi)
+    
+    temp <- data %>% map(~ kernel((.x$t - t0) / current_b, type_k))
+    Wi <- temp %>% map(~ .x / sum(.x))
+    Ni <- wi / map_dbl(Wi, ~ max(.x))
+    Nmu <- WN / mean(1/Ni, na.rm = TRUE)
     
     risk[b] <- q1**2 * current_b**(2 * H0) +
-      q2**2 / nb_points +
-      q3**2 * (1 / WN - 1 / length(data)) +
-      q4 * current_b**H0 * (1 / WN - 1 / length(data))
+      q2**2 / Nmu  +
+      q3**2 * (1 / WN - 1 / length(data))
   }
   
   grid[which.min(risk)]
@@ -295,13 +302,15 @@ estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
 #'  risk is performed. The default is a logarithmic sequence from 0.001 to 0.1.
 #' @param nb_obs_minimal Numeric, minimal number of points, in the neighborhood,
 #'  to be considered in the computation of the mean. The default is 2.
+#' @param type_k Integer, used kernel!. If 1, uniform kernel, If 2, Epanechnikov
+#'  kernel. If 3, biweight kernel.
 #'
 #' @return Numeric, an estimation of the bandwidth.
 #' @export
 estimate_b_mean_list <- function(data, t0_list, H0_list = 0.5, L0_list = 1,
                                  sigma_list = 0, variance_list = 0,
                                  grid = lseq(0.001, 0.1, length.out = 101),
-                                 nb_obs_minimal = 2) {
+                                 nb_obs_minimal = 2, type_k = 2) {
   if(!inherits(data, 'list')){
     data <- checkData(data)
   }
@@ -314,7 +323,8 @@ estimate_b_mean_list <- function(data, t0_list, H0_list = 0.5, L0_list = 1,
                   function(t0, H0, L0, s, v){
                     estimate_b_mean(data, t0 = t0, H0 = H0, L0 = L0,
                                     sigma = s, variance = v, grid = grid,
-                                    nb_obs_minimal = nb_obs_minimal)
+                                    nb_obs_minimal = nb_obs_minimal,
+                                    type_k = type_k)
                   })
 }
 
@@ -339,12 +349,8 @@ estimate_b_mean_list <- function(data, t0_list, H0_list = 0.5, L0_list = 1,
 #'  consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
 #'  put a unique numeric.
-#' @param K Character string, the kernel used for the estimation:
-#'  \itemize{
-#'   \item epanechnikov (default)
-#'   \item uniform
-#'   \item beta
-#'  }
+#' @param type_k Integer, used kernel!. If 1, uniform kernel, If 2, Epanechnikov
+#'  kernel. If 3, biweight kernel.
 #'
 #' @return A list, with elements:
 #'  \itemize{
@@ -355,8 +361,7 @@ estimate_b_mean_list <- function(data, t0_list, H0_list = 0.5, L0_list = 1,
 #'  }
 #' @export
 estimate_bandwidth_mean <- function(data, t0_list = 0.5, k0_list = 2,
-                                    grid = lseq(0.001, 0.1, length.out = 101),
-                                    nb_obs_minimal = 2) {
+                                    grid = NULL, nb_obs_minimal = 2, type_k = 2) {
   if(!inherits(data, 'list')){
     data <- checkData(data)
   }
@@ -364,20 +369,26 @@ estimate_bandwidth_mean <- function(data, t0_list = 0.5, k0_list = 2,
   # Estimation of the noise
   sigma_estim <- estimate_sigma_list(data, t0_list, k0_list)
   
-  # Estimation of H0 and variance
+  # Estimation of H0, variance and L0
   data_presmooth <- presmoothing(data, t0_list, gamma = 0.5)
   H0_estim <- estimate_H0_list(data_presmooth)
   variance_estim <- estimate_var(data_presmooth)
+  L0_estim <- estimate_lambda(data_presmooth, H0_estim)
   
-  # Estimation of L0
-  L0_estim <- estimate_L0_list(data, t0_list = t0_list, H0_list = H0_estim,
-                               k0_list = k0_list, sigma = NULL, density = FALSE)
+  if(is.null(grid)){
+    N <- length(data)
+    Mi <- data %>% map_dbl(~ length(.x$t))
+    aa <- log(1/(N*max(Mi))) / min(2 * H0_estim + 1) - log(2)
+    bb <- log(1/(N*min(Mi))) / max(2 * H0_estim + 1) + log(2)
+    grid <- exp(seq(aa, bb, length.out = 151))
+  }
   
   # Estimation of the bandwidth
   b_estim <- estimate_b_mean_list(data, t0_list = t0_list, H0_list = H0_estim,
                                   L0_list = L0_estim, sigma_list = sigma_estim,
                                   variance_list = variance_estim,
-                                  grid = grid, nb_obs_minimal = nb_obs_minimal)
+                                  grid = grid, nb_obs_minimal = nb_obs_minimal,
+                                  type_k = type_k)
   
   list(
     "sigma" = sigma_estim,

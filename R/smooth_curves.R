@@ -126,13 +126,23 @@ smooth_curves <- function(data, U = NULL, t0_list = 0.5,
 #'  } 
 #' @export
 smooth_curves_mean <- function(data, U = NULL, t0_list = 0.5, k0_list = 2,
-                          grid = lseq(0.001, 0.1, length.out = 101),
+                          grid = NULL,
                           nb_obs_minimal = 2, K = 'epanechnikov'){
   
+  if(K == 'uniform')
+    type_k = 1
+  else if (K == 'epanechnikov')
+    type_k = 2
+  else if(K == 'biweight')
+    type_k = 3
+  else
+    type_k = 1
+
   # Estimation of the different parameters
   param_estim <- estimate_bandwidth_mean(data, t0_list = t0_list,
                                          k0_list = k0_list, grid = grid,
-                                         nb_obs_minimal = nb_obs_minimal)
+                                         nb_obs_minimal = nb_obs_minimal,
+                                         type_k = type_k)
   
   # Get the bandwidths
   b_estim <- unname(unlist(param_estim$b))

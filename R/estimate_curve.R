@@ -65,6 +65,8 @@ estimate_curve <- function(curve, U, b, t0_list = NULL,
     x_hat <- epaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth, n_obs_min)
   } else if (kernel == "uniform") {
     x_hat <- uniKernelSmoothingCurve(U, curve$t, curve$x, bandwidth, n_obs_min)
+  } else if (kernel == "biweight") {
+    x_hat <- biweightKernelSmoothingCurve(U, curve$t, curve$x, bandwidth, n_obs_min)
   } else if (kernel == "beta") {
     x_hat <- betaKernelSmoothingCurve(U, curve$t, curve$x, bandwidth)
   } else if (kernel == "mBeta") {

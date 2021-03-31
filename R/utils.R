@@ -213,3 +213,33 @@ list2cai <- function(data){
 lseq <- function(from = 1, to = 100, length.out = 51) {
   exp(seq(log(from), log(to), length.out = length.out))
 }
+
+
+#' Compute different kernels
+#' 
+#' @param u Vector of numeric, points to estimate the kernel.
+#' @param type Integer, used kernel. If 1, uniform kernel, If 2, Epanechnikov
+#'  kernel. If 3, biweight kernel.
+#'  
+#' @return Vector of numeric
+#' @export
+kernel <- function(u, type = 1){
+  indicator <- function(u) 2 * dunif(u, -1, 1)
+  switch(type,
+         indicator(u) / 2,
+         0.75 * (1 - u**2) * indicator(u),
+         0.9375 * (1 - u**2)**2 * indicator(u))
+}
+
+#' Test whether the observation points are in the neighborhood
+#' 
+#' @param t Vector of numeric
+#' @param t0 Numeric
+#' @param h Numeric
+#' @param k0 Numeric
+#' 
+#' @return Vector of boolean
+#' @export
+neighbors <- function(t, t0, h, k0){
+  sum(ifelse(abs(t - t0) <= h, 1, 0)) >= k0
+}

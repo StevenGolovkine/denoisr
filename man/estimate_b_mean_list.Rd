@@ -13,7 +13,8 @@ estimate_b_mean_list(
   sigma_list = 0,
   variance_list = 0,
   grid = lseq(0.001, 0.1, length.out = 101),
-  nb_obs_minimal = 2
+  nb_obs_minimal = 2,
+  type_k = 2
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ risk is performed. The default is a logarithmic sequence from 0.001 to 0.1.}
 
 \item{nb_obs_minimal}{Numeric, minimal number of points, in the neighborhood,
 to be considered in the computation of the mean. The default is 2.}
+
+\item{type_k}{Integer, used kernel!. If 1, uniform kernel, If 2, Epanechnikov
+kernel. If 3, biweight kernel.}
 
 \item{H0}{Vector of numerics, an estimation of \eqn{H_0}.}
 

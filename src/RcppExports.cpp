@@ -36,6 +36,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// biweightKernelSmoothingCurve
+arma::vec biweightKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b, const double& n_obs_min);
+RcppExport SEXP _denoisr_biweightKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP, SEXP n_obs_minSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type U(USEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const double& >::type n_obs_min(n_obs_minSEXP);
+    rcpp_result_gen = Rcpp::wrap(biweightKernelSmoothingCurve(U, T, Y, b, n_obs_min));
+    return rcpp_result_gen;
+END_RCPP
+}
 // betaKernelSmoothingCurve
 arma::vec betaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b);
 RcppExport SEXP _denoisr_betaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP) {
@@ -170,6 +185,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_denoisr_epaKernelSmoothingCurve", (DL_FUNC) &_denoisr_epaKernelSmoothingCurve, 5},
     {"_denoisr_uniKernelSmoothingCurve", (DL_FUNC) &_denoisr_uniKernelSmoothingCurve, 5},
+    {"_denoisr_biweightKernelSmoothingCurve", (DL_FUNC) &_denoisr_biweightKernelSmoothingCurve, 5},
     {"_denoisr_betaKernelSmoothingCurve", (DL_FUNC) &_denoisr_betaKernelSmoothingCurve, 4},
     {"_denoisr_modifiedBetaKernelSmoothingCurve", (DL_FUNC) &_denoisr_modifiedBetaKernelSmoothingCurve, 4},
     {"_denoisr_LOOmean", (DL_FUNC) &_denoisr_LOOmean, 4},

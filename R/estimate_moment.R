@@ -28,8 +28,8 @@
 #' @export
 mean_ll <- function(data, U = seq(0, 1, length.out = 101),
                     t0_list = 0.5, k0_list = 2,
-                    grid = lseq(0.001, 0.1, length.out = 101),
-                    nb_obs_minimal = 2, K = 'uniform'){
+                    grid = NULL,
+                    nb_obs_minimal = 2, K = 'epanechnikov'){
   
   data_smooth <- smooth_curves_mean(data, U = U, t0_list = t0_list,
                                     k0_list = k0_list, grid = grid,

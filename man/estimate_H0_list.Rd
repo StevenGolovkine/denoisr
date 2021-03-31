@@ -36,12 +36,6 @@ estimation of irregular mean and covariance functions.
 }
 \seealso{
 Other estimate \eqn{H_0}: 
-\code{\link{estimate_H0_deriv_list_old}()},
-\code{\link{estimate_H0_deriv_list}()},
-\code{\link{estimate_H0_deriv_old}()},
-\code{\link{estimate_H0_deriv}()},
-\code{\link{estimate_H0_list_old}()},
-\code{\link{estimate_H0_old}()},
 \code{\link{estimate_H0}()}
 }
 \concept{estimate \eqn{H_0}}

@@ -9,9 +9,9 @@ mean_ll(
   U = seq(0, 1, length.out = 101),
   t0_list = 0.5,
   k0_list = 2,
-  grid = lseq(0.001, 0.1, length.out = 101),
+  grid = NULL,
   nb_obs_minimal = 2,
-  K = "uniform"
+  K = "epanechnikov"
 )
 }
 \arguments{

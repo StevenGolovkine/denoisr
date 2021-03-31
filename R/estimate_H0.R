@@ -50,7 +50,7 @@ presmoothing <- function(data, t0_list = 0.5, gamma = 0.5,
                                   range.x = c(t1_list[idx_t0], t3_list[idx_t0]))
       df[i, ] <- pred$y
     }
-    results[[idx_t0]] <- df
+    results[[idx_t0]] <- list(t = pred$x, x = df)
   }
   
   return(results)
@@ -69,7 +69,7 @@ presmoothing <- function(data, t0_list = 0.5, gamma = 0.5,
 #' @return List, estimation of the variance at each \eqn{t_0}.
 #' @export
 estimate_var <- function(data){
-  data %>% map_dbl(~ var(.x[,6], na.rm = TRUE))
+  data %>% map_dbl(~ var(.x$x[,6], na.rm = TRUE))
 }
 
 #' Perform an estimation of \eqn{H_0}
@@ -124,7 +124,30 @@ estimate_H0 <- function(data){
 #'                           order = 1, drv = 0, degree = 0)
 #' H0 <- estimate_H0_list(df_smooth)
 estimate_H0_list <- function(data){
-  data %>% purrr::map_dbl(~ estimate_H0(.x))
+  data %>% purrr::map_dbl(~ estimate_H0(.x$x))
+}
+
+#' Perform an estimation of the random Hölder random constant
+#' 
+#' This function performs an estimation of \eqn{\Lambda_{\eta}} used for the
+#' estimation of the bandwidth for the mean and the covariance by a univariate
+#' kernel regression estimator.
+#' 
+#' @importFrom magrittr %>% 
+#' 
+#' @param data A list of array, resulting from the presmoothing function.
+#' @param H0_list A vector of numeric, resulting from the estimate_H0_list 
+#'  function.
+#' 
+#' @return List, estimation of the variance at each \eqn{t_0}
+#' @export
+estimate_lambda <- function(data, H0_list){
+  V1 <- data %>% 
+    map2(H0_list, ~ abs(.x$x[, 6] - .x$x[, 1]) / abs(.x$t[6] - .x$t[1])**.y)
+  V2 <- data %>% 
+    map2(H0_list, ~ abs(.x$x[, 11] - .x$x[, 6]) / abs(.x$t[11] - .x$t[6])**.y)
+  V_max <- V1 %>% map2_dfc(V2, ~ pmax(.x, .y, na.rm = TRUE))
+  unname(colMeans(V_max, na.rm = TRUE))
 }
 
 

@@ -9,6 +9,10 @@ uniKernelSmoothingCurve <- function(U, T, Y, b, n_obs_min) {
     .Call('_denoisr_uniKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b, n_obs_min)
 }
 
+biweightKernelSmoothingCurve <- function(U, T, Y, b, n_obs_min) {
+    .Call('_denoisr_biweightKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b, n_obs_min)
+}
+
 betaKernelSmoothingCurve <- function(U, T, Y, b) {
     .Call('_denoisr_betaKernelSmoothingCurve', PACKAGE = 'denoisr', U, T, Y, b)
 }

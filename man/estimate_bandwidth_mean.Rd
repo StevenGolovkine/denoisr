@@ -8,8 +8,9 @@ estimate_bandwidth_mean(
   data,
   t0_list = 0.5,
   k0_list = 2,
-  grid = lseq(0.001, 0.1, length.out = 101),
-  nb_obs_minimal = 2
+  grid = NULL,
+  nb_obs_minimal = 2,
+  type_k = 2
 )
 }
 \arguments{
@@ -29,12 +30,8 @@ consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a
 different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
 put a unique numeric.}
 
-\item{K}{Character string, the kernel used for the estimation:
-\itemize{
-\item epanechnikov (default)
-\item uniform
-\item beta
-}}
+\item{type_k}{Integer, used kernel!. If 1, uniform kernel, If 2, Epanechnikov
+kernel. If 3, biweight kernel.}
 }
 \value{
 A list, with elements:
