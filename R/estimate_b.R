@@ -270,7 +270,7 @@ estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
     
     risk[b] <- q1**2 * current_b**(2 * H0) +
       q2**2 / Nmu  +
-      q3**2 * (1 / (WN + 1e-6) - 1 / (length(data) + 1e-6))
+      q3**2 * (1 / (WN + 1))
   }
   
   grid[which.min(risk)]
