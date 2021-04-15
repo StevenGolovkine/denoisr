@@ -263,6 +263,7 @@ estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
     wi <- data %>% map_dbl(~ neighbors(.x$t, t0, current_b, nb_obs_minimal))
     WN <- sum(wi)
     
+    if(WN == 0) next
     temp <- data %>% map(~ kernel((.x$t - t0) / current_b, type_k))
     Wi <- temp %>% map(~ .x / sum(.x))
     Ni <- wi / map_dbl(Wi, ~ max(.x))
@@ -270,7 +271,7 @@ estimate_b_mean <- function(data, t0, H0 = 0.5, L0 = 1, sigma = 0, variance = 0,
     
     risk[b] <- q1**2 * current_b**(2 * H0) +
       q2**2 / Nmu  +
-      q3**2 * (1 / (WN + 1))
+      q3**2 * (1 / WN)
   }
   
   grid[which.min(risk)]
@@ -378,8 +379,8 @@ estimate_bandwidth_mean <- function(data, t0_list = 0.5, k0_list = 2,
   if(is.null(grid)){
     N <- length(data)
     Mi <- data %>% map_dbl(~ length(.x$t))
-    aa <- log(1/(N*max(Mi))) / min(2 * H0_estim + 1) - log(3)
-    bb <- log(1/(N*min(Mi))) / max(2 * H0_estim + 1) + log(3)
+    aa <- log(1/(N*max(Mi))) / min(2 * H0_estim + 1) - log(2)
+    bb <- log(1/(N*min(Mi))) / max(2 * H0_estim + 1) + log(2)
     grid <- exp(seq(aa, bb, length.out = 151))
   }
   
