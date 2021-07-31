@@ -36,6 +36,10 @@ This function performs an estimation of \eqn{H_0} used for the estimation of
 the bandwidth for a univariate kernel regression estimator defined over
 continuous domains data using the method of \cite{add ref}.
 }
+\examples{
+X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+estimate_L0(X, t0 = 0.5, H0 = 0.5, k0 = 2)
+}
 \seealso{
 Other estimate \eqn{L_0}: 
 \code{\link{estimate_L0_list}()}

@@ -36,6 +36,10 @@
 #'  (default is FALSE)
 #'
 #' @return Numeric, an estimation of L0.
+#' @export
+#' @examples
+#' X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#' estimate_L0(X, t0 = 0.5, H0 = 0.5, k0 = 2)
 estimate_L0 <- function(data, t0 = 0, H0 = 0, k0 = 2, sigma = NULL, density = FALSE) {
   if(H0 > 1) H0 = 1
 
@@ -141,20 +145,17 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0, k0 = 2, sigma = NULL, density = FA
 #' @return A vector of numerics, an estimation of \eqn{L_0} at each \eqn{t_0}.
 #' @export
 #' @examples
-#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-#' L0 <- estimate_L0_list(df, t0_list = 0.5, H0_list = 0.5)
+#' X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#' estimate_L0_list(X, t0_list = 0.5, H0_list = 0.5)
 #' 
 #' df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
 #'                                                    H = c(0.2, 0.5, 0.8), 
 #'                                                    sigma = 0.05)
-#' L0 <- estimate_L0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
-#'                        H0_list = c(0.2, 0.5, 0.8), k0 = 6)
+#' estimate_L0_list(df_piece, t0_list = c(0.15, 0.5, 0.85), 
+#'                  H0_list = c(0.2, 0.5, 0.8), k0 = 6)
 estimate_L0_list <- function(data, t0_list, H0_list,
                              k0_list = 2, sigma = NULL, density = FALSE) {
-  if(!inherits(data, 'list')){
-    data <- checkData(data)
-  }
-  
+  if(!inherits(data, 'list')) data <- checkData(data)
   if (length(t0_list) != length(H0_list)) {
     stop("t0_list and H0_list must have the same length")
   }

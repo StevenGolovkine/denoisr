@@ -23,7 +23,6 @@ funData2list <- function(data, norm = TRUE){
     if(norm) t <- (t - min(t)) / (max(t) - min(t))
     data_list[[i]] <- list(t = t, x = x[i,])
   }
-  
   data_list
 }
 
@@ -74,7 +73,6 @@ irregFunData2list <- function(data, norm = TRUE){
   } else {
     data_list <- purrr::map2(t, x, ~ list(t = .x, x = .y))
   }
-  
   data_list
 }
 
@@ -150,57 +148,6 @@ checkData <- function(data){
   data_
 }
 
-#' Convert \code{ssfcov} objects into right format for this package
-#' 
-#' @param time Vector, observation times.
-#' @param x Vector, observation values.
-#' @param subject Vector, observation id.
-#' 
-#' @return A list, where each element represents a curve. Each curve is defined
-#'  as a list with two entries:
-#'  \itemize{
-#'   \item \strong{$t} The sampling points
-#'   \item \strong{$x} The observed points
-#'  }
-#'  
-#' @references ssfcov, R package. See Cai and Yuan, Nonparametric Covariance
-#'  Function Estimation for Functional and Longitudinal Data - 2010.
-#' @export
-cai2list <- function(time, x, subject){
-  results <- list()
-  for(zz in unique(subject)){
-    results[[zz]] <- list(t = time[subject == zz], x = x[subject == zz])
-  }
-  results
-}
-
-#' Convert comprehensive lists into \code{ssfcov} objects.
-#' 
-#' @importFrom magrittr %>%
-#' 
-#' @param data list, where each element represents a curve. Each curve is defined
-#'  as a list with two entries:
-#'  \itemize{
-#'   \item \strong{$t} The sampling points
-#'   \item \strong{$x} The observed points
-#'  }
-#'
-#' @return A dataframe where the columns are:
-#'  \itemize{
-#'   \item \strong{$time} The observation times.
-#'   \item \strong{x} The observation values.
-#'   \item \strong{subject} The observation id.
-#'  }
-#'  
-#' @references ssfcov, R package. See Cai and Yuan, Nonparametric Covariance
-#'  Function Estimation for Functional and Longitudinal Data - 2010.
-#' @export
-list2cai <- function(data){
-  results <- data %>% purrr::map_dfr(~ data.frame(time = .x$t, x = .x$x),
-                                     .id = 'obs')
-  results
-}
-
 
 #' Generate logarithmic spaced sequence
 #' 
@@ -229,17 +176,4 @@ kernel <- function(u, type = 1){
          indicator(u) / 2,
          0.75 * (1 - u**2) * indicator(u),
          0.9375 * (1 - u**2)**2 * indicator(u))
-}
-
-#' Test whether the observation points are in the neighborhood
-#' 
-#' @param t Vector of numeric
-#' @param t0 Numeric
-#' @param h Numeric
-#' @param k0 Numeric
-#' 
-#' @return Vector of boolean
-#' @export
-neighbors <- function(t, t0, h, k0){
-  sum(ifelse(abs(t - t0) <= h, 1, 0)) >= k0
 }

@@ -39,10 +39,10 @@
 #'  } 
 #' @export
 #' @examples
-#' df_piece <- generate_piecewise_fractional_brownian(N = 1, M = 300, 
-#'                                                    H = c(0.2, 0.5, 0.8), 
-#'                                                    sigma = 0.05)
-#' estimate_curve(df_piece[[1]],
+#' X <- generate_piecewise_fractional_brownian(N = 1, M = 300, 
+#'                                             H = c(0.2, 0.5, 0.8), 
+#'                                             sigma = 0.05)
+#' estimate_curve(X[[1]],
 #'                U = seq(0, 1, length.out = 200),
 #'                b = c(0.2, 0.5, 0.8),
 #'                t0_list = c(0.16, 0.5, 0.83))
@@ -51,8 +51,6 @@ estimate_curve <- function(curve, U, b, t0_list = NULL,
   if (length(b) == 1) {
     bandwidth <- rep(b, length(U))
   } else if ((length(b) != length(U)) & !is.null(t0_list)) {
-    #idx <- U %>% purrr::map_dbl(~ order(abs(.x - t0_list))[1])
-    #bandwidth <- b[idx]
     bandwidth <- approx(t0_list, b, xout = U,
                         yleft = b[1], yright = b[length(b)])$y
   } else if (length(b) == length(U)) {

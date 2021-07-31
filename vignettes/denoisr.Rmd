@@ -23,9 +23,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`denoisr` is a **R** package which permits to smooth (remove the noise from) functional
-data by, first, estimate the Hurst coefficient of the underlying generating
-process. 
+`denoisr` is a **R** package which permits to smooth (remove the noise from) functional data by, first, estimate the Hurst coefficient of the underlying generating process. 
 
 Functional data to smooth should be defined on a univariate compact, but can be
 irregularly sampled. `denoisr` can also be used only for Hurst parameter 
@@ -118,55 +116,9 @@ ggplot(montreal, aes(x = t, y = value, color = variable)) +
 
 ```
 
-### Mean and Covariance
-
-First, we compute the mean curve. The mean curve is defined as the mean of the Leave-One-Out mean curves that are computed after removing one curve sequentially.
-```{r compute_mean}
-# Compute the mean curve
-mean_curve <- estimate_mean(canadian_temperature_daily,
-                            U = seq(0, 1, length.out = 501),
-                            b = smooth_data$parameter$b)
-```
-
-Show the mean function along the complete set of curves.
-```{r plot_mean, fig.height=4.35, fig.width=7}
-mean_curve_plot <- tibble(t = seq(0, 1, length.out = 501), x = mean_curve)
-autoplot(data_fd) +
-  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
-  labs(title = 'Daily Temperature Data',
-       x = 'Normalized Day of Year',
-       y = 'Temperature in °C') +
-  theme_minimal()
-```
-
-Next, we compute the covariance surface. The covariance surface is defined as a 2-dimensional Nadaraya-Watson estimator of the smoothed version of the noisy curves.
-```{r compute_covariance}
-# Compute the covariance surface
-U <- seq(0, 1, length.out = 101)
-cov_surface <- estimate_covariance(canadian_temperature_daily,
-                                   U = U,
-                                   b = smooth_data$parameter$b,
-                                   h = 0.05)
-```
-
-Show the covariance surface.
-```{r plot_covariance, fig.height=5, fig.width=5, fig.align='center'}
-cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
-ggplot(cov_surface_plot) + 
-  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
-  labs(title = 'Covariance surface of daily temperature data',
-       x = '',
-       y = '',
-       fill = 'Level') +
-  theme_minimal()
-```
-
-
-
 ## Example on simulated data
 
 We will do the same analysis on some simulated datasets.
-
 
 ### On fractional brownian motion
 
@@ -215,46 +167,6 @@ ggplot(obs, aes(x = t, y = value, color = variable)) +
   theme_minimal()
 ```
 
-```{r mean_frac_brown}
-# Compute the mean curve
-mean_curve <- estimate_mean(fractional_brownian,
-                            U = seq(0, 1, length.out = 100),
-                            b = smooth_data$parameter$b)
-```
-
-```{r plot_mean_frac_brown, fig.height=4.35, fig.width=7}
-data_fd <- list2irregFunData(fractional_brownian)
-mean_curve_plot <- tibble(t = seq(0, 1, length.out = 100), x = mean_curve)
-autoplot(data_fd) +
-  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
-  labs(title = 'Fractional brownian motion',
-       x = 'Normalized time',
-       y = 'Value') +
-  theme_minimal()
-```
-
-```{r compute_covariance_frac_brown}
-# Compute the covariance surface
-U <- seq(0, 1, length.out = 101)
-cov_surface <- estimate_covariance(fractional_brownian,
-                                   U = U,
-                                   b = smooth_data$parameter$b,
-                                   h = 0.05)
-```
-
-```{r plot_covariance_frac_brown, fig.height=5, fig.width=5, fig.align='center'}
-# Show the covariance surface
-cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
-ggplot(cov_surface_plot) + 
-  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
-  labs(title = 'Covariance surface of fractional brownian motion',
-       x = '',
-       y = '',
-       fill = 'Level') +
-  theme_minimal()
-```
-
-
 ### On piecewise fractional brownian motion
 
 ```{r load_piecewise_brownian, warning=FALSE, message=FALSE}
@@ -289,47 +201,6 @@ ggplot(obs, aes(x = t, y = value, color = variable)) +
        x = 'Normalized time',
        y = 'Value',
        color = '') +
-  theme_minimal()
-```
-
-```{r mean_piece_frac_brown}
-# Compute the mean curve
-mean_curve <- estimate_mean(piece_frac_brown,
-                            U = seq(0, 1, length.out = 100),
-                            b = smooth_data$parameter$b,
-                            t0_list = c(0.15, 0.5, 0.85))
-```
-
-```{r plot_mean_piece_frac_brown, fig.height=4.35, fig.width=7}
-data_fd <- list2irregFunData(piece_frac_brown)
-mean_curve_plot <- tibble(t = seq(0, 1, length.out = 100), x = mean_curve)
-autoplot(data_fd) +
-  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
-  labs(title = 'Fractional brownian motion',
-       x = 'Normalized time',
-       y = 'Value') +
-  theme_minimal()
-```
-
-```{r compute_covariance_piece_frac_brown}
-# Compute the covariance surface
-U <- seq(0, 1, length.out = 101)
-cov_surface <- estimate_covariance(piece_frac_brown,
-                                   U = U,
-                                   b = smooth_data$parameter$b,
-                                   h = 0.05,
-                                   t0_list = c(0.15, 0.5, 0.85))
-```
-
-```{r plot_covariance_piece_frac_brown, fig.height=5, fig.width=5, fig.align='center'}
-# Show the covariance surface
-cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
-ggplot(cov_surface_plot) + 
-  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
-  labs(title = 'Covariance surface of \n piecewise fractional brownian motion',
-       x = '',
-       y = '',
-       fill = 'Level') +
   theme_minimal()
 ```
 
@@ -368,43 +239,3 @@ ggplot(obs, aes(x = t, y = value, color = variable)) +
        color = '') +
   theme_minimal()
 ```
-
-```{r mean_frac_inte_brown}
-# Compute the mean curve
-mean_curve <- estimate_mean(inte_fractional_brownian,
-                            U = seq(0, 1, length.out = 100),
-                            b = smooth_data$parameter$b)
-```
-
-```{r plot_mean_inte_frac_brown, fig.height=4.35, fig.width=7}
-data_fd <- list2irregFunData(inte_fractional_brownian)
-mean_curve_plot <- tibble(t = seq(0, 1, length.out = 100), x = mean_curve)
-autoplot(data_fd) +
-  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
-  labs(title = 'Integrated fractional brownian motion',
-       x = 'Normalized time',
-       y = 'Value') +
-  theme_minimal()
-```
-
-```{r compute_covariance_inte_frac_brown}
-# Compute the covariance surface
-U <- seq(0, 1, length.out = 101)
-cov_surface <- estimate_covariance(inte_fractional_brownian,
-                                   U = U,
-                                   b = smooth_data$parameter$b,
-                                   h = 0.05)
-```
-
-```{r plot_covariance_inte_frac_brown, fig.height=5, fig.width=5, fig.align='center'}
-# Show the covariance surface
-cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
-ggplot(cov_surface_plot) + 
-  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
-  labs(title = 'Covariance surface of integrated fractional brownian motion',
-       x = '',
-       y = '',
-       fill = 'Level') +
-  theme_minimal()
-```
-

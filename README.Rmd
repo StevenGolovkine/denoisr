@@ -35,123 +35,43 @@ the curves.
 the Nadaraya-Watson estimator.
 * `estimate_curve()` estimates one curve, given bandwidths.
 * `smooth_curves()` and `smooth_curves_regularity()` estimate the curves.
-* `estimate_mean()` and `estimate_covariance()` estimate the leave-one-out
-smoothing mean and covariance.
 
 You can learn more about them in `vignette('denoisr')`.
 
 ## Installation
 
-The package is not yet on CRAN. But, you can install from source with
-
+To install the latest version directly from [Github](https://github.com/StevenGolovkine/denoisr), please use
 ```{r, eval=FALSE}
-devtools::install_url("https://github.com/StevenGolovkine/denoisr/raw/master/denoisr_1.0.3.tar.gz")
-```
-
-## Development version
-
-You can install the last released version of `denoisr` from [Github](https://github.com/StevenGolovkine/denoisr) with:
-
-```{r, eval=FALSE}
+# install.packages("devtools")
 devtools::install_github("StevenGolovkine/denoisr")
 ```
 
-## Usage
-
-```{r load_package, warning=FALSE, message=FALSE}
-# Load packages
-library(denoisr)
-library(dplyr)
-library(funData)
-library(ggplot2)
-library(reshape2)
+To build the vignette as well, please use
+```{r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("StevenGolovkine/denoisr", build_vignettes = TRUE)
 ```
 
-```{r load_data}
-# Load data
-data("canadian_temperature_daily")
-```
+## Dependencies
 
-```{r convert_funData}
-# Convert list to funData object
-data_fd <- list2funData(canadian_temperature_daily)
-```
+The `denoisr` package depends on the `R`-packages [`doParallel`](https://CRAN.R-project.org/package=doParallel), [`dplyr`](https://CRAN.R-project.org/package=dplyr),
+[`foreach`](https://CRAN.R-project.org/package=foreach),
+[`funData`](https://CRAN.R-project.org/package=funData),
+[`gss`](https://CRAN.R-project.org/package=gss),
+[`iterators`](https://CRAN.R-project.org/package=iterators),
+[`KernSmooth`](https://CRAN.R-project.org/package=KernSmooth), [`magrittr`](https://CRAN.R-project.org/package=magrittr),
+[`np`](https://CRAN.R-project.org/package=np),
+[`parallel`](https://CRAN.R-project.org/package=parallel),
+[`purrr`](https://CRAN.R-project.org/package=purrr),
+[`Rcpp`](https://CRAN.R-project.org/package=Rcpp) and
+[`RcppArmadillo`](https://CRAN.R-project.org/package=RcppArmadillo).
 
-```{r plot_data, fig.height=4.35, fig.width=7, fig.align='center'}
-# Plot of the data
-autoplot(data_fd) + 
-  labs(title = 'Daily Temperature Data',
-       x = 'Normalized Day of Year',
-       y = 'Temperature in °C') +
-  theme_minimal()
-```
+## References
 
-```{r smooth_data}
-# Smooth the data
-smooth_data <- smooth_curves(canadian_temperature_daily, 
-                             t0_list = 0.5, 
-                             k0_list = 15)
-```
+The theoretical foundations of the estimation of the mean and covariance functions are described in:
 
-```{r plot_data2, fig.height=4.35, fig.width=7, fig.align='center'}
-# Plot of the smoothed data
-smooth_data_fd <- list2funData(smooth_data$smooth)
-autoplot(smooth_data_fd) +
-  labs(title = 'Smooth Daily Temperature Data',
-       x = 'Normalized Day of Year',
-       y = 'Temperature in °C') +
-  theme_minimal()
-```
+Golovkine S., Klutchnikoff N., Patilea V. (2021) - Learning the smoothness of noisy curves with application to online curve reconstruction.
 
-```{r plot_data3, fig.height=4.35, fig.width=7, fig.align='center'}
-# Plot one realisation of the smoothed data
-montreal <- tibble(t = canadian_temperature_daily$Montreal$t,
-                   Data = canadian_temperature_daily$Montreal$x,
-                   Smooth = smooth_data$smooth$Montreal$x) %>% 
-  reshape2::melt(id = 't')
-ggplot(montreal, aes(x = t, y = value, color = variable)) +
-  geom_line() +
-  labs(title = 'Example of Montreal',
-       x = 'Normalized Day of Year',
-       y = 'Temperature in °C',
-       color = '') +
-  theme_minimal()
+## Bug reports
 
-```
-
-```{r compute_mean}
-# Compute the mean curve
-mean_curve <- estimate_mean(canadian_temperature_daily,
-                            U = seq(0, 1, length.out = 501),
-                            b = smooth_data$parameter$b)
-```
-
-```{r plot_mean, fig.height=4.35, fig.width=7, fig.align='center'}
-mean_curve_plot <- tibble(t = seq(0, 1, length.out = 501), x = mean_curve)
-autoplot(data_fd) +
-  geom_line(data = mean_curve_plot, mapping = aes(x = t, y = x, group = NULL), col = 'red', size = 2) +
-  labs(title = 'Daily Temperature Data',
-       x = 'Normalized Day of Year',
-       y = 'Temperature in °C') +
-  theme_minimal()
-```
-
-```{r compute_covariance}
-# Compute the covariance surface
-U <- seq(0, 1, length.out = 101)
-cov_surface <- estimate_covariance(canadian_temperature_daily,
-                                   U = U,
-                                   b = smooth_data$parameter$b,
-                                   h = 0.05)
-```
-
-```{r plot_covariance, fig.height=5, fig.width=5, fig.align='center'}
-cov_surface_plot <- tibble(expand.grid(U, U), C = as.vector(cov_surface))
-ggplot(cov_surface_plot) + 
-  geom_contour_filled(aes(x = Var1, y = Var2, z = C)) + 
-  labs(title = 'Covariance surface of daily temperature data',
-       x = '',
-       y = '',
-       fill = 'Level') +
-  theme_minimal()
-```
+Please use [GitHub issues](https://github.com/StevenGolovkine/denoisr/issues) for reporting bugs or issues.

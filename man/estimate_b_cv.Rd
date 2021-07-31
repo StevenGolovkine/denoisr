@@ -31,9 +31,7 @@ b <- estimate_b_cv(df)
 \code{\link[np]{npregbw}}
 
 Other estimate bandwidth: 
-\code{\link{estimate_b_curves_list}()},
-\code{\link{estimate_b_curves}()},
-\code{\link{estimate_b_mean_list}()},
-\code{\link{estimate_b_mean}()}
+\code{\link{estimate_b_list}()},
+\code{\link{estimate_b}()}
 }
 \concept{estimate bandwidth}

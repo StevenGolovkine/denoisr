@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // epaKernelSmoothingCurve
 arma::vec epaKernelSmoothingCurve(const arma::vec& U, const arma::vec& T, const arma::vec& Y, const arma::vec& b, const double& n_obs_min);
 RcppExport SEXP _denoisr_epaKernelSmoothingCurve(SEXP USEXP, SEXP TSEXP, SEXP YSEXP, SEXP bSEXP, SEXP n_obs_minSEXP) {

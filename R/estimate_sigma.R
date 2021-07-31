@@ -28,9 +28,7 @@
 #' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' estimate_sigma(df, t0 = 0.5, k0 = 14)
 estimate_sigma <- function(data, t0 = 0.5, k0 = 2) {
-  if(!inherits(data, 'list')){
-    data <- checkData(data)
-  }
+  if(!inherits(data, 'list')) data <- checkData(data)
   
   idxs <- data %>% purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(8 * k0 - 6)]))
   df_sub <- data %>% purrr::map2(idxs, ~ list(t = .x$t[.y:(.y + 8 * k0 - 7)],
