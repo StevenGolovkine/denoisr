@@ -33,6 +33,8 @@ Imports:
     Rcpp (>= 1.0.3),
     RcppArmadillo (>= 0.9.800.1.0),
     utils (>= 4.0.3)
+Remotes:
+    ClaraHapp/funData,
 Suggests:
     ggplot2 (>= 3.3.0),
     knitr (>= 1.26),
