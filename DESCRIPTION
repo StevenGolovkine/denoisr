@@ -3,7 +3,7 @@ Type: Package
 Title: Nonparametric Kernel Smoothing Methods for Functional Data
 Version: 1.1.0
 Date: 2019-06-14
-Depends: R (>= 2.10)
+Depends: R (>= 3.6.0)
 Authors@R: person("Steven", "Golovkine", 
                 email = "steven_golovkine@icloud.com", 
                 role = c("aut", "cre"))
@@ -32,7 +32,7 @@ Imports:
     purrr (>= 0.3.3),
     Rcpp (>= 1.0.3),
     RcppArmadillo (>= 0.9.800.1.0),
-    utils (>= 4.0.3)
+    utils (>= 3.6.0)
 Remotes:
     ClaraHapp/funData,
 Suggests:
