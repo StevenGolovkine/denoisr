@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Build
-Status](https://travis-ci.org/StevenGolovkine/denoisr.svg?branch=master)](https://travis-ci.org/StevenGolovkine/denoisr)
+Status](https://travis-ci.com/StevenGolovkine/denoisr.svg?branch=master)](https://travis-ci.org/StevenGolovkine/denoisr)
 [![Codacy
 Badge](https://api.codacy.com/project/badge/Grade/d5b2b6c6083c4d269ace4a8a1b8103b3)](https://www.codacy.com/manual/StevenGolovkine/denoisr?utm_source=github.com&utm_medium=referral&utm_content=StevenGolovkine/denoisr&utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/215247523.svg)](https://zenodo.org/badge/latestdoi/215247523)
