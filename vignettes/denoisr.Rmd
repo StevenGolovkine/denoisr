@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 Functional data to smooth should be defined on a univariate compact, but can be
 irregularly sampled. `denoisr` can also be used only for Hurst parameter 
-estimation. And finally, there is also some functions to compute the mean curve and the corariance surface.
+estimation.
 
 `denoisr` have a support for the package [`funData`](https://cran.r-project.org/web/packages/funData/index.html).
 
@@ -60,7 +60,7 @@ This section performs the smoothing of the Canadian temperature Weather data.
 data("canadian_temperature_daily")
 ```
 
-This package manipulates lists to define functional data. So, functions are provided to convert it as functional data object defined in the package *funData*.
+This package manipulates lists to define functional data. So, functions are provided to convert it as functional data object defined in the package  [`funData`](https://cran.r-project.org/web/packages/funData/index.html).
 
 ```{r convert_funData}
 # Convert list to funData object
@@ -81,7 +81,7 @@ autoplot(data_fd) +
 
 The smoothing of the curves can be performed using the function `smooth_curves`. It accepts the parameter `t0_list` which correspond to the times where we want to estimate the bandwidth and the parameter `k0_list` which is the considered neighborhood.
 
-```{r smooth_data}
+```{r smooth_data, message=FALSE}
 # Smooth the data
 smooth_data <- smooth_curves(canadian_temperature_daily, 
                              t0_list = 0.5, 
@@ -138,7 +138,7 @@ fractional_brownian <- generate_fractional_brownian(N = 100, M = 350,
                                                     H = 0.5, sigma = 0.05)
 ```
 
-```{r smooth_data_brown}
+```{r smooth_data_brown, message=FALSE}
 # Smooth the data
 smooth_data <- smooth_curves(fractional_brownian, 
                              t0_list = 0.5, 
@@ -176,7 +176,7 @@ piece_frac_brown <- generate_piecewise_fractional_brownian(N = 150, M = 350,
                                                            sigma = 0.05)
 ```
 
-```{r smooth_data_piecebrown}
+```{r smooth_data_piecebrown, message=FALSE}
 # Smooth the data
 smooth_data <- smooth_curves(piece_frac_brown, 
                              t0_list = c(0.15, 0.5, 0.85), 
@@ -212,7 +212,7 @@ set.seed(42)
 inte_fractional_brownian <- generate_integrate_fractional_brownian(N = 100, M = 350, H = 0.5, sigma = 0.025)
 ```
 
-```{r smooth_data_inte_brown}
+```{r smooth_data_inte_brown, message=FALSE}
 # Smooth the data
 smooth_data <- smooth_curves_regularity(inte_fractional_brownian, 
                                         t0 = 0.5, k0 = 14)

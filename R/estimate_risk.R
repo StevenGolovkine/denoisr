@@ -34,11 +34,12 @@
 #' @return A list, with the mean and max residual squared error in \eqn{t_0}.
 #' @export
 #' @examples 
-#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-#' curves_smoothed <- smooth_curves(df)$smooth
-#' estimate_risk(df, curves_smoothed, t0_list = 0.5)
+#' \dontrun{
+#'  X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#'  X_smoothed <- smooth_curves(X)$smooth
+#'  estimate_risk(X, X_smoothed, t0_list = 0.5)
+#' }
 estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
-  
   risk_df <- dplyr::tibble(t0 = numeric(), 
                            MeanRSE = numeric(), 
                            MaxRSE = numeric())
@@ -49,9 +50,9 @@ estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
                                           MeanRSE = risk[[1]], 
                                           MaxRSE = risk[[2]])
   }
-
   risk_df
 }
+
 
 #' Perform an estimation of the risk on a set of curves along the sampling points.
 #' 
@@ -81,12 +82,13 @@ estimate_risk <- function(curves, curves_estim, t0_list = 0.5) {
 #'  in \eqn{t_0}.
 #' @export
 #' @examples 
-#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-#' curves_smoothed <- smooth_curves(df)$smooth
-#' estimate_risks(df, curves_smoothed)
+#' \dontrun{
+#'  X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#'  X_smoothed <- smooth_curves(X)$smooth
+#'  estimate_risks(X, X_smoothed)
+#' }
 estimate_risks <- function(curves, curves_estim) {
   risk <- estimateRiskCurves(curves, curves_estim)
-
   c("MeanIntRSE" = risk[1], "MaxIntRSE" = risk[2])
 }
 
@@ -113,13 +115,14 @@ estimate_risks <- function(curves, curves_estim) {
 #'   \item \strong{$x} The estimated points.
 #'  }
 #'
-#' @return Numeric, the integrated mean squarred eror
+#' @return Numeric, the integrated mean squared error
 #' @export
 #' @examples 
-#' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-#' curves_smoothed <- smooth_curves(df)$smooth
-#' estimate_int_risk(df[[1]], curves_smoothed[[1]])
+#' \dontrun{
+#'  X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+#'  X_smoothed <- smooth_curves(X)$smooth
+#'  estimate_int_risk(X[[1]], X_smoothed[[1]])
+#' }
 estimate_int_risk <- function(curves, curves_estim) {
   estimateRiskCurve(curves, curves_estim)
 }
-

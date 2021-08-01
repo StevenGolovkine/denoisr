@@ -23,9 +23,10 @@ regression estimator defined over continuous data using least-square cross
 validation for each curve and return the average bandwidth among them.
 }
 \examples{
-df <- denoisr::generate_fractional_brownian(N = 5, M = 300, 
-                                            H = 0.5, sigma = 0.05)
-b <- estimate_b_cv(df)
+\dontrun{
+X <- generate_fractional_brownian(N = 5, M = 300, H = 0.5, sigma = 0.05)
+estimate_b_cv(X)
+}
 }
 \seealso{
 \code{\link[np]{npregbw}}

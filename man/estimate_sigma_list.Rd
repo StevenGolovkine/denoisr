@@ -14,11 +14,11 @@ be defined as list with two entries:
 \item \strong{$x} The observed points
 }}
 
-\item{t0_list}{A vector of numerics, the sampling points at which we estimate
+\item{t0_list}{A vector of numeric, the sampling points at which we estimate
 \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for
 the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.}
 
-\item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
+\item{k0_list}{A vector of numeric, the number of neighbors of \eqn{t_0} to
 consider. Should be set as \deqn{k0 = M * exp(-(log(log(M))**2))}. We can set a
 different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
 put a unique numeric.}

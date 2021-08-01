@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_k0.R
 \name{estimate_k0}
 \alias{estimate_k0}
-\title{Perform the estimation of the recommanded \eqn{k_0}}
+\title{Perform the estimation of the recommended \eqn{k_0}}
 \usage{
 estimate_k0(M)
 }
@@ -10,10 +10,10 @@ estimate_k0(M)
 \item{M}{Numeric, mean number of sampling points per curve}
 }
 \value{
-Numeric, the recommanded \eqn{k_0}
+Numeric, the recommended \eqn{k_0}
 }
 \description{
-This function performs the estimation of the recommanded \eqn{k_0} as used in
+This function performs the estimation of the recommended \eqn{k_0} as used in
 \cite{add ref}.
 }
 \examples{

@@ -37,7 +37,9 @@ and
 \deqn{MeanIntRSE = \max_{1 \leq n \leq N} \int(X_n(t) - \hat{X}_n(t))^2dt}
 }
 \examples{
-df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-curves_smoothed <- smooth_curves(df)$smooth
-estimate_risks(df, curves_smoothed)
+\dontrun{
+ X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+ X_smoothed <- smooth_curves(X)$smooth
+ estimate_risks(X, X_smoothed)
+}
 }

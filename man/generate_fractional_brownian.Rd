@@ -21,7 +21,7 @@ The number of points follows a Poisson distribution with mean \eqn{M}.}
 
 \item{H}{Numeric, Hurst coefficient. \eqn{0 < H < 1}}
 
-\item{sigma}{A vector of numerics, standard deviation of the noise to add to
+\item{sigma}{A vector of numeric, standard deviation of the noise to add to
 the fractional Brownian motion.}
 
 \item{pdf}{Function, probability density function for the sampling points.}

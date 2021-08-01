@@ -15,11 +15,11 @@ be defined as a list with two entries:
 \item \strong{$x} The observed points.
 }}
 
-\item{H0_list}{A vector of numerics, estimations of \eqn{H_0}.}
+\item{H0_list}{A vector of numeric, estimations of \eqn{H_0}.}
 
-\item{L0_list}{A vector of numerics, estimations of \eqn{L_0}.}
+\item{L0_list}{A vector of numeric, estimations of \eqn{L_0}.}
 
-\item{sigma}{A vector of numerics, an estimation of \eqn{\sigma}.}
+\item{sigma}{A vector of numeric, an estimation of \eqn{\sigma}.}
 
 \item{K}{Character string, the kernel used for the estimation:
 \itemize{
@@ -29,7 +29,7 @@ be defined as a list with two entries:
 }}
 }
 \value{
-A vector of numerics, estimations of the bandwidth.
+A vector of numeric, estimations of the bandwidth.
 }
 \description{
 This function performs an estimation of the bandwidth for a univariate kernel
@@ -44,8 +44,8 @@ estimate_b_list(X, H0_list = 0.5, L0_list = 1, sigma = 0.05)
 X <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
                                             H = c(0.2, 0.5, 0.8), 
                                             sigma = 0.05)
-b <- estimate_b_list(X, H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1), 
-                     sigma = 0.1, K = 'epanechnikov')
+estimate_b_list(X, H0_list = c(0.2, 0.5, 0.8), L0_list = c(1, 1, 1), 
+                sigma = 0.1, K = 'epanechnikov')
 }
 \seealso{
 Other estimate bandwidth: 

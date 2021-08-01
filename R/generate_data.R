@@ -15,7 +15,7 @@
 #' @param M An integer, expected number of points in the trajectory.
 #'   The number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}
-#' @param sigma A vector of numerics, standard deviation of the noise to add to
+#' @param sigma A vector of numeric, standard deviation of the noise to add to
 #'  the fractional Brownian motion. 
 #' @param pdf Function, probability density function for the sampling points.
 #' @param L Numeric, multiplicative constant.
@@ -37,20 +37,16 @@ fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL, L = 1) {
   }
   x <- L * as.vector(somebm::fbm(hurst = H, n = M_n))
   
-  # Start to fill the data
   simu <- matrix(rep(0, (M_n + 1) * (length(sigma) + 2)), nrow = M_n + 1)
   simu[, 1] <- t
   simu[, 2] <- x
   
   e <- rnorm(M_n + 1, mean = 0, sd = 1)
-  
-  # Add columns with homoscedastic noise.
   j <- 3
   for (i in sigma) {
     simu[, j] <- x + i * e
     j <- j + 1
   }
-  
   dplyr::as_tibble(simu, .name_repair = "unique")
 }
 
@@ -66,7 +62,7 @@ fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL, L = 1) {
 #' @param M An integer, expected number of points in the trajectory.
 #'   The number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}
-#' @param sigma A vector of numerics, standard deviation of the noise to add to
+#' @param sigma A vector of numeric, standard deviation of the noise to add to
 #'  the fractional Brownian motion. 
 #' @param pdf Function, probability density function for the sampling points.
 #' @param L Numeric, multiplicative constant.
@@ -86,7 +82,6 @@ fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL, L = 1) {
 #' generate_fractional_brownian(100, 50, 0.5, 0.05, pdf = rnorm)
 generate_fractional_brownian <- function(N = 100, M = 10, H = 0.5, 
                                          sigma = 0.05, pdf = NULL, L = 1){
-  
   simulation_ <- purrr::rerun(N, fractional_brownian_trajectory(M, H, sigma, 
                                                                 pdf, L))
   purrr::map(simulation_, ~ list(t = .x$...1, x = .x$...3, x_true = .x$...2))  
@@ -100,7 +95,7 @@ generate_fractional_brownian <- function(N = 100, M = 10, H = 0.5,
 #' Generate piecewise fractional Brownian motion with a random noise
 #' 
 #' This function generates a realization of a piecewise fractional Brownian motion
-#' wih random noise. A piecewise fractional Brownian motion is defined by a non
+#' with random noise. A piecewise fractional Brownian motion is defined by a non
 #' constant Hurst parameter along the sampling points. We observe the process at
 #' regularly spaced time \eqn{t_i = \frac{i}{M_n}}, where \eqn{i = 0, \dots, M_n}.
 #' We define a segmentation \eqn{\tau = (\tau_k)_{k=0, \dots, K+1}}, with 
@@ -109,9 +104,9 @@ generate_fractional_brownian <- function(N = 100, M = 10, H = 0.5,
 #' is a fractional Brownian motion with Hurst parameter \eqn{H_k}. 
 #' 
 #' @param M An integer, expected number of points in the trajectory.
-#'   THe number of points follows a Poisson distribution with mean \eqn{M}.
+#'   The number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}
-#' @param sigma A vector of numerics, standard deviation of the noise to add to 
+#' @param sigma A vector of numeric, standard deviation of the noise to add to 
 #'  the piecewise fractional Brownian motion. Should have the length of H. It
 #'  adds heteroscedastic noise to the data.
 #' @param pdf A function for the generation of the sampling points.
@@ -124,7 +119,6 @@ generate_fractional_brownian <- function(N = 100, M = 10, H = 0.5,
 #'   deviation \eqn{\sigma}
 #'  }
 piecewise_fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL){
-  
   M_n <- rpois(1, M)
   
   M_nn <- vector(length = length(H))
@@ -153,21 +147,17 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL){
   for(i in 2:length(x)){
     y <- c(y, x[[i]] + y[length(y)])
   }
-  
-  # Start to fill the data
+
   simu <- matrix(rep(0, length(y) * 3), nrow = length(y))
   simu[, 1] <- t
   simu[, 2] <- y
   
-  e <- rnorm(length(y), mean = 0, sd = 1)
-  
   if (length(sigma) > 1){
     sigma <- rep(sigma, M_nn)
   }
-  
-  # Add columns with homoscedastic noise.
+
+  e <- rnorm(length(y), mean = 0, sd = 1)
   simu[, 3] <- y + sigma * e
-  
   dplyr::as_tibble(simu, .name_repair = 'unique')
 }
 
@@ -185,9 +175,9 @@ piecewise_fractional_brownian_trajectory <- function(M, H, sigma, pdf = NULL){
 #' 
 #' @param N An integer, number of curves to simulate.
 #' @param M An integer, expected number of points in the trajectory.
-#'   THe number of points follows a Poisson distribution with mean \eqn{M}.
+#'   The number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}
-#' @param sigma A vector of numerics, standard deviation of the noise to add to 
+#' @param sigma A vector of numeric, standard deviation of the noise to add to 
 #'  the piecewise fractional Brownian motion. Should have the length of H. It
 #'  adds heteroscedastic noise to the data.
 #' @param pdf A function for the generation of the sampling points.
@@ -207,7 +197,6 @@ generate_piecewise_fractional_brownian <- function(N = 100, M = 100,
                                                    H = c(0.2, 0.5, 0.8), 
                                                    sigma = 0.05,
                                                    pdf = NULL){
-  
   simulation_ <- purrr::rerun(N, piecewise_fractional_brownian_trajectory(M, H,
                                                                           sigma,
                                                                           pdf))
@@ -234,7 +223,7 @@ generate_piecewise_fractional_brownian <- function(N = 100, M = 100,
 #'   The number of points follows a Poisson distribution with mean \eqn{M}.
 #' @param H Numeric, Hurst coefficient. \eqn{0 < H < 1}. As we return its
 #'  integrated version, the true Hurst will be 1 + H.
-#' @param sigma A vector of numerics, standard deviation of the noise to add to
+#' @param sigma A vector of numeric, standard deviation of the noise to add to
 #'  the fractional Brownian motion.
 #' @param L Numeric, multiplicative constant.
 #'
@@ -251,20 +240,16 @@ integrate_fractional_brownian_trajectory <- function(M, H, sigma, L = 1) {
   
   x <- L * as.vector(somebm::fbm(hurst = H, n = M_n))
   
-  # Start to fill the data
   simu <- matrix(rep(0, (M_n + 1) * (length(sigma) + 2)), nrow = M_n + 1)
   simu[, 1] <- t
   simu[, 2] <- cumsum(x) / (M_n + 1)
   
   e <- rnorm(M_n + 1, mean = 0, sd = 1)
-
-  # Add columns with homoscedastic noise.
   j <- 3
   for (i in sigma) {
     simu[, j] <- cumsum(x) / (M_n + 1) + i * e
     j <- j + 1
   }
-  
   dplyr::as_tibble(simu, .name_repair = "unique")
 }
 
@@ -300,7 +285,6 @@ integrate_fractional_brownian_trajectory <- function(M, H, sigma, L = 1) {
 #' generate_integrate_fractional_brownian(100, 50, 0.5, 0.05, 2)
 generate_integrate_fractional_brownian <- function(N = 100, M = 10, H = 0.5, 
                                                    sigma = 0.05, L = 1){
-  
   simulation_ <- purrr::rerun(N, integrate_fractional_brownian_trajectory(M, H, sigma, L))
   purrr::map(simulation_, ~ list(t = .x$...1, x = .x$...3, x_true = .x$...2))  
 }

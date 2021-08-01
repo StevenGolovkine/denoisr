@@ -110,7 +110,6 @@ estimate_L0 <- function(data, t0 = 0, H0 = 0, k0 = 2, sigma = NULL, density = FA
       deno <- ((k0 - 1) / (mu_hat + 1))**(2 * H0)
     }
   }
-
   (nume / deno)**0.5
 }
 

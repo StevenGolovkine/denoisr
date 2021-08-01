@@ -153,7 +153,7 @@ estimate_H0_list <- function(data, t0_list, k0_list = 2, sigma = NULL) {
 #'                                             H = 0.5, sigma = 0.01)
 #' estimate_H0_deriv(X, t0 = 0.5, eps = 0.01, k0 = 6)
 #' @references Golovkine S., Klutchnikoff N., Patilea V. (2020) - Learning the
-#' smoothness of noisy curves with applications to online curves denoising.
+#'  smoothness of noisy curves with applications to online curves denoising.
 estimate_H0_deriv <- function(data, t0 = 0, eps = 0.01, k0 = 2, sigma = NULL){
   sigma_estim <- estimate_sigma(data, t0, k0)
   H0_estim <- estimate_H0(data, t0 = t0, k0 = k0, sigma = sigma)

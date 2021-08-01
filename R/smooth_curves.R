@@ -57,17 +57,13 @@
 #' X_smooth <- smooth_curves(X, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 smooth_curves <- function(data, U = NULL, t0_list = 0.5,
                           k0_list = 2, K = "epanechnikov"){
-
-  # Estimation of the different parameters
   param_estim <- estimate_bandwidth(data, t0_list = t0_list,
                                     k0_list = k0_list, K = K)
 
-  # Get the bandwidths
   b_estim <- param_estim$b %>% 
     purrr::transpose() %>% 
     purrr::map(~ unname(unlist(.x)))
 
-  # Estimation of the curves
   if (is.null(U)) {
     curves <- data %>% 
       purrr::map2(b_estim, ~ estimate_curve(.x, U = .x$t, b = .y,
@@ -140,22 +136,14 @@ smooth_curves_regularity <- function(data, U = NULL, t0 = 0.5, k0 = 2,
 
   if(!inherits(data, 'list')) data <- checkData(data)
   
-  # Estimation of the noise
   sigma_estim <- estimate_sigma_list(data, t0, k0)
-
-  # Estimation of H0
   H0_estim <- estimate_H0_deriv_list(data, t0_list = t0, k0_list = k0)
-
-  # Estimation of L0
   L0_estim <- estimate_L0_list(data, t0_list = t0, H0_list = H0_estim, k0_list = k0)
-
-  # Estimation of the bandwidth
   b_estim <- estimate_b_list(data, H0_list = H0_estim, L0_list = L0_estim, 
                              sigma = sigma_estim, K = K) %>%
     purrr::transpose() %>% 
     purrr::map(~ unname(unlist(.x)))
 
-  # Estimation of the curves
   if (is.null(U)) {
     curves <- data %>% purrr::map2(b_estim, ~ estimate_curve(.x,
       U = .x$t, b = .y,

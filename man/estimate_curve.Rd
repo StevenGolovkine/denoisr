@@ -20,13 +20,13 @@ estimate_curve(
 \item \strong{$x} The observed points.
 }}
 
-\item{U}{A vector of numerics, sampling points at which estimate the curve.}
+\item{U}{A vector of numeric, sampling points at which estimate the curve.}
 
-\item{b}{Numeric or vector of numerics, estimation of the bandwidth. If one
+\item{b}{Numeric or vector of numeric, estimation of the bandwidth. If one
 is provided, we use a unique bandwidth for the curve. However, if a vector
 is given, the bandwidth changes depending on the sampling points.}
 
-\item{t0_list}{A vector of numerics, times at which the bandwidths have been
+\item{t0_list}{A vector of numeric, times at which the bandwidths have been
 estimated. Only used if the parameter \code{b} is a vector.}
 
 \item{kernel}{Character string, the kernel used for the estimation:
@@ -51,10 +51,10 @@ This function performs the smoothing of a curve using the Nadaraya-Watson
 estimator given a particular kernel.
 }
 \examples{
-df_piece <- generate_piecewise_fractional_brownian(N = 1, M = 300, 
-                                                   H = c(0.2, 0.5, 0.8), 
-                                                   sigma = 0.05)
-estimate_curve(df_piece[[1]],
+X <- generate_piecewise_fractional_brownian(N = 1, M = 300, 
+                                            H = c(0.2, 0.5, 0.8), 
+                                            sigma = 0.05)
+estimate_curve(X[[1]],
                U = seq(0, 1, length.out = 200),
                b = c(0.2, 0.5, 0.8),
                t0_list = c(0.16, 0.5, 0.83))

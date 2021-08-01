@@ -171,7 +171,7 @@ lseq <- function(from = 1, to = 100, length.out = 51) {
 #' @return Vector of numeric
 #' @export
 kernel <- function(u, type = 1){
-  indicator <- function(u) 2 * dunif(u, -1, 1)
+  indicator <- function(u) 2 * stats::dunif(u, -1, 1)
   switch(type,
          indicator(u) / 2,
          0.75 * (1 - u**2) * indicator(u),

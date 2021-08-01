@@ -5,17 +5,7 @@
 \title{Perform a non-parametric smoothing of a set of curves when the regularity is
 larger than 1}
 \usage{
-smooth_curves_regularity(
-  data,
-  U = NULL,
-  t0 = 0.5,
-  k0 = 2,
-  K = "epanechnikov",
-  gamma = 0.5,
-  Gamma = 1,
-  reason = "curve",
-  old = FALSE
-)
+smooth_curves_regularity(data, U = NULL, t0 = 0.5, k0 = 2, K = "epanechnikov")
 }
 \arguments{
 \item{data}{A list, where each element represents a curve. Each curve have to
@@ -42,17 +32,6 @@ be set as \eqn{k0 = M * exp(-log(log(M))^2)}.}
 \item uniform
 \item beta
 }}
-
-\item{gamma}{float, default=0.5}
-
-\item{Gamma}{float, default=1}
-
-\item{reason}{Character string, for what purpose we compute the bandwidth
-\itemize{
-\item curve (default)
-\item mean
-\item covariance
-}}
 }
 \value{
 A list, which contains two elements. The first one is a list which
@@ -77,8 +56,8 @@ larger than 1. The bandwidth is estimated using the method from
 assume that the regularly is the same all over the curve.
 }
 \examples{
-df <- generate_integrate_fractional_brownian(N = 1000, M = 300, 
-                                              H = 0.5, sigma = 0.01)
-df_smooth <- smooth_curves_regularity(df, U = seq(0, 1, length.out = 101), 
-                                      t0 = 0.5, k0 = 14)
+X <- generate_integrate_fractional_brownian(N = 1000, M = 300, 
+                                            H = 0.5, sigma = 0.01)
+X_smooth <- smooth_curves_regularity(X, U = seq(0, 1, length.out = 101), 
+                                     t0 = 0.5, k0 = 14)
 }

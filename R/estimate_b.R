@@ -83,9 +83,9 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov"){
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points.
 #'  } 
-#' @param H0_list A vector of numerics, estimations of \eqn{H_0}.
-#' @param L0_list A vector of numerics, estimations of \eqn{L_0}.
-#' @param sigma A vector of numerics, an estimation of \eqn{\sigma}.
+#' @param H0_list A vector of numeric, estimations of \eqn{H_0}.
+#' @param L0_list A vector of numeric, estimations of \eqn{L_0}.
+#' @param sigma A vector of numeric, an estimation of \eqn{\sigma}.
 #' @param K Character string, the kernel used for the estimation:
 #'  \itemize{
 #'  \item epanechnikov (default)
@@ -93,7 +93,7 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov"){
 #'  \item uniform
 #'  }
 #'
-#' @return A vector of numerics, estimations of the bandwidth.
+#' @return A vector of numeric, estimations of the bandwidth.
 #' @export
 #' @examples
 #' X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
@@ -107,7 +107,6 @@ estimate_b <- function(data, H0 = 0.5, L0 = 1, sigma = 0, K = "epanechnikov"){
 estimate_b_list <- function(data, H0_list, L0_list, sigma = 0, 
                             K = "epanechnikov") {
   if(!inherits(data, 'list')) data <- checkData(data)
-  
   if (length(H0_list) != length(L0_list)) {
     stop("H0_list and L0_list must have the same length.")
   }
@@ -132,10 +131,10 @@ estimate_b_list <- function(data, H0_list, L0_list, sigma = 0,
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points.
 #'  } 
-#' @param t0_list A vector of numerics, the sampling points at which we estimate 
+#' @param t0_list A vector of numeric, the sampling points at which we estimate 
 #'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
 #'  the estimation of \eqn{L_0} when \eqn{\sigma} is unknown.
-#' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
+#' @param k0_list A vector of numeric, the number of neighbors of \eqn{t_0} to 
 #'  consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
 #'  put a unique numeric.
@@ -166,17 +165,10 @@ estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2,
                                K = "epanechnikov") {
   if(!inherits(data, 'list')) data <- checkData(data)
   
-  # Estimation of the noise
   sigma_estim <- estimate_sigma_list(data, t0_list, k0_list)
-  
-  # Estimation of H0
   H0_estim <- estimate_H0_list(data, t0_list, k0_list)
-
-  # Estimation of L0
   L0_estim <- estimate_L0_list(data, t0_list = t0_list, H0_list = H0_estim,
                                k0_list = k0_list, sigma = NULL, density = FALSE)
-  
-  # Estimation of the bandwidth
   b_estim <- estimate_b_list(data, H0_list = H0_estim, L0_list = L0_estim,
                              sigma = sigma_estim, K = K)
   
@@ -211,8 +203,10 @@ estimate_bandwidth <- function(data, t0_list = 0.5, k0_list = 2,
 #' @return Numeric, an estimation of the bandwidth.
 #' @export
 #' @examples 
+#' \dontrun{
 #' X <- generate_fractional_brownian(N = 5, M = 300, H = 0.5, sigma = 0.05)
 #' estimate_b_cv(X)
+#' }
 estimate_b_cv <- function(data) {
   if(!inherits(data, 'list')) data <- checkData(data)
   
@@ -231,8 +225,6 @@ estimate_b_cv <- function(data) {
       regtype = "lc" # Local Constant Regression
     )$bw
   }
-
   parallel::stopCluster(cl)
-
   bw_list
 }

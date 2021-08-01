@@ -16,11 +16,11 @@ generate_piecewise_fractional_brownian(
 \item{N}{An integer, number of curves to simulate.}
 
 \item{M}{An integer, expected number of points in the trajectory.
-THe number of points follows a Poisson distribution with mean \eqn{M}.}
+The number of points follows a Poisson distribution with mean \eqn{M}.}
 
 \item{H}{A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}}
 
-\item{sigma}{A vector of numerics, standard deviation of the noise to add to
+\item{sigma}{A vector of numeric, standard deviation of the noise to add to
 the piecewise fractional Brownian motion. Should have the length of H. It
 adds heteroscedastic noise to the data.}
 

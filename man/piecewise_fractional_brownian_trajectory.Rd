@@ -8,11 +8,11 @@ piecewise_fractional_brownian_trajectory(M, H, sigma, pdf = NULL)
 }
 \arguments{
 \item{M}{An integer, expected number of points in the trajectory.
-THe number of points follows a Poisson distribution with mean \eqn{M}.}
+The number of points follows a Poisson distribution with mean \eqn{M}.}
 
 \item{H}{A vector of numeric, Hurst coefficients. \eqn{0 < H_k < 1}}
 
-\item{sigma}{A vector of numerics, standard deviation of the noise to add to
+\item{sigma}{A vector of numeric, standard deviation of the noise to add to
 the piecewise fractional Brownian motion. Should have the length of H. It
 adds heteroscedastic noise to the data.}
 
@@ -29,7 +29,7 @@ deviation \eqn{\sigma}
 }
 \description{
 This function generates a realization of a piecewise fractional Brownian motion
-wih random noise. A piecewise fractional Brownian motion is defined by a non
+with random noise. A piecewise fractional Brownian motion is defined by a non
 constant Hurst parameter along the sampling points. We observe the process at
 regularly spaced time \eqn{t_i = \frac{i}{M_n}}, where \eqn{i = 0, \dots, M_n}.
 We define a segmentation \eqn{\tau = (\tau_k)_{k=0, \dots, K+1}}, with

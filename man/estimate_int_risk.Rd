@@ -22,7 +22,7 @@ Each curve have to be defined as a list with two entries:
 }}
 }
 \value{
-Numeric, the integrated mean squarred eror
+Numeric, the integrated mean squared error
 }
 \description{
 This function performs the estimation of the risk on one curve along
@@ -34,7 +34,9 @@ Actually, one risk is computed. They are defined as:
 \deqn{IntRSE = \int(X_n(t) - \hat{X}_n(t))^2dt}
 }
 \examples{
-df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
-curves_smoothed <- smooth_curves(df)$smooth
-estimate_int_risk(df[[1]], curves_smoothed[[1]])
+\dontrun{
+ X <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
+ X_smoothed <- smooth_curves(X)$smooth
+ estimate_int_risk(X[[1]], X_smoothed[[1]])
+}
 }

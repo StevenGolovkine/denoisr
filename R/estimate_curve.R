@@ -16,11 +16,11 @@
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points.
 #'  } 
-#' @param U A vector of numerics, sampling points at which estimate the curve. 
-#' @param b Numeric or vector of numerics, estimation of the bandwidth. If one 
+#' @param U A vector of numeric, sampling points at which estimate the curve. 
+#' @param b Numeric or vector of numeric, estimation of the bandwidth. If one 
 #'  is provided, we use a unique bandwidth for the curve. However, if a vector 
 #'  is given, the bandwidth changes depending on the sampling points. 
-#' @param t0_list A vector of numerics, times at which the bandwidths have been 
+#' @param t0_list A vector of numeric, times at which the bandwidths have been 
 #'  estimated. Only used if the parameter \code{b} is a vector.
 #' @param kernel Character string, the kernel used for the estimation:
 #'  \itemize{
@@ -51,8 +51,8 @@ estimate_curve <- function(curve, U, b, t0_list = NULL,
   if (length(b) == 1) {
     bandwidth <- rep(b, length(U))
   } else if ((length(b) != length(U)) & !is.null(t0_list)) {
-    bandwidth <- approx(t0_list, b, xout = U,
-                        yleft = b[1], yright = b[length(b)])$y
+    bandwidth <- stats::approx(t0_list, b, xout = U, 
+                               yleft = b[1], yright = b[length(b)])$y
   } else if (length(b) == length(U)) {
     bandwidth <- b
   } else {
@@ -73,6 +73,5 @@ estimate_curve <- function(curve, U, b, t0_list = NULL,
     print("Wrong kernel name")
     x_hat <- rep(0, length(U))
   }
-
   list(t = U, x = as.vector(x_hat))
 }

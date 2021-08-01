@@ -27,14 +27,14 @@
 #' @examples
 #' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' estimate_sigma(df, t0 = 0.5, k0 = 14)
-estimate_sigma <- function(data, t0 = 0.5, k0 = 2) {
+estimate_sigma <- function(data, t0 = 0.5, k0 = 2){
   if(!inherits(data, 'list')) data <- checkData(data)
-  
   idxs <- data %>% purrr::map_dbl(~ min(order(abs(.x$t - t0))[seq_len(8 * k0 - 6)]))
   df_sub <- data %>% purrr::map2(idxs, ~ list(t = .x$t[.y:(.y + 8 * k0 - 7)],
                                               x = .x$x[.y:(.y + 8 * k0 - 7)]))
   estimateSigma(df_sub)
 }
+
 
 #' Perform an estimation of the noise given a list of \eqn{t_0}.
 #' 
@@ -47,10 +47,10 @@ estimate_sigma <- function(data, t0 = 0.5, k0 = 2) {
 #'   \item \strong{$t} The sampling points
 #'   \item \strong{$x} The observed points
 #'  }
-#' @param t0_list A vector of numerics, the sampling points at which we estimate 
+#' @param t0_list A vector of numeric, the sampling points at which we estimate 
 #'  \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for 
 #'  the estimation of \eqn{H_0} when \eqn{\sigma} is unknown.
-#' @param k0_list A vector of numerics, the number of neighbors of \eqn{t_0} to 
+#' @param k0_list A vector of numeric, the number of neighbors of \eqn{t_0} to 
 #'  consider. Should be set as \deqn{k0 = M * exp(-(log(log(M))**2))}. We can set a 
 #'  different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just 
 #'  put a unique numeric.
@@ -61,6 +61,7 @@ estimate_sigma <- function(data, t0 = 0.5, k0 = 2) {
 #' df <- generate_fractional_brownian(N = 1000, M = 300, H = 0.5, sigma = 0.05)
 #' estimate_sigma_list(df, t0_list = c(0.25, 0.5, 0.75), k0 = 14)
 estimate_sigma_list <- function(data, t0_list, k0_list){
+  if(!inherits(data, 'list')) data <- checkData(data)
   t0_list %>%
     purrr::map2_dbl(k0_list, ~ estimate_sigma(data, t0 = .x, k0 = .y))
 }

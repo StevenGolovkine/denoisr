@@ -14,11 +14,11 @@ be defined as a list with two entries:
 \item \strong{$x} The observed points.
 }}
 
-\item{t0_list}{A vector of numerics, the sampling points at which we estimate
+\item{t0_list}{A vector of numeric, the sampling points at which we estimate
 \eqn{H0}. We will consider the \eqn{8k0 - 7} nearest points of \eqn{t_0} for
 the estimation of \eqn{L_0} when \eqn{\sigma} is unknown.}
 
-\item{k0_list}{A vector of numerics, the number of neighbors of \eqn{t_0} to
+\item{k0_list}{A vector of numeric, the number of neighbors of \eqn{t_0} to
 consider. Should be set as \deqn{k0 = (M / log(M) + 7) / 8}. We can set a
 different \eqn{k_0}, but in order to use the same for each \eqn{t_0}, just
 put a unique numeric.}
@@ -45,13 +45,11 @@ Nadaraya-Watson estimator. The bandwidth is estimated using the method from
 \cite{add ref}.
 }
 \examples{
-df <- denoisr::generate_fractional_brownian(N = 1000, M = 300, 
-                                            H = 0.5, sigma = 0.05)
-b <- estimate_bandwidth_curves(df)
+X <- generate_fractional_brownian(N = 1000, M = 300,  H = 0.5, sigma = 0.05)
+estimate_bandwidth(X)
 
-df_piece <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
-                                                   H = c(0.2, 0.5, 0.8), 
-                                                   sigma = 0.05)
-b <- estimate_bandwidth_curves(df_piece, t0_list = c(0.15, 0.5, 0.85),
-                               k0_list = 6)
+X <- generate_piecewise_fractional_brownian(N = 1000, M = 300, 
+                                            H = c(0.2, 0.5, 0.8), 
+                                            sigma = 0.05)
+estimate_bandwidth(X, t0_list = c(0.15, 0.5, 0.85), k0_list = 6)
 }
