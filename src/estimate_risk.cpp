@@ -18,19 +18,15 @@ Rcpp::List estimateRisk(
   // Get the number of curves
   arma::uword N = curves.length();
   
-  List mycurve = curves[0];
-  List mycurve_estim = curves_estim[0];
-  
   arma::uvec idx;
-  
   arma::vec squared_diff(N);
   for(arma::uword n=0; n<N; n++){
     
-    mycurve = curves[n];
+    List mycurve = curves[n];
     arma::vec x = mycurve["x"];
     arma::vec t = mycurve["t"];
     
-    mycurve_estim = curves_estim[n];
+    List mycurve_estim = curves_estim[n];
     arma::vec x_estim = mycurve_estim["x"];
     arma::vec t_estim = mycurve_estim["t"];
     
@@ -75,14 +71,11 @@ List estimateRiskCurves(
   // Get the number of curves
   arma::uword N = curves.length();
   
-  List mycurve = curves[0];
-  List mycurve_estim = curves_estim[0];
-  
   arma::vec risk_int(N);
   for(arma::uword n=0; n < N; n++){
     
-    mycurve = curves[n];
-    mycurve_estim = curves_estim[n];
+    List mycurve = curves[n];
+    List mycurve_estim = curves_estim[n];
 
     risk_int(n) = estimateRiskCurve(mycurve, mycurve_estim);
   }
