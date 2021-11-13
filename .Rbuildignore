@@ -3,3 +3,7 @@
 ^data-raw$
 ^\.travis\.yml$
 ^Meta$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
